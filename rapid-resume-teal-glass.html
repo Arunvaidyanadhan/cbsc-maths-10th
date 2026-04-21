@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapid Resume — Build Your Future</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary-color: #1D9E75; /* Teal as primary color */
+    --secondary-color: #50E3C2; /* Complementary green */
+    --accent-color: #F5A623; /* Warm accent */
+    --background-dark: #F7F9FC; /* Light background */
+    --background-light: #FFFFFF; /* Pure white for contrast */
+    --text-primary: #0F172A; /* Darker text for better contrast */
+    --text-secondary: #334155; /* Medium slate for better readability */
+    --text-muted: #64748B; /* Light slate for muted text */
+    --font-display: 'Syne', sans-serif; /* Modern font */
+    --font-body: 'DM Sans', sans-serif; /* Clean body font */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--background-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+  }
+
+  /* ── Background mesh ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(29,158,117,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(15,110,86,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(93,202,165,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body > * { position: relative; z-index: 1; }
+
+  /* ── Glass utility ── */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+  }
+  .glass-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(157,225,203,0.3);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+  .glass-card:hover {
+    background: rgba(255,255,255,0.95);
+    border-color: rgba(157,225,203,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(4,52,44,0.5);
+  }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 16px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--background-light);
+    border-bottom: 1px solid var(--primary-color);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--text-primary); }
+  .nav-links {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    background: var(--primary-color);
+    color: var(--background-light);
+  }
+  .nav-cta {
+    background: var(--teal-400) !important;
+    color: white !important;
+    border: none !important;
+    font-weight: 600 !important;
+    padding: 8px 20px !important;
+    border-radius: 10px !important;
+  }
+  .nav-cta:hover { background: var(--teal-200) !important; color: var(--teal-900) !important; }
+
+  /* ── Pages ── */
+  .page { display: none; padding-top: 80px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ── LANDING PAGE ── */
+  .hero {
+    padding: 100px 5% 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(29,158,117,0.2);
+    border: 1px solid rgba(93,202,165,0.3);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--teal-200);
+    margin-bottom: 24px;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal-200); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    color: var(--primary-color);
+    margin-bottom: 24px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--teal-200);
+    position: relative;
+  }
+  .hero p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 480px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-color);
+    color: var(--background-light);
+    border: none;
+    border-radius: 14px;
+    padding: 16px 32px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--secondary-color); color: var(--background-dark); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(29,158,117,0.4); }
+  .btn-glass {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--background-light);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 16px 32px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    backdrop-filter: blur(10px);
+  }
+  .btn-glass:hover { background: var(--accent-color); color: var(--background-dark); }
+
+  .hero-visual {
+    position: relative;
+  }
+  .resume-preview {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .resume-preview::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(29,158,117,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .resume-line { height: 10px; border-radius: 5px; margin-bottom: 10px; background: rgba(255,255,255,0.3); }
+  .resume-line.name { width: 60%; height: 18px; background: rgba(93,202,165,0.3); }
+  .resume-line.title { width: 40%; height: 12px; background: rgba(93,202,165,0.15); }
+  .resume-line.full { width: 100%; }
+  .resume-line.three-q { width: 75%; }
+  .resume-line.half { width: 50%; }
+  .resume-section-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--teal-200); text-transform: uppercase; margin: 20px 0 10px; }
+  .stats-row { display: flex; gap: 12px; margin-top: 32px; }
+  .stat-pill {
+    flex: 1;
+    background: rgba(29,158,117,0.15);
+    border: 1px solid rgba(93,202,165,0.2);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-pill strong { display: block; font-family: var(--font-display); font-size: 22px; color: var(--teal-200); }
+  .stat-pill span { font-size: 12px; color: var(--text-muted); }
+  .floating-badge {
+    position: absolute;
+    background: rgba(29,158,117,0.25);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(93,202,165,0.3);
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    animation: float 4s ease-in-out infinite;
+  }
+  .floating-badge.f1 { top: -20px; right: 20px; animation-delay: 0s; }
+  .floating-badge.f2 { bottom: 60px; left: -30px; animation-delay: 1.5s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+  /* Features grid */
+  .section { padding: 80px 5%; max-width: 1280px; margin: 0 auto; }
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--teal-200);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+  }
+  .section-sub { font-size: 17px; color: var(--text-secondary); max-width: 560px; line-height: 1.6; margin-bottom: 60px; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .feature-card {
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-icon {
+    width: 52px; height: 52px;
+    background: rgba(29,158,117,0.2);
+    border: 1px solid rgba(93,202,165,0.25);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .feature-card h3 { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* Success stories */
+  .stories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .story-card { padding: 28px; position: relative; }
+  .story-quote { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 24px; font-style: italic; }
+  .story-quote::before { content: '"'; font-size: 48px; color: var(--teal-200); font-family: var(--font-display); line-height: 0.5; display: block; margin-bottom: 12px; }
+  .story-author { display: flex; align-items: center; gap: 12px; }
+  .story-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-400), var(--teal-600));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 14px;
+    border: 2px solid rgba(93,202,165,0.3);
+  }
+  .story-name { font-weight: 600; font-size: 14px; }
+  .story-role { font-size: 12px; color: var(--text-muted); }
+  .star-row { color: var(--teal-200); font-size: 13px; margin-bottom: 16px; letter-spacing: 2px; }
+
+  /* Blog grid */
+  .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .blog-card { overflow: hidden; cursor: pointer; }
+  .blog-thumb {
+    height: 180px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .blog-thumb-1 { background: linear-gradient(135deg, rgba(29,158,117,0.4), rgba(15,110,86,0.6)); }
+  .blog-thumb-2 { background: linear-gradient(135deg, rgba(93,202,165,0.3), rgba(29,158,117,0.5)); }
+  .blog-thumb-3 { background: linear-gradient(135deg, rgba(8,80,65,0.5), rgba(29,158,117,0.3)); }
+  .blog-tag {
+    display: inline-block;
+    background: rgba(29,158,117,0.2);
+    color: var(--teal-200);
+    border: 1px solid rgba(93,202,165,0.2);
+    border-radius: 100px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .blog-card h3 { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+  .blog-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
+  .blog-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-muted); }
+
+  /* Footer */
+  footer {
+    padding: 60px 5% 40px;
+    border-top: 1px solid var(--primary-color);
+    background: var(--background-light);
+    color: var(--text-secondary);
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; max-width: 1280px; margin: 0 auto 48px; }
+  .footer-brand p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-top: 12px; max-width: 280px; }
+  .footer-col h4 { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-200); margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 14px; color: var(--text-secondary); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; cursor: pointer; }
+  .footer-col a:hover { color: var(--text-primary); }
+  .footer-bottom { text-align: center; font-size: 13px; color: var(--text-muted); max-width: 1280px; margin: 0 auto; padding-top: 32px; border-top: 1px solid rgba(157,225,203,0.1); }
+
+  /* ── TEMPLATE SELECTION PAGE ── */
+  .page-header { padding: 60px 5% 40px; max-width: 1280px; margin: 0 auto; }
+  .page-header h1 { font-family: var(--font-display); font-size: 44px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 12px; }
+  .page-header p { font-size: 17px; color: var(--text-secondary); }
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; padding: 0 5%; max-width: 1280px; margin: 0 auto 40px; }
+  .filter-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--teal-400);
+    border-color: var(--teal-400);
+    color: white;
+  }
+  .templates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; padding: 0 5%; max-width: 1280px; margin: 0 auto 80px; }
+  .template-card { overflow: hidden; cursor: pointer; }
+  .template-thumb {
+    height: 200px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.85);
+  }
+  .template-thumb-inner {
+    width: 70%;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(157,225,203,0.3);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .t-line { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.15); margin-bottom: 6px; }
+  .t-line.accent { background: var(--teal-200); opacity: 0.6; }
+  .t-line.short { width: 60%; }
+  .t-line.med { width: 80%; }
+  .template-info { padding: 20px; border-top: 1px solid var(--glass-border); }
+  .template-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .template-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+  .template-badge-row { display: flex; gap: 6px; align-items: center; justify-content: space-between; }
+  .template-tag {
+    background: rgba(29,158,117,0.15);
+    color: var(--teal-200);
+    border: 1px solid rgba(93,202,165,0.2);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .select-btn {
+    background: var(--teal-400);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .select-btn:hover { background: var(--teal-200); color: var(--teal-900); }
+
+  /* ── FORM PAGE ── */
+  .form-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 5% 80px;
+    min-height: calc(100vh - 80px);
+  }
+  .form-sidebar {
+    padding: 40px 0 40px;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+  }
+  .sidebar-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal-200); margin-bottom: 20px; }
+  .sidebar-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sidebar-step:hover { background: var(--glass-bg); }
+  .sidebar-step.active { background: rgba(29,158,117,0.2); border: 1px solid rgba(93,202,165,0.2); }
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .sidebar-step.active .step-num { background: var(--teal-400); border-color: var(--teal-400); }
+  .sidebar-step.done .step-num { background: rgba(29,158,117,0.3); border-color: rgba(93,202,165,0.4); }
+  .step-done-check { font-size: 12px; }
+  .step-label { font-size: 14px; font-weight: 500; }
+  .form-content { padding: 40px 0 40px 40px; }
+  .form-section-title { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .form-section-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.3px; }
+  .form-input, .form-textarea {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-primary);
+    transition: all 0.2s;
+  }
+  .form-input:focus, .form-textarea:focus {
+    border-color: rgba(93,202,165,0.5);
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0 0 3px rgba(29,158,117,0.15);
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+  .form-textarea { min-height: 120px; resize: vertical; }
+  .skill-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .chip {
+    background: rgba(29,158,117,0.2);
+    border: 1px solid rgba(93,202,165,0.3);
+    color: var(--teal-200);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .chip:hover { background: rgba(29,158,117,0.35); }
+  .chip.selected { background: var(--teal-400); border-color: var(--teal-400); color: white; }
+  .form-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--glass-border); }
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-bottom: 32px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--teal-400); border-radius: 2px; transition: width 0.4s ease; width: 25%; }
+
+  /* ── THANK YOU PAGE ── */
+  .thankyou-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 80px);
+    padding: 60px 5%;
+    text-align: center;
+  }
+  .success-ring {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(29,158,117,0.15);
+    border: 2px solid rgba(93,202,165,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px;
+    margin-bottom: 32px;
+    position: relative;
+    animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn { from{transform:scale(0.4);opacity:0} to{transform:scale(1);opacity:1} }
+  .success-ring::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(93,202,165,0.15);
+  }
+  .thankyou-center h1 { font-family: var(--font-display); font-size: 48px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 16px; }
+  .thankyou-center p { font-size: 18px; color: var(--text-secondary); max-width: 480px; line-height: 1.7; margin-bottom: 48px; }
+  .download-card {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 32px 48px;
+    margin-bottom: 40px;
+    min-width: 380px;
+    backdrop-filter: blur(16px);
+  }
+  .download-card h3 { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .download-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+  .download-options { display: flex; gap: 12px; justify-content: center; }
+  .share-links { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .share-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+  }
+  .share-btn:hover { background: var(--glass-hover); color: var(--text-primary); }
+  .next-steps { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 40px; }
+  .next-card {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    width: 200px;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+  .next-card:hover { background: rgba(255,255,255,0.95); transform: translateY(-4px); }
+  .next-card .nc-icon { font-size: 32px; margin-bottom: 10px; }
+  .next-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .next-card p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── BLOG PAGE ── */
+  .blog-hero {
+    padding: 60px 5% 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .featured-post {
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .featured-post:hover { transform: translateY(-4px); }
+  .featured-thumb {
+    height: 240px;
+    background: linear-gradient(135deg, rgba(29,158,117,0.5), rgba(4,52,44,0.8));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px;
+    position: relative;
+  }
+  .featured-content { padding: 28px; }
+  .featured-content h2 { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+  .articles-list { padding: 0 5%; max-width: 1280px; margin: 0 auto 80px; }
+  .articles-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .articles-header h2 { font-family: var(--font-display); font-size: 24px; font-weight: 700; }
+  .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .article-card { padding: 24px; cursor: pointer; }
+  .article-card h3 { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+  .article-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
+  .article-meta { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+  .read-more { color: var(--teal-200); font-weight: 600; text-decoration: none; font-size: 13px; cursor: pointer; }
+  .newsletter-strip {
+    margin: 0 5% 80px;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 48px;
+    background: rgba(29,158,117,0.1);
+    border: 1px solid rgba(93,202,165,0.2);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    backdrop-filter: blur(16px);
+  }
+  .newsletter-strip h3 { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .newsletter-strip p { font-size: 15px; color: var(--text-secondary); }
+  .newsletter-form { display: flex; gap: 10px; }
+  .newsletter-input {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-primary);
+    transition: all 0.2s;
+  }
+  .newsletter-input:focus { border-color: rgba(93,202,165,0.5); background: rgba(255,255,255,0.95); }
+  .newsletter-input::placeholder { color: var(--text-muted); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--glass-border); margin: 0 5%; }
+
+  /* Scroll animations */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .fade-up { animation: fadeUp 0.6s ease forwards; }
+
+  /* Responsive */
+  @media(max-width:768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .form-layout { grid-template-columns: 1fr; }
+    .form-sidebar { display: none; }
+    .form-content { padding: 20px 0; }
+    .form-grid { grid-template-columns: 1fr; }
+    .blog-hero { grid-template-columns: 1fr; }
+    .download-card { min-width: unset; padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="nav-logo" onclick="showPage('landing')">Rapid<span>Resume</span></div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('landing')" id="nav-landing" class="active">Home</a></li>
+    <li><a onclick="showPage('templates')" id="nav-templates">Templates</a></li>
+    <li><a onclick="showPage('blog')" id="nav-blog">Blog</a></li>
+    <li><a onclick="showPage('form')" class="nav-cta">Build Resume →</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-left fade-up">
+      <div class="hero-badge">🚀 Trusted by 50,000+ job seekers</div>
+      <h1>Build a Resume<br>That Gets You <em>Hired</em></h1>
+      <p>Create a stunning, ATS-optimized resume in under 5 minutes. Powered by AI, designed for humans. Stand out in every inbox.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('templates')">Build My Resume →</button>
+        <button class="btn-glass" onclick="showPage('blog')">📖 See Tips</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-badge f1">✅ ATS Score: 98/100</div>
+      <div class="resume-preview glass-card">
+        <div class="resume-line name"></div>
+        <div class="resume-line title" style="margin-bottom:16px;"></div>
+        <div class="resume-section-label">Experience</div>
+        <div class="resume-line full"></div>
+        <div class="resume-line three-q"></div>
+        <div class="resume-line half"></div>
+        <div class="resume-section-label">Skills</div>
+        <div class="resume-line full"></div>
+        <div class="resume-line three-q"></div>
+        <div class="resume-section-label">Education</div>
+        <div class="resume-line full"></div>
+        <div class="resume-line half"></div>
+        <div class="stats-row">
+          <div class="stat-pill"><strong>98%</strong><span>ATS Pass</span></div>
+          <div class="stat-pill"><strong>3.2x</strong><span>More Calls</span></div>
+          <div class="stat-pill"><strong>5 min</strong><span>To Build</span></div>
+        </div>
+      </div>
+      <div class="floating-badge f2">🎉 Interview Landed!</div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-label">Why Choose Us</div>
+    <h2 class="section-title">Everything you need to<br>land your dream job</h2>
+    <p class="section-sub">From AI-powered suggestions to one-click downloads, we make resume building effortless.</p>
+    <div class="features-grid">
+      <div class="feature-card glass-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI-Powered Writing</h3>
+        <p>Get smart bullet point suggestions tailored to your role and industry. Write less, impress more.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <div class="feature-icon">📊</div>
+        <h3>ATS Optimization</h3>
+        <p>Beat applicant tracking systems with keyword analysis and format validation built right in.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <div class="feature-icon">🎨</div>
+        <h3>50+ Pro Templates</h3>
+        <p>Designed by HR experts and recruiters. Every template is clean, modern, and recruiter-approved.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <div class="feature-icon">⚡</div>
+        <h3>5-Minute Builder</h3>
+        <p>Our guided form walks you step by step. No formatting nightmares, no blank-page anxiety.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <div class="feature-icon">📥</div>
+        <h3>Multiple Formats</h3>
+        <p>Export to PDF, DOCX, or share a live link. Tailored for any application process.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Private & Secure</h3>
+        <p>Your data is yours. No selling, no sharing. Protected with enterprise-grade encryption.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Stories -->
+  <div class="section">
+    <div class="section-label">Success Stories</div>
+    <h2 class="section-title">They got hired. You're next.</h2>
+    <p class="section-sub">Real people, real results. See what our users are saying.</p>
+    <div class="stories-grid">
+      <div class="story-card glass-card">
+        <div class="star-row">★★★★★</div>
+        <p class="story-quote">I'd been job hunting for 6 months with no luck. After rebuilding my resume with Rapid Resume, I got 4 interviews in the first week. Absolutely incredible tool.</p>
+        <div class="story-author">
+          <div class="story-avatar">PK</div>
+          <div><div class="story-name">Priya Kapoor</div><div class="story-role">UX Designer at Swiggy</div></div>
+        </div>
+      </div>
+      <div class="story-card glass-card">
+        <div class="star-row">★★★★★</div>
+        <p class="story-quote">The ATS optimization feature is a game-changer. My old resume was being filtered out automatically. Now I'm sailing through to human reviewers every time.</p>
+        <div class="story-author">
+          <div class="story-avatar">AR</div>
+          <div><div class="story-name">Arjun Reddy</div><div class="story-role">SDE-2 at Zepto</div></div>
+        </div>
+      </div>
+      <div class="story-card glass-card">
+        <div class="star-row">★★★★★</div>
+        <p class="story-quote">I'm a fresh grad and had no idea how to write a resume. This tool guided me through everything and helped me land my first role at a great startup!</p>
+        <div class="story-author">
+          <div class="story-avatar">SM</div>
+          <div><div class="story-name">Sneha Menon</div><div class="story-role">PM Intern at CRED</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog preview -->
+  <div class="section">
+    <div class="section-label">From the Blog</div>
+    <h2 class="section-title">Career tips that actually work</h2>
+    <p class="section-sub">Actionable advice from hiring experts and people who got the jobs.</p>
+    <div class="blog-grid">
+      <div class="glass-card blog-card" onclick="showPage('blog')">
+        <div class="blog-thumb blog-thumb-1">📝</div>
+        <span class="blog-tag">Resume Tips</span>
+        <h3>10 Resume Mistakes That Get You Rejected Instantly</h3>
+        <p>Avoid these common pitfalls that hiring managers see every day.</p>
+        <div class="blog-meta"><span>May 2025</span><span>•</span><span>5 min read</span></div>
+      </div>
+      <div class="glass-card blog-card" onclick="showPage('blog')">
+        <div class="blog-thumb blog-thumb-2">🎯</div>
+        <span class="blog-tag">Job Search</span>
+        <h3>How to Tailor Your Resume for Each Application</h3>
+        <p>The secret strategy that gets callbacks even from dream companies.</p>
+        <div class="blog-meta"><span>Apr 2025</span><span>•</span><span>7 min read</span></div>
+      </div>
+      <div class="glass-card blog-card" onclick="showPage('blog')">
+        <div class="blog-thumb blog-thumb-3">🤖</div>
+        <span class="blog-tag">ATS Guide</span>
+        <h3>ATS Decoded: What the Algorithm Really Looks For</h3>
+        <p>Inside knowledge on how applicant tracking systems actually score your resume.</p>
+        <div class="blog-meta"><span>Mar 2025</span><span>•</span><span>8 min read</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Strip -->
+  <div style="padding: 0 5% 80px; max-width:1280px; margin:0 auto;">
+    <div style="background:linear-gradient(135deg,rgba(29,158,117,0.2),rgba(15,110,86,0.3));border:1px solid rgba(93,202,165,0.25);border-radius:24px;padding:64px 48px;text-align:center;backdrop-filter:blur(16px);">
+      <div class="section-label" style="text-align:center;">Ready?</div>
+      <h2 style="font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;">Your next job starts with<br>a better resume.</h2>
+      <p style="font-size:17px;color:var(--text-secondary);margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6;">Join 50,000+ professionals who've levelled up their career with Rapid Resume. It's free to start.</p>
+      <button class="btn-primary" onclick="showPage('form')" style="font-size:17px;padding:18px 40px;">Start Building — It's Free →</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="font-size:24px;margin-bottom:0;">Rapid<span>Resume</span></div>
+        <p>Build ATS-optimized resumes in minutes. Designed for modern job seekers who want to stand out.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a onclick="showPage('templates')">Templates</a>
+        <a>ATS Checker</a>
+        <a>Cover Letter</a>
+        <a>LinkedIn Import</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a onclick="showPage('blog')">Blog</a>
+        <a>Resume Guide</a>
+        <a>Interview Tips</a>
+        <a>Career Hub</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a>About</a>
+        <a>Careers</a>
+        <a>Privacy</a>
+        <a>Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 RapidResume. All rights reserved. Made with 💚 for job seekers everywhere.</div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     TEMPLATE SELECTION PAGE
+══════════════════════════════════════ -->
+<div id="page-templates" class="page">
+  <div class="page-header">
+    <div class="section-label">Step 1 of 3</div>
+    <h1>Choose Your Template</h1>
+    <p>Pick a design that fits your style and industry. Every template is ATS-optimized.</p>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active">All Templates</button>
+    <button class="filter-btn">Modern</button>
+    <button class="filter-btn">Creative</button>
+    <button class="filter-btn">Classic</button>
+    <button class="filter-btn">Minimal</button>
+    <button class="filter-btn">Executive</button>
+    <button class="filter-btn">Tech</button>
+  </div>
+  <div class="templates-grid">
+    <!-- Template 1 -->
+    <div class="glass-card template-card">
+      <div class="template-thumb">
+        <div class="template-thumb-inner">
+          <div class="t-line accent short"></div>
+          <div class="t-line short" style="width:45%;margin-bottom:12px;"></div>
+          <div class="t-line med"></div>
+          <div class="t-line full"></div>
+          <div class="t-line short"></div>
+        </div>
+        <div style="position:absolute;top:12px;right:12px;background:var(--teal-400);color:white;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;">POPULAR</div>
+      </div>
+      <div class="template-info">
+        <div class="template-name">Meridian</div>
+        <div class="template-desc">Clean modern layout for tech & product roles</div>
+        <div class="template-badge-row">
+          <span class="template-tag">Modern</span>
+          <button class="select-btn" onclick="showPage('form')">Use This</button>
+        </div>
+      </div>
+    </div>
+    <!-- Template 2 -->
+    <div class="glass-card template-card">
+      <div class="template-thumb">
+        <div class="template-thumb-inner" style="border-left:3px solid rgba(93,202,165,0.5);">
+          <div class="t-line accent short"></div>
+          <div class="t-line short" style="width:50%;margin-bottom:14px;"></div>
+          <div class="t-line full"></div>
+          <div class="t-line med"></div>
+          <div class="t-line three-q"></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <div class="template-name">Prism</div>
+        <div class="template-desc">Bold sidebar design for creative professionals</div>
+        <div class="template-badge-row">
+          <span class="template-tag">Creative</span>
+          <button class="select-btn" onclick="showPage('form')">Use This</button>
+        </div>
+      </div>
+    </div>
+    <!-- Template 3 -->
+    <div class="glass-card template-card">
+      <div class="template-thumb">
+        <div class="template-thumb-inner" style="text-align:center;">
+          <div class="t-line accent" style="margin:0 auto 6px;width:50%;"></div>
+          <div class="t-line" style="margin:0 auto 12px;width:65%;"></div>
+          <div class="t-line full"></div>
+          <div class="t-line three-q"></div>
+          <div class="t-line half"></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <div class="template-name">Classic Pro</div>
+        <div class="template-desc">Timeless format trusted by hiring managers</div>
+        <div class="template-badge-row">
+          <span class="template-tag">Classic</span>
+          <button class="select-btn" onclick="showPage('form')">Use This</button>
+        </div>
+      </div>
+    </div>
+    <!-- Template 4 -->
+    <div class="glass-card template-card">
+      <div class="template-thumb">
+        <div class="template-thumb-inner">
+          <div class="t-line accent" style="width:30%;height:4px;"></div>
+          <div class="t-line short" style="width:55%;"></div>
+          <div style="height:8px;"></div>
+          <div class="t-line full"></div>
+          <div class="t-line med"></div>
+          <div class="t-line short"></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <div class="template-name">Nova</div>
+        <div class="template-desc">Ultra-minimal for those who let work speak</div>
+        <div class="template-badge-row">
+          <span class="template-tag">Minimal</span>
+          <button class="select-btn" onclick="showPage('form')">Use This</button>
+        </div>
+      </div>
+    </div>
+    <!-- Template 5 -->
+    <div class="glass-card template-card">
+      <div class="template-thumb">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:70%;">
+          <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;">
+            <div class="t-line accent" style="width:80%;"></div>
+            <div class="t-line" style="width:100%;"></div>
+            <div class="t-line short"></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:6px;padding:10px;">
+            <div class="t-line" style="width:100%;"></div>
+            <div class="t-line" style="width:80%;"></div>
+            <div class="t-line short"></div>
+          </div>
+        </div>
+      </div>
+      <div class="template-info">
+        <div class="template-name">Atlas</div>
+        <div class="template-desc">Two-column layout, perfect for engineers</div>
+        <div class="template-badge-row">
+          <span class="template-tag">Tech</span>
+          <button class="select-btn" onclick="showPage('form')">Use This</button>
+        </div>
+      </div>
+    </div>
+    <!-- Template 6 -->
+    <div class="glass-card template-card">
+      <div class="template-thumb">
+        <div class="template-thumb-inner">
+          <div class="t-line accent short" style="width:70%;height:14px;border-radius:4px;"></div>
+          <div class="t-line" style="width:40%;margin-bottom:16px;"></div>
+          <div class="t-line full"></div>
+          <div class="t-line three-q"></div>
+        </div>
+        <div style="position:absolute;top:12px;right:12px;background:rgba(29,158,117,0.3);color:var(--teal-200);font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;">NEW</div>
+      </div>
+      <div class="template-info">
+        <div class="template-name">Summit</div>
+        <div class="template-desc">Executive presence for senior professionals</div>
+        <div class="template-badge-row">
+          <span class="template-tag">Executive</span>
+          <button class="select-btn" onclick="showPage('form')">Use This</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     FORM PAGE
+══════════════════════════════════════ -->
+<div id="page-form" class="page">
+  <div class="form-layout">
+    <div class="form-sidebar">
+      <div class="sidebar-title">Your Progress</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="sidebar-step active" id="step-tab-1" onclick="goStep(1)">
+        <div class="step-num" id="step-num-1">1</div>
+        <div class="step-label">Personal Info</div>
+      </div>
+      <div class="sidebar-step" id="step-tab-2" onclick="goStep(2)">
+        <div class="step-num" id="step-num-2">2</div>
+        <div class="step-label">Experience</div>
+      </div>
+      <div class="sidebar-step" id="step-tab-3" onclick="goStep(3)">
+        <div class="step-num" id="step-num-3">3</div>
+        <div class="step-label">Skills</div>
+      </div>
+      <div class="sidebar-step" id="step-tab-4" onclick="goStep(4)">
+        <div class="step-num" id="step-num-4">4</div>
+        <div class="step-label">Education</div>
+      </div>
+      <div style="margin-top:32px;padding:16px;background:rgba(29,158,117,0.1);border:1px solid rgba(93,202,165,0.15);border-radius:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--teal-200);margin-bottom:6px;">💡 PRO TIP</div>
+        <p style="font-size:12px;color:var(--text-secondary);line-height:1.5;">Use numbers in your bullet points. "Increased sales by 40%" beats "Improved sales" every time.</p>
+      </div>
+    </div>
+
+    <div class="form-content">
+
+      <!-- Step 1: Personal -->
+      <div id="form-step-1" class="form-step">
+        <div class="form-section-title">Personal Information</div>
+        <div class="form-section-sub">Let's start with the basics. This appears at the top of your resume.</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input class="form-input" placeholder="Arjun" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" placeholder="Sharma" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Job Title</label>
+            <input class="form-input" placeholder="Senior Software Engineer" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" placeholder="arjun@email.com" type="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input class="form-input" placeholder="+91 98765 43210" type="tel">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input class="form-input" placeholder="Bangalore, India" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LinkedIn</label>
+            <input class="form-input" placeholder="linkedin.com/in/arjunsharma" type="url">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Portfolio / Website</label>
+            <input class="form-input" placeholder="arjunsharma.dev" type="url">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Professional Summary</label>
+            <textarea class="form-textarea" placeholder="A brief 2–3 sentence summary highlighting your key skills, experience level, and what makes you stand out..."></textarea>
+          </div>
+        </div>
+        <div class="form-nav">
+          <div></div>
+          <button class="btn-primary" onclick="goStep(2)">Next: Experience →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Experience -->
+      <div id="form-step-2" class="form-step" style="display:none;">
+        <div class="form-section-title">Work Experience</div>
+        <div class="form-section-sub">Add your most recent role first. Use action verbs and quantify impact.</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Company Name</label>
+            <input class="form-input" placeholder="Infosys" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Role / Title</label>
+            <input class="form-input" placeholder="Software Engineer II" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input class="form-input" placeholder="Jun 2022" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date</label>
+            <input class="form-input" placeholder="Present" type="text">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Key Responsibilities & Achievements</label>
+            <textarea class="form-textarea" style="min-height:160px;" placeholder="• Led migration of legacy monolith to microservices, reducing latency by 35%&#10;• Mentored 4 junior developers, improving team velocity by 20%&#10;• Built CI/CD pipeline using GitHub Actions, cutting deployment time by 60%"></textarea>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn-glass" style="border-style:dashed;width:100%;justify-content:center;padding:14px;">+ Add Another Position</button>
+        </div>
+        <div class="form-nav">
+          <button class="btn-glass" onclick="goStep(1)">← Back</button>
+          <button class="btn-primary" onclick="goStep(3)">Next: Skills →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Skills -->
+      <div id="form-step-3" class="form-step" style="display:none;">
+        <div class="form-section-title">Skills</div>
+        <div class="form-section-sub">Tap to add skills, or type your own. ATS loves specific technical keywords.</div>
+        <div style="margin-bottom:28px;">
+          <div class="form-label" style="margin-bottom:12px;">Suggested Skills (tap to add)</div>
+          <div class="skill-chips" id="skillChips">
+            <span class="chip" onclick="toggleChip(this)">React</span>
+            <span class="chip" onclick="toggleChip(this)">Node.js</span>
+            <span class="chip selected" onclick="toggleChip(this)">Python</span>
+            <span class="chip" onclick="toggleChip(this)">TypeScript</span>
+            <span class="chip selected" onclick="toggleChip(this)">PostgreSQL</span>
+            <span class="chip" onclick="toggleChip(this)">AWS</span>
+            <span class="chip" onclick="toggleChip(this)">Docker</span>
+            <span class="chip" onclick="toggleChip(this)">GraphQL</span>
+            <span class="chip" onclick="toggleChip(this)">Redis</span>
+            <span class="chip" onclick="toggleChip(this)">Kubernetes</span>
+            <span class="chip" onclick="toggleChip(this)">Next.js</span>
+            <span class="chip" onclick="toggleChip(this)">Git</span>
+            <span class="chip" onclick="toggleChip(this)">Figma</span>
+            <span class="chip" onclick="toggleChip(this)">REST APIs</span>
+            <span class="chip" onclick="toggleChip(this)">Agile</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Add Custom Skill</label>
+          <input class="form-input" placeholder="e.g. FastAPI, LangChain, Tailwind CSS..." type="text">
+        </div>
+        <div style="margin-top:32px;background:rgba(29,158,117,0.08);border:1px solid rgba(93,202,165,0.15);border-radius:14px;padding:20px;">
+          <div style="font-size:13px;font-weight:700;color:var(--teal-200);margin-bottom:6px;">🎯 Skill Level</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.5;">For senior roles, group skills by type: Languages, Frameworks, Cloud, Tools. For junior roles, list the most relevant 8–10 only.</p>
+        </div>
+        <div class="form-nav">
+          <button class="btn-glass" onclick="goStep(2)">← Back</button>
+          <button class="btn-primary" onclick="goStep(4)">Next: Education →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Education -->
+      <div id="form-step-4" class="form-step" style="display:none;">
+        <div class="form-section-title">Education</div>
+        <div class="form-section-sub">Add your highest qualification first.</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Institution Name</label>
+            <input class="form-input" placeholder="IIT Madras" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Degree / Course</label>
+            <input class="form-input" placeholder="B.Tech Computer Science" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Graduation Year</label>
+            <input class="form-input" placeholder="2022" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CGPA / Grade</label>
+            <input class="form-input" placeholder="8.7 / 10" type="text">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input class="form-input" placeholder="Chennai, Tamil Nadu" type="text">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Achievements / Activities (optional)</label>
+            <textarea class="form-textarea" style="min-height:80px;" placeholder="Dean's List, Hackathon Winner, Student Council..."></textarea>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn-glass" style="border-style:dashed;width:100%;justify-content:center;padding:14px;">+ Add Certification / Course</button>
+        </div>
+        <div class="form-nav">
+          <button class="btn-glass" onclick="goStep(3)">← Back</button>
+          <button class="btn-primary" onclick="showPage('thankyou')">🚀 Generate Resume</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     THANK YOU PAGE
+══════════════════════════════════════ -->
+<div id="page-thankyou" class="page">
+  <div class="thankyou-center">
+    <div class="success-ring">🎉</div>
+    <h1>Your Resume is Ready!</h1>
+    <p>Looking sharp. Your Meridian resume has been generated and is ready to download. Time to land that interview.</p>
+    <div class="download-card">
+      <h3>📄 Arjun_Sharma_Resume.pdf</h3>
+      <p>Meridian Template · ATS Score: 97/100 · 1 Page</p>
+      <div class="download-options">
+        <button class="btn-primary">⬇ Download PDF</button>
+        <button class="btn-glass">📋 Copy Link</button>
+      </div>
+    </div>
+    <div class="share-links">
+      <button class="share-btn">🔗 Share on LinkedIn</button>
+      <button class="share-btn">✉ Email to Myself</button>
+      <button class="share-btn">📱 WhatsApp</button>
+    </div>
+    <div class="next-steps">
+      <div class="next-card glass-card" onclick="showPage('templates')">
+        <div class="nc-icon">🎨</div>
+        <h4>Try Another Template</h4>
+        <p>See how your resume looks in a different style</p>
+      </div>
+      <div class="next-card glass-card" onclick="showPage('form')">
+        <div class="nc-icon">✏️</div>
+        <h4>Edit Resume</h4>
+        <p>Go back and update any section</p>
+      </div>
+      <div class="next-card glass-card" onclick="showPage('blog')">
+        <div class="nc-icon">💡</div>
+        <h4>Interview Tips</h4>
+        <p>You got the resume — now ace the interview</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     BLOG PAGE
+══════════════════════════════════════ -->
+<div id="page-blog" class="page">
+  <div class="blog-hero">
+    <div>
+      <div class="section-label">Career Intelligence</div>
+      <h1 style="font-family:var(--font-display);font-size:clamp(36px,4vw,54px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;">Insights to<br>accelerate your<br>career</h1>
+      <p style="font-size:17px;color:var(--text-secondary);line-height:1.7;margin-bottom:28px;">Expert-written guides on resumes, interviews, salary negotiation, and landing offers at top companies.</p>
+      <button class="btn-glass">Subscribe for Weekly Tips →</button>
+    </div>
+    <div class="featured-post glass-card">
+      <div class="featured-thumb">📰</div>
+      <div class="featured-content">
+        <span class="blog-tag">Featured</span>
+        <h2>The Complete 2025 Resume Guide for Indian Tech Professionals</h2>
+        <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:10px;">Everything you need to know about building a resume that gets you hired at FAANG, unicorns, and hot startups.</p>
+        <div class="blog-meta" style="margin-top:16px;"><span>12 min read</span><span>•</span><span>June 2025</span><span>•</span><span style="color:var(--teal-200);">Read →</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="articles-list">
+    <div class="articles-header">
+      <h2>Latest Articles</h2>
+      <div class="filter-row" style="padding:0;margin:0;">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Resume</button>
+        <button class="filter-btn">Interview</button>
+        <button class="filter-btn">Career</button>
+        <button class="filter-btn">Salary</button>
+      </div>
+    </div>
+    <div class="articles-grid" style="margin-top:24px;">
+      <div class="glass-card article-card">
+        <span class="blog-tag">Resume</span>
+        <h3>10 Resume Mistakes That Get You Rejected Instantly</h3>
+        <p>From typos to wrong formats — avoid these common errors that send your resume to the trash pile.</p>
+        <div class="article-meta"><span>May 2025 · 5 min</span><span class="read-more">Read →</span></div>
+      </div>
+      <div class="glass-card article-card">
+        <span class="blog-tag">Interview</span>
+        <h3>How to Answer "Tell Me About Yourself" Like a Pro</h3>
+        <p>The first question is the most important. Here's a proven framework that sets a winning tone.</p>
+        <div class="article-meta"><span>May 2025 · 6 min</span><span class="read-more">Read →</span></div>
+      </div>
+      <div class="glass-card article-card">
+        <span class="blog-tag">Salary</span>
+        <h3>How to Negotiate Your Offer Without Losing It</h3>
+        <p>Most candidates leave 10–20% on the table. Here's exactly what to say in salary conversations.</p>
+        <div class="article-meta"><span>Apr 2025 · 8 min</span><span class="read-more">Read →</span></div>
+      </div>
+      <div class="glass-card article-card">
+        <span class="blog-tag">Career</span>
+        <h3>From Tier-3 College to Top MNC: A Roadmap</h3>
+        <p>Three developers share how they overcame the brand gap to land roles at Swiggy, Razorpay, and Google.</p>
+        <div class="article-meta"><span>Apr 2025 · 10 min</span><span class="read-more">Read →</span></div>
+      </div>
+      <div class="glass-card article-card">
+        <span class="blog-tag">ATS</span>
+        <h3>ATS Decoded: What the Algorithm Really Looks For</h3>
+        <p>Most job applications are never seen by humans. Learn exactly how to beat ATS screening.</p>
+        <div class="article-meta"><span>Mar 2025 · 7 min</span><span class="read-more">Read →</span></div>
+      </div>
+      <div class="glass-card article-card">
+        <span class="blog-tag">Resume</span>
+        <h3>How to Write a Resume for a Career Change</h3>
+        <p>Switching industries? Here's how to position transferable skills and close the experience gap.</p>
+        <div class="article-meta"><span>Mar 2025 · 9 min</span><span class="read-more">Read →</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="newsletter-strip" style="margin:0 5% 80px;">
+    <div>
+      <h3>Get weekly career tips</h3>
+      <p>Join 12,000+ readers who get actionable advice every Thursday.</p>
+    </div>
+    <div class="newsletter-form">
+      <input class="newsletter-input" type="email" placeholder="your@email.com">
+      <button class="btn-primary">Subscribe →</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="font-size:24px;margin-bottom:0;">Rapid<span>Resume</span></div>
+        <p>Build ATS-optimized resumes in minutes. Designed for modern job seekers who want to stand out.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a onclick="showPage('templates')">Templates</a>
+        <a>ATS Checker</a>
+        <a>Cover Letter</a>
+        <a>LinkedIn Import</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a onclick="showPage('blog')">Blog</a>
+        <a>Resume Guide</a>
+        <a>Interview Tips</a>
+        <a>Career Hub</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a>About</a>
+        <a>Careers</a>
+        <a>Privacy</a>
+        <a>Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 RapidResume. All rights reserved. Made with 💚 for job seekers everywhere.</div>
+  </footer>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const navEl = document.getElementById('nav-' + id);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  let currentStep = 1;
+  function goStep(n) {
+    document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+    document.getElementById('form-step-' + n).style.display = 'block';
+    document.querySelectorAll('.sidebar-step').forEach((s, i) => {
+      s.classList.remove('active', 'done');
+      if (i + 1 < n) s.classList.add('done');
+      if (i + 1 === n) s.classList.add('active');
+    });
+    document.getElementById('progressFill').style.width = (n * 25) + '%';
+    currentStep = n;
+    window.scrollTo({ top: 80, behavior: 'smooth' });
+  }
+
+  function toggleChip(el) {
+    el.classList.toggle('selected');
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.closest('.filter-row').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
