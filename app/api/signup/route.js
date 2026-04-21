@@ -5,8 +5,8 @@ import bcrypt from 'bcrypt';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { email, password, guestUserId } = body;
-    
+    const { email, password, guestUserId, name } = body;
+
     if (!email || !password) {
       return NextResponse.json({ error: 'email and password are required' }, { status: 400 });
     }

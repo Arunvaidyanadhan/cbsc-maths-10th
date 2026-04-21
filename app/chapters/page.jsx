@@ -141,7 +141,7 @@ export default function Chapters() {
                 <div
                   key={chapter.id}
                   onClick={() => !isLocked && handleChapterClick(chapter)}
-                  className={`grid grid-cols-[auto_1fr_auto] gap-8 items-start p-8 bg-card border-b border-subtle transition-colors relative overflow-hidden rounded-xl ${
+                  className={`grid grid-cols-[auto_1fr_auto] gap-8 items-start p-8 bg-card border-b border-subtle transition-colors relative overflow-hidden rounded-xl glass-card ${
                     isLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:bg-card-hover group'
                   }`}
                 >

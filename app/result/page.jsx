@@ -43,7 +43,7 @@ export default function ResultPage() {
 
   return (
     <div className="result-page">
-      <div className="result-card">
+      <div className="result-card glass-card">
         {/* Score Header */}
         <div className="result-score-number" style={{ color: scoreConfig.color }}>
           {score}<span className="result-score-denom">/{total}</span>

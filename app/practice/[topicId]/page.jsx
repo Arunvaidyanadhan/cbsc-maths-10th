@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import QuestionCard from '../../../components/QuestionCard';
 import PaywallModal from '../../../components/PaywallModal';
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import ProgressBar from '../../../components/ProgressBar';
 
 export default function PracticePage() {
   const router = useRouter();
@@ -97,15 +99,10 @@ export default function PracticePage() {
     setStartTime(Date.now());
   };
 
-  const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-      setSelected(null);
-      setAnswered(false);
-    } else {
-      // Submit attempt
-      submitAttempt();
-    }
+  const handleNextQuestion = () => {
+    setAnswered(false);
+    setSelected(null);
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const submitAttempt = async () => {
@@ -190,46 +187,43 @@ export default function PracticePage() {
   const progressPercent = Math.round(((currentIndex + 1) / questions.length) * 100);
 
   return (
-    <div className="practice-page">
-      {/* Practice Navbar */}
-      <nav className="practice-nav">
-        <div className="practice-nav-inner">
-          <div className="practice-nav-left">
-            <span className="nav-q-counter">Q {currentIndex + 1} of {questions.length}</span>
-            <span className="nav-level-badge">{level}</span>
-          </div>
-          <div className="practice-nav-center">
-            <div className="nav-progress-track">
-              <div className="nav-progress-fill" style={{ width: `${progressPercent}%` }} />
-            </div>
-            <span className="nav-pct">{progressPercent}%</span>
-          </div>
-          <div className="nav-score-chip">
-            <span className="nav-score-check">✓</span>
-            <span>{score}</span>
-          </div>
+    <div className="relative">
+      {/* Sticky Header */}
+      <header className="sticky top-0 bg-white/80 backdrop-blur-md shadow-md z-10 p-4 flex justify-between items-center">
+        <div>
+          <h1 className="text-lg font-bold text-gray-800">{questions[0]?.topicName || 'Topic'}</h1>
+          <p className="text-sm text-gray-600">Subtopic: {questions[currentIndex]?.subtopicTag || 'N/A'}</p>
         </div>
-      </nav>
+        <div className="flex items-center gap-4">
+          <span className="text-sm font-semibold text-gray-600">
+            Question {currentIndex + 1} / {questions.length}
+          </span>
+        </div>
+      </header>
 
-      {/* Practice Container */}
-      <div className="practice-container">
-        <QuestionCard
-          question={currentQuestion}
-          qIndex={currentIndex}
-          total={questions.length}
-          selected={selected}
-          answered={answered}
-          onSelect={handleSelect}
-          onNext={handleNext}
-        />
-      </div>
-
-      {/* Paywall Modal */}
-      <PaywallModal
-        isOpen={showPaywall}
-        onClose={() => setShowPaywall(false)}
-        onUpgrade={handleUpgrade}
-      />
+      {/* Question Content */}
+      <main className="p-6">
+        {loading ? (
+          <div className="animate-pulse">Loading questions...</div>
+        ) : questions.length === 0 ? (
+          <div className="p-4 bg-yellow-100 text-yellow-600 rounded-lg">
+            <p>No questions available for this topic. Please try another topic or level.</p>
+          </div>
+        ) : (
+          <div className="transition-opacity duration-300 ease-in-out">
+            <QuestionCard
+              question={currentQuestion}
+              qIndex={currentIndex}
+              total={questions.length}
+              selected={selected}
+              answered={answered}
+              onSelect={handleSelect}
+              onNext={handleNextQuestion}
+              onSubmit={submitAttempt}
+            />
+          </div>
+        )}
+      </main>
     </div>
   );
 }

@@ -6,7 +6,7 @@ export default function ChapterCard({ chapter, progress, onClick, isLocked = fal
     <button
       onClick={() => !isLocked && onClick(chapter)}
       disabled={isLocked}
-      className={`w-full bg-white rounded-2xl p-4 text-left shadow-sm transition-all hover:shadow-md ${
+      className={`w-full bg-white/30 backdrop-blur-md rounded-2xl p-4 text-left shadow-lg transition-all hover:shadow-xl ${
         isLocked ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
       } ${chapter.recommended ? 'border-2 border-primary-500' : 'border-2 border-transparent'}`}
     >

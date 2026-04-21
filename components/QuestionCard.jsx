@@ -1,4 +1,12 @@
-export default function QuestionCard({ question, qIndex, total, selected, answered, onSelect, onNext }) {
+export default function QuestionCard({ question, qIndex, total, selected, answered, onSelect, onNext, onSubmit }) {
+  if (!question) {
+    return (
+      <div className="p-4 bg-red-100 text-red-600 rounded-lg">
+        <p>Error: Question data is missing or invalid.</p>
+      </div>
+    );
+  }
+
   // Build options array from separate fields
   const options = [
     question.option1,
@@ -7,8 +15,11 @@ export default function QuestionCard({ question, qIndex, total, selected, answer
     question.option4,
   ];
 
+  const isLastQuestion = qIndex === total - 1;
+  const handleClick = isLastQuestion ? onSubmit : onNext;
+
   return (
-    <div className="w-full">
+    <div className="w-full bg-white/30 backdrop-blur-md rounded-2xl p-6 shadow-lg">
       {/* Question Text */}
       <p className="practice-question">
         {question.text}
@@ -39,7 +50,7 @@ export default function QuestionCard({ question, qIndex, total, selected, answer
               key={index}
               onClick={() => !answered && onSelect(index)}
               disabled={answered}
-              className={btnClass}
+              className={`${btnClass} bg-white/30 backdrop-blur-md shadow-md hover:shadow-lg transition-all`}
             >
               <span className="option-letter">{String.fromCharCode(65 + index)}</span>
               <span className="option-text">{option}</span>
@@ -56,13 +67,13 @@ export default function QuestionCard({ question, qIndex, total, selected, answer
         </div>
       )}
 
-      {/* Next Button */}
+      {/* Next/Submit Button */}
       {answered && (
         <button
-          onClick={onNext}
+          onClick={handleClick}
           className="next-btn"
         >
-          {qIndex === total - 1 ? 'See Results →' : 'Next Question →'}
+          {isLastQuestion ? 'See Results →' : 'Next Question →'}
         </button>
       )}
     </div>

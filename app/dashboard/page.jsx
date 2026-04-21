@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from '../../components/ThemeToggle';
+import ProfileModal from '../../components/ProfileModal';
 
 export default function Dashboard() {
   const router = useRouter();
   const [userId, setUserId] = useState(null);
   const [progress, setProgress] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   useEffect(() => {
     const id = localStorage.getItem('mathbuddy_userId');
@@ -77,7 +79,11 @@ export default function Dashboard() {
   const dailyGoal = progress?.dailyGoal || 15;
   const streak = progress?.streak || 0;
   const xp = progress?.xp || 0;
-  const userName = 'Student';
+  const userName = progress?.userName || 'Student';
+
+  // Calculate chapters completed
+  const chapters = progress?.chapters || {};
+  const chaptersCompleted = Object.values(chapters).filter(cp => cp.pct >= 100).length;
 
   const dailyProgressPercent = Math.min((todayProgress / dailyGoal) * 100, 100);
 
@@ -106,18 +112,12 @@ export default function Dashboard() {
           <a href="/chapters" className="text-xs font-semibold tracking-widest uppercase text-muted hover:text-primary transition-colors">
             Chapters
           </a>
-          <div className="nav-profile-chip">
+          <div className="nav-profile-chip cursor-pointer" onClick={() => setShowProfileModal(true)}>
             <div className="nav-avatar">{userName.charAt(0)}</div>
             <div className="nav-profile-info">
               <span className="nav-name">{userName}</span>
               <span className="nav-score">~{marks} marks</span>
             </div>
-            <button
-              onClick={handleLogout}
-              className="nav-logout-btn"
-            >
-              Logout
-            </button>
           </div>
           <ThemeToggle />
         </div>
@@ -132,7 +132,7 @@ export default function Dashboard() {
               Dashboard
             </p>
             <h1 className="text-5xl font-extrabold tracking-tight text-heading leading-[1.1] mb-3">
-              Your Progress
+              Welcome, {userName}
             </h1>
             <p className="text-secondary text-sm leading-relaxed mb-4">
               {motivationMessage}
@@ -148,7 +148,7 @@ export default function Dashboard() {
           {/* Stats Grid */}
           <div className="stats-grid">
             {/* Daily Goal */}
-            <div className="stat-card">
+            <div className="stat-card glass-card">
               <p className="stat-label">Daily Goal</p>
               <div className="flex items-end justify-between">
                 <span className="stat-value">
@@ -159,29 +159,29 @@ export default function Dashboard() {
                 <span className="text-3xl">🎯</span>
               </div>
               <div className="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div 
+                <div
                   className="h-full bg-primary transition-all"
                   style={{ width: `${dailyProgressPercent}%` }}
                 ></div>
               </div>
             </div>
 
-            {/* Estimated Marks */}
-            <div className="stat-card">
-              <p className="stat-label">Estimated Marks</p>
+            {/* Chapters Completed */}
+            <div className="stat-card glass-card">
+              <p className="stat-label">Chapters Completed</p>
               <div className="flex items-end justify-between">
                 <span className="stat-value">
-                  ~{marks}
+                  {chaptersCompleted}
                 </span>
-                <span className="text-3xl">📊</span>
+                <span className="text-3xl">�</span>
               </div>
               <p className="stat-desc">
-                Based on {accuracy}% accuracy
+                Out of 15 chapters
               </p>
             </div>
 
             {/* Streak */}
-            <div className="stat-card">
+            <div className="stat-card glass-card">
               <p className="stat-label">Streak</p>
               <div className="flex items-end justify-between">
                 <span className="stat-value">
@@ -195,7 +195,7 @@ export default function Dashboard() {
             </div>
 
             {/* XP */}
-            <div className="stat-card">
+            <div className="stat-card glass-card">
               <p className="stat-label">Total XP</p>
               <div className="flex items-end justify-between">
                 <span className="stat-value">
@@ -246,6 +246,23 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
+
+      {/* Profile Modal */}
+      <ProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        user={{
+          name: userName,
+          email: 'user@example.com',
+          xp,
+          streak,
+          chaptersCompleted,
+          isPremium: false,
+          dailyGoal,
+          accuracy
+        }}
+        onLogout={handleLogout}
+      />
 
     </div>
   );

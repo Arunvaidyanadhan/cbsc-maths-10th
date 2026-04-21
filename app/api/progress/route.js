@@ -81,6 +81,7 @@ export async function GET(request) {
     });
     
     return NextResponse.json({
+      userName: user?.name || 'Student',
       totalAttempted,
       accuracy,
       weakTopics,

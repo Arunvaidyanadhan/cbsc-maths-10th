@@ -47,6 +47,14 @@ module.exports = {
       },
       boxShadow: {
         glass: '0 8px 32px rgba(0,0,0,0.08)',
+        'btn-hover': '0 4px 12px rgba(0, 0, 0, 0.1)',
+      },
+      transitionTimingFunction: {
+        'btn-hover': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      scale: {
+        98: '0.98',
+        102: '1.02',
       },
     },
   },

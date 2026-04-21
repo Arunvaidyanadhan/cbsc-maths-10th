@@ -12,8 +12,8 @@ export default function TopicCard({ topic, progress, onClick, isLocked = false }
     <button
       onClick={() => !isLocked && onClick(topic)}
       disabled={isLocked}
-      className={`w-full rounded-xl p-4 text-left shadow-sm transition-all ${
-        isLocked ? 'bg-card opacity-60 cursor-not-allowed' : 'bg-card hover:bg-card-hover cursor-pointer'
+      className={`w-full bg-white/30 backdrop-blur-md rounded-xl p-4 text-left shadow-lg transition-all hover:shadow-xl ${
+        isLocked ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
       } border border-subtle ${done ? 'border-primary' : ''}`}
     >
       <div className="flex items-start justify-between gap-3">
