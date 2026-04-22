@@ -3,23 +3,18 @@
 import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
-  const [isLight, setIsLight] = useState(false);
+  const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-
-    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
-      setIsLight(true);
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
+    const themeToApply = savedTheme || 'dark';
+    setTheme(themeToApply);
+    document.documentElement.setAttribute('data-theme', themeToApply);
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = isLight ? 'dark' : 'light';
-    setIsLight(!isLight);
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
   };
@@ -27,13 +22,12 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="flex items-center gap-2 bg-surface-2 border border-border text-text-muted font-mono text-xs tracking-widest uppercase px-4 py-2 cursor-pointer transition-all hover:text-accent hover:border-accent"
+      className="dark-toggle flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-subtle text-muted hover:text-heading transition-all"
       aria-label="Toggle theme"
     >
-      <span className={`text-lg transition-transform duration-300 ${isLight ? 'rotate-180' : ''}`}>
-        ☀
+      <span className="text-xl">
+        {theme === 'dark' ? '🌙' : '☀️'}
       </span>
-      <span>{isLight ? 'Dark' : 'Light'}</span>
     </button>
   );
 }

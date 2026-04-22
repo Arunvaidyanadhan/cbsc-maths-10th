@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 import bcrypt from 'bcrypt';
+import { setSessionCookie } from '../../../lib/auth.js';
 
 export async function POST(request) {
   try {
@@ -27,7 +28,17 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
     
-    return NextResponse.json({ userId: user.id });
+    await setSessionCookie(user.id);
+    
+    return NextResponse.json({
+      success: true,
+      userId: user.id,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

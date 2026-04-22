@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 import crypto from 'crypto';
+import { getRequestUserId } from '../../../lib/auth.js';
 
 export async function POST(request) {
   try {
     const body = await request.json();
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const userId = await getRequestUserId(request, { allowQuery: true });
     
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !userId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });

@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
+import { getRequestUserId } from '../../../lib/auth.js';
 
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const userId = await getRequestUserId(request, { allowQuery: true });
     
     if (!userId) {
-      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
     
     // Get user and daily stats
@@ -88,6 +88,7 @@ export async function GET(request) {
       streak: stats?.streak || 0,
       longestStreak: stats?.longestStreak || 0,
       xp: user?.xp || 0,
+      isPremium: user?.isPremium || false,
       todayQuestions,
       dailyGoal: stats?.dailyGoal || 15,
       goalHit: stats?.todayGoalHit || false,

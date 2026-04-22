@@ -1,4 +1,4 @@
-export default function ResultCard({ score, total, percentage, mastery, xpEarned, weakAreas, onContinue, onRetry }) {
+export default function ResultCard({ score, total, percentage, mastery, xpEarned, weakAreas, onContinue, onRetry, isPremium = false }) {
   const getMessage = (pct) => {
     if (pct >= 90) return { text: 'Excellent! 🏆', color: 'text-primary' };
     if (pct >= 70) return { text: 'Great job! 👏', color: 'text-primary' };
@@ -7,7 +7,6 @@ export default function ResultCard({ score, total, percentage, mastery, xpEarned
   };
 
   const message = getMessage(percentage);
-  const isPremium = localStorage.getItem('mathbuddy_isPremium') === 'true';
   const showUpgradeCTA = percentage >= 70 && !isPremium;
 
   return (
@@ -53,12 +52,11 @@ export default function ResultCard({ score, total, percentage, mastery, xpEarned
             <div className="font-bold text-primary">You're doing great!</div>
           </div>
           <div className="text-sm text-secondary mb-3 leading-relaxed">
-            Upgrade to unlock all chapters and levels for unlimited practice.
+            Keep the momentum going with a focused practice session.
           </div>
           <button
             onClick={() => {
-              localStorage.setItem('mathbuddy_isPremium', 'true');
-              window.location.reload();
+              window.location.assign('/practice-modes');
             }}
             className="w-full bg-primary text-on-primary font-semibold py-2 px-6 rounded-lg transition-all hover:bg-primary-hover"
           >

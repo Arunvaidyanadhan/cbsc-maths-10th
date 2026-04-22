@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
+import { runBadgeEvaluation } from '../../../lib/badgeEngine';
+import { getRequestUserId } from '../../../lib/auth.js';
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { userId, topicId, chapterId, level, score, total, answers, timeTakenSecs } = body;
+    const sessionUserId = await getRequestUserId(request, { allowQuery: true, allowHeader: true });
+    const { userId: bodyUserId, topicId, chapterId, level, score, total, answers, timeTakenSecs } = body;
+    const userId = sessionUserId || bodyUserId;
     
     if (!userId || !topicId || !chapterId) {
       return NextResponse.json({ error: 'userId, topicId, and chapterId are required' }, { status: 400 });
@@ -186,12 +190,16 @@ export async function POST(request) {
       },
     });
     
+    // Check for new badge unlocks
+    const newlyUnlockedBadges = await runBadgeEvaluation(userId, 'practice');
+    
     return NextResponse.json({ 
       success: true, 
       attemptId: attempt.id,
       mastery,
       xpEarned,
       weakSubtopics,
+      newlyUnlockedBadges,
     });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

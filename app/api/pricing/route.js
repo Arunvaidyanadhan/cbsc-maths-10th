@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
+import { getRequestUserId } from '../../../lib/auth.js';
 
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const userId = await getRequestUserId(request, { allowQuery: true });
     
     if (!userId) {
-      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
     
     // Get user to check if offered_price exists

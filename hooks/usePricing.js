@@ -4,10 +4,10 @@ export const usePricing = () => {
   const [pricing, setPricing] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchPricing = async (userId) => {
+  const fetchPricing = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/pricing?userId=${userId}`);
+      const res = await fetch('/api/pricing');
       const data = await res.json();
       setPricing(data);
     } catch (error) {

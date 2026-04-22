@@ -19,7 +19,12 @@ export default function QuestionCard({ question, qIndex, total, selected, answer
   const handleClick = isLastQuestion ? onSubmit : onNext;
 
   return (
-    <div className="w-full bg-white/30 backdrop-blur-md rounded-2xl p-6 shadow-lg">
+    <div className="w-full practice-question-card">
+      {/* Question Number Pill */}
+      <div className="practice-q-pill">
+        Question {qIndex + 1} of {total}
+      </div>
+
       {/* Question Text */}
       <p className="practice-question">
         {question.text}

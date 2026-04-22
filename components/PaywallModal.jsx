@@ -5,23 +5,20 @@ import { usePricing } from '../hooks/usePricing';
 import { usePayment } from '../hooks/usePayment';
 
 export default function PaywallModal({ isOpen, onClose, onUpgrade }) {
-  const userId = localStorage.getItem('mathbuddy_userId');
   const { pricing, loading, fetchPricing } = usePricing();
   const { startPayment, paying, error } = usePayment({
     onSuccess: () => {
-      localStorage.setItem('mathbuddy_isPremium', 'true');
       onUpgrade();
       onClose();
     },
     onFailure: () => {},
-    userId
   });
 
   useEffect(() => {
-    if (isOpen && userId) {
-      fetchPricing(userId);
+    if (isOpen) {
+      fetchPricing();
     }
-  }, [isOpen, userId, fetchPricing]);
+  }, [isOpen, fetchPricing]);
 
   if (!isOpen) return null;
 

@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
+import { getRequestUserId } from '../../../lib/auth.js';
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const topicId = searchParams.get('topicId');
     const level = searchParams.get('level');
-    const userId = searchParams.get('userId');
+    const userId = await getRequestUserId(request, { allowQuery: true });
     
     if (!topicId || !level) {
       return NextResponse.json({ error: 'topicId and level are required' }, { status: 400 });
@@ -23,7 +24,7 @@ export async function GET(request) {
     }
     
     // Premium check
-    if (userId && level !== 'pass') {
+    if (level !== 'pass') {
       const user = await prisma.user.findUnique({ where: { id: userId } });
       
       // First 2 chapters are free for all levels

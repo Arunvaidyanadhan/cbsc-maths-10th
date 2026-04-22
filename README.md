@@ -147,3 +147,4 @@ Ready for Vercel deployment. Just connect your PostgreSQL database (e.g., Supaba
 ## 📝 License
 
 MIT
+Keep Your Rhythm Consistent.

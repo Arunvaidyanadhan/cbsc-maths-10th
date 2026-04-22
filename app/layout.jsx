@@ -1,7 +1,7 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'MathBuddy - CBSE Class 10 Maths Practice',
+  title: 'Rithamio - CBSE Class 10 Maths Practice',
   description: 'Improve your CBSE Class 10 Maths scores with daily practice',
 };
 

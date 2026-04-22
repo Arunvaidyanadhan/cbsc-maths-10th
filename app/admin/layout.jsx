@@ -36,7 +36,7 @@ export default function AdminLayout({ children }) {
           fontWeight: '700',
           letterSpacing: '-0.02em',
         }}>
-          mathbuddy admin
+          Rithamio admin
         </div>
         
         <nav style={{ flex: 1 }}>

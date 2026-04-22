@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import TopicCard from '../../../components/TopicCard';
 import PaywallModal from '../../../components/PaywallModal';
+import AppShell from '../../../components/AppShell.jsx';
+import { NavigationContext } from '../../../lib/navigationContext.js';
 
 export default function ChapterPage() {
   const router = useRouter();
   const params = useParams();
-  const [userId, setUserId] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
   const [chapter, setChapter] = useState(null);
   const [topics, setTopics] = useState([]);
@@ -17,24 +18,23 @@ export default function ChapterPage() {
   const [showPaywall, setShowPaywall] = useState(false);
 
   useEffect(() => {
-    const id = localStorage.getItem('mathbuddy_userId');
-    const premium = localStorage.getItem('mathbuddy_isPremium') === 'true';
-    if (!id) {
-      router.push('/');
-      return;
-    }
-    setUserId(id);
-    setIsPremium(premium);
-    fetchData(id, params.id);
+    NavigationContext.saveLastActivity('chapter', params.id);
+    fetchData(params.id);
   }, [params.id]);
 
-  const fetchData = async (id, chapterId) => {
+  const fetchData = async (chapterId) => {
     try {
       const [chaptersRes, topicsRes, progressRes] = await Promise.all([
         fetch('/api/chapters'),
         fetch(`/api/topics?chapterId=${chapterId}`),
-        fetch(`/api/progress?userId=${id}`),
+        fetch('/api/progress'),
       ]);
+
+      if (progressRes.status === 401) {
+        router.push('/login');
+        return;
+      }
+
       const chaptersData = await chaptersRes.json();
       const topicsData = await topicsRes.json();
       const progressData = await progressRes.json();
@@ -43,6 +43,7 @@ export default function ChapterPage() {
       setChapter(chapter);
       setTopics(topicsData.topics || []);
       setProgress(progressData);
+      setIsPremium(progressData.isPremium || false);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -51,8 +52,10 @@ export default function ChapterPage() {
   };
 
   const handleTopicClick = (topic) => {
-    // Check if premium is required for this level
-    const isLockedLevel = topic.level !== 'pass' && !isPremium;
+    NavigationContext.saveLastActivity('chapter', params.id);
+    NavigationContext.saveLastActivity('topic', topic.id);
+
+    const isLockedLevel = topic.level !== 'pass' && !isPremium && (chapter?.order || 999) > 2;
     
     if (isLockedLevel) {
       setShowPaywall(true);
@@ -64,7 +67,6 @@ export default function ChapterPage() {
 
   const handleUpgrade = () => {
     setIsPremium(true);
-    localStorage.setItem('mathbuddy_isPremium', 'true');
     setShowPaywall(false);
   };
 
@@ -88,17 +90,12 @@ export default function ChapterPage() {
 
   const topicProgress = progress?.topics || {};
   const mistakes = progress?.mistakes || {};
-  const userName = 'Student';
-  const marks = progress?.accuracy ? (progress.accuracy < 50 ? 40 : progress.accuracy < 70 ? 60 : progress.accuracy < 85 ? 75 : 90) : 0;
-
-  const handleLogout = () => {
-    localStorage.removeItem('mathbuddy_userId');
-    router.push('/');
-  };
+  const userName = progress?.userName || 'Student';
 
   return (
-    <div className="min-h-screen">
-      <div className="page-container p-4">
+    <AppShell>
+
+      <div className="page-container p-4 pt-24">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <button
@@ -107,18 +104,8 @@ export default function ChapterPage() {
           >
             ← Back to Chapters
           </button>
-          <div className="nav-profile-chip">
-            <div className="nav-avatar">{userName.charAt(0)}</div>
-            <div className="nav-profile-info">
-              <span className="nav-name">{userName}</span>
-              <span className="nav-score">~{marks} marks</span>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="nav-logout-btn"
-            >
-              Logout
-            </button>
+          <div className="text-xs tracking-widest uppercase text-muted font-semibold">
+            {chapter?.name || 'Chapter'}
           </div>
         </div>
         <div className="flex items-center gap-3 mb-6">
@@ -142,7 +129,7 @@ export default function ChapterPage() {
         {/* Topic List */}
         <div className="space-y-4">
           {topics.map((topic) => {
-            const isLocked = topic.level !== 'pass';
+            const isLocked = topic.level !== 'pass' && !isPremium && (chapter?.order || 999) > 2;
             return (
               <TopicCard
                 key={topic.id}
@@ -174,6 +161,6 @@ export default function ChapterPage() {
         onClose={() => setShowPaywall(false)}
         onUpgrade={handleUpgrade}
       />
-    </div>
+    </AppShell>
   );
 }

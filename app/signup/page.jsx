@@ -14,14 +14,12 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    const guestUserId = localStorage.getItem('mathbuddy_userId');
-    
+
     try {
-      const res = await fetch('/api/signup', {
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, guestUserId, name })
+        body: JSON.stringify({ email, password, name })
       });
       
       const data = await res.json();
@@ -32,10 +30,7 @@ export default function Signup() {
         return;
       }
       
-      // Store the returned userId
-      localStorage.setItem('mathbuddy_userId', data.userId);
-      
-      router.push('/dashboard');
+      router.push('/profile');
     } catch (error) {
       alert('Something went wrong. Please try again.');
       setLoading(false);
@@ -47,18 +42,18 @@ export default function Signup() {
       {/* Navigation - Mobile only */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-5 py-4 bg-transparent">
         <a className="text-lg font-extrabold text-primary tracking-tight" href="/">
-          mathbuddy
+          Rithamio
         </a>
         <ThemeToggle />
       </nav>
 
       {/* Left Panel - Desktop only */}
       <div className="auth-left">
-        <div className="auth-left-logo">mathbuddy</div>
-        <div className="auth-left-headline">Score 90+ in CBSE Class 10 Maths</div>
+        <div className="auth-left-logo">Rithamio</div>
+        <div className="auth-left-headline">Master CBSE Class 10 Maths with Daily Practice</div>
         <div className="auth-left-sub">
-          Daily practice. Streak tracking. Smart skill gaps.<br/>
-          No videos. No fluff. Just results.
+          Small daily practice → big exam improvement.<br/>
+          Build consistency, track progress, and score 90+.
         </div>
         <div className="auth-stat-row">
           <div className="auth-stat">

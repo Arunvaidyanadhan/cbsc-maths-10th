@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const usePayment = ({ onSuccess, onFailure, userId }) => {
+export const usePayment = ({ onSuccess }) => {
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState(null);
 
@@ -9,7 +9,7 @@ export const usePayment = ({ onSuccess, onFailure, userId }) => {
     setError(null);
     try {
       // Step 1: create order
-      const orderRes = await fetch(`/api/create-order?userId=${userId}`, { method: 'POST' });
+      const orderRes = await fetch('/api/create-order', { method: 'POST' });
       if (!orderRes.ok) throw new Error('Order creation failed');
       const { order_id, amount, currency, key_id } = await orderRes.json();
 
@@ -18,7 +18,7 @@ export const usePayment = ({ onSuccess, onFailure, userId }) => {
         key: key_id,
         amount,
         currency,
-        name: 'MathBuddy',
+        name: 'Rithamio',
         description: 'Full Access – 1 Year',
         order_id,
         prefill: {
@@ -29,7 +29,7 @@ export const usePayment = ({ onSuccess, onFailure, userId }) => {
         handler: async (response) => {
           // Step 3: verify
           try {
-            const verifyRes = await fetch(`/api/verify-payment?userId=${userId}`, {
+            const verifyRes = await fetch('/api/verify-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

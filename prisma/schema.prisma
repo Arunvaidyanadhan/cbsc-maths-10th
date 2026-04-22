@@ -36,6 +36,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   
   attempts      Attempt[]
+  practiceModeAttempts PracticeModeAttempt[]
+  userBadges    UserBadge[]
   dailyStats    DailyStats?
   
   @@index([email])
@@ -99,6 +101,7 @@ model Question {
   createdAt     DateTime @default(now())
   
   topic         Topic    @relation(fields: [topicId], references: [id])
+  questionModes QuestionMode[]
   
   @@index([topicId, level, isActive])
   @@index([subtopicTag])
@@ -199,6 +202,105 @@ model ChapterProgress {
   lastPractisedAt  DateTime?
   
   @@unique([userId, chapterId])
+  @@index([userId])
+}
+
+model PracticeMode {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  icon        String
+  tag         String
+  color       String
+  isPro       Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  order       Int
+  
+  questionModes QuestionMode[]
+  attempts     PracticeModeAttempt[]
+  
+  @@index([order])
+  @@index([isActive])
+}
+
+model QuestionMode {
+  id             String   @id @default(cuid())
+  questionId     String
+  practiceModeId String
+  year           Int?
+  examBoard      String?
+  
+  question       Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  practiceMode   PracticeMode @relation(fields: [practiceModeId], references: [id], onDelete: Cascade)
+  
+  @@unique([questionId, practiceModeId])
+  @@index([practiceModeId])
+}
+
+model PracticeModeAttempt {
+  id             String   @id @default(cuid())
+  userId         String
+  practiceModeId String
+  
+  score          Int
+  total          Int
+  mastery        Int
+  xpEarned       Int
+  timeTakenSecs  Int
+  
+  completedAt    DateTime @default(now())
+  
+  user           User        @relation(fields: [userId], references: [id])
+  practiceMode   PracticeMode @relation(fields: [practiceModeId], references: [id])
+  answers        PracticeModeAnswer[]
+  
+  @@index([userId, completedAt])
+  @@index([userId, practiceModeId])
+}
+
+model PracticeModeAnswer {
+  id             String   @id @default(cuid())
+  attemptId      String
+  
+  selectedIndex  Int
+  correctIndex   Int
+  isCorrect      Boolean
+  timeTakenSecs  Int
+  subtopicTag    String
+  
+  attempt        PracticeModeAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  
+  @@index([attemptId])
+}
+
+model Badge {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  type        String   // streak, xp, accuracy, session, mode, comeback
+  criteria    Json     // JSON criteria for unlocking
+  order       Int
+  isActive    Boolean  @default(true)
+  
+  userBadges  UserBadge[]
+  
+  @@index([order])
+  @@index([isActive])
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+  isRevealed Boolean  @default(false)
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, badgeId])
   @@index([userId])
 }
 

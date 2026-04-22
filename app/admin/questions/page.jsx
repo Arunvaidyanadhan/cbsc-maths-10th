@@ -6,6 +6,7 @@ export default function AdminQuestions() {
   const [questions, setQuestions] = useState([]);
   const [chapters, setChapters] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [practiceModes, setPracticeModes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [showBulkForm, setShowBulkForm] = useState(false);
@@ -30,12 +31,15 @@ export default function AdminQuestions() {
     subtopicTag: '',
     difficulty: 1,
     isActive: true,
+    selectedModes: [],
+    pyqYear: '',
   });
   const [bulkJson, setBulkJson] = useState('');
 
   useEffect(() => {
     fetchQuestions();
     fetchChapters();
+    fetchPracticeModes();
   }, [filterChapter, filterTopic, filterLevel, search, page]);
 
   useEffect(() => {
@@ -86,6 +90,16 @@ export default function AdminQuestions() {
     }
   };
 
+  const fetchPracticeModes = async () => {
+    try {
+      const res = await fetch('/api/practice-modes');
+      const data = await res.json();
+      setPracticeModes(data);
+    } catch (error) {
+      console.error('Error fetching practice modes:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -119,6 +133,8 @@ export default function AdminQuestions() {
         subtopicTag: '',
         difficulty: 1,
         isActive: true,
+        selectedModes: [],
+        pyqYear: '',
       });
     } catch (error) {
       alert(error.message);
@@ -169,6 +185,8 @@ export default function AdminQuestions() {
       subtopicTag: question.subtopicTag,
       difficulty: question.difficulty,
       isActive: question.isActive,
+      selectedModes: question.questionModes?.map(qm => qm.practiceModeId) || [],
+      pyqYear: question.questionModes?.find(qm => qm.practiceModeId === 'pm1')?.year || '',
     });
     setShowForm(true);
   };
@@ -221,6 +239,8 @@ export default function AdminQuestions() {
                 subtopicTag: '',
                 difficulty: 1,
                 isActive: true,
+                selectedModes: [],
+                pyqYear: '',
               });
               setShowForm(true);
             }}
@@ -354,6 +374,37 @@ export default function AdminQuestions() {
               <label className="admin-label">Subtopic Tag</label>
               <input type="text" className="admin-input" value={formData.subtopicTag} onChange={(e) => setFormData({ ...formData, subtopicTag: e.target.value })} placeholder="e.g., euclids-lemma" required />
             </div>
+            <div className="admin-field">
+              <label className="admin-label">Practice Modes</label>
+              <div className="admin-mode-checkboxes">
+                {practiceModes.map(mode => (
+                  <label key={mode.id} className="admin-mode-check-label">
+                    <input
+                      type="checkbox"
+                      checked={formData.selectedModes.includes(mode.id)}
+                      onChange={() => {
+                        const newModes = formData.selectedModes.includes(mode.id)
+                          ? formData.selectedModes.filter(id => id !== mode.id)
+                          : [...formData.selectedModes, mode.id];
+                        setFormData({ ...formData, selectedModes: newModes });
+                      }}
+                    />
+                    <span>{mode.icon} {mode.name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            {formData.selectedModes.includes('pm1') && (
+              <div className="admin-field">
+                <label className="admin-label">PYQ Year</label>
+                <select className="admin-select" value={formData.pyqYear} onChange={(e) => setFormData({ ...formData, pyqYear: e.target.value })}>
+                  <option value="">Select year</option>
+                  {[2024, 2023, 2022, 2021, 2020, 2019, 2018].map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="admin-field">
               <label className="admin-label">Active</label>
               <input type="checkbox" checked={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} />

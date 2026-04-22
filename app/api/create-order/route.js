@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 import Razorpay from 'razorpay';
+import { getRequestUserId } from '../../../lib/auth.js';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -9,11 +10,10 @@ const razorpay = new Razorpay({
 
 export async function POST(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const userId = await getRequestUserId(request, { allowQuery: true });
     
     if (!userId) {
-      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
     
     // Get user's offered_price from DB (never trust frontend price)
