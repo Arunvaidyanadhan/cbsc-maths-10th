@@ -162,20 +162,33 @@ export async function POST(request) {
       },
     });
     
+    // Get total topics in this chapter
+    const chapter = await prisma.chapter.findUnique({
+      where: { id: chapterId },
+      select: { totalTopics: true }
+    });
+    
     const completedTopics = chapterProgress?.completedTopicIds || [];
+    const totalTopics = chapter?.totalTopics || 1;
+    
     if (!completedTopics.includes(topicId)) {
+      const newCompletedTopics = [...completedTopics, topicId];
+      const newPct = Math.round((newCompletedTopics.length / totalTopics) * 100);
+      
       await prisma.chapterProgress.upsert({
         where: { 
           userId_chapterId: { userId, chapterId }
         },
         update: {
           completedTopicIds: { push: topicId },
+          pct: newPct,
           lastPractisedAt: new Date(),
         },
         create: {
           userId,
           chapterId,
           completedTopicIds: [topicId],
+          pct: Math.round((1 / totalTopics) * 100),
           lastPractisedAt: new Date(),
         },
       });

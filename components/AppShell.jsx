@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import GlobalNavbar from './GlobalNavbar.jsx';
 import Footer from './Footer.jsx';
 
@@ -24,7 +24,7 @@ export default function AppShell({ children }) {
   return (
     <div className="min-h-screen flex flex-col">
       <GlobalNavbar />
-      <main className="app-content page-transition">
+      <main className="app-content">
         {children}
       </main>
       <Footer />

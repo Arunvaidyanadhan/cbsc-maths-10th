@@ -62,7 +62,8 @@ export default function GlobalNavbar() {
   const navItems = [
     { label: 'Profile', href: '/profile', icon: '👤' },
     { label: 'Chapters', href: '/chapters', icon: '📚' },
-    { label: 'Practice', href: '/profile#practice', icon: '🎯' }
+    { label: 'Practice Modes', href: '/practice-modes', icon: '🎯' },
+    { label: 'Info Hub', href: '/info-hub', icon: '📖' }
   ];
 
   const isActiveItem = (href) => {

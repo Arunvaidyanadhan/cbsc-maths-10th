@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '../../components/AppShell.jsx';
 import { NavigationContext } from '../../lib/navigationContext.js';
+import ExamCountdownCard from '../../components/ExamCountdownCard.jsx';
+import DailyActionCard from '../../components/DailyActionCard.jsx';
+import CoachCard from '../../components/CoachCard.jsx';
+import GreetingBanner from '../../components/GreetingBanner.jsx';
 import {
   FaClipboardList,
   FaFire,
@@ -20,9 +24,12 @@ export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState(null);
   const [practiceModes, setPracticeModes] = useState([]);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [revealingBadges, setRevealingBadges] = useState(new Set());
   const [openingBadges, setOpeningBadges] = useState(new Set());
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [newName, setNewName] = useState('');
 
   const modeIconMap = {
     'previous-year': { icon: FaClipboardList, color: '#0D7A6A' },
@@ -40,9 +47,10 @@ export default function ProfilePage() {
 
   const fetchProfile = async () => {
     try {
-      const [profileRes, modesRes] = await Promise.all([
+      const [profileRes, modesRes, progressRes] = await Promise.all([
         fetch('/api/profile'),
-        fetch('/api/practice-modes')
+        fetch('/api/practice-modes'),
+        fetch('/api/progress')
       ]);
       
       if (profileRes.ok) {
@@ -54,10 +62,39 @@ export default function ProfilePage() {
         const modesData = await modesRes.json();
         setPracticeModes(modesData);
       }
+      
+      if (progressRes.ok) {
+        const progressData = await progressRes.json();
+        console.log('Progress data:', progressData); // Debug log
+        setStats(progressData);
+      }
     } catch (error) {
       console.error('Failed to fetch data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUpdateName = async () => {
+    if (!newName.trim()) return;
+    
+    try {
+      const response = await fetch('/api/profile/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newName.trim() }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setProfile(prev => ({ ...prev, name: data.user.name }));
+        setIsEditingName(false);
+        setNewName('');
+      }
+    } catch (error) {
+      console.error('Failed to update name:', error);
     }
   };
 
@@ -208,286 +245,280 @@ export default function ProfilePage() {
     : 0;
   const recentPracticeTarget = NavigationContext.getRecentPracticeTarget();
 
+  // Detect if user is new (no attempts or no data)
+  const isNewUser = !stats || stats.totalAttempted === 0;
+  
+  // Transform weak topics data for UI
+  const weakSubtopics = stats?.weakTopics?.map(wt => ({
+    name: wt.topicName || wt.subtopicTag,
+    mistakeCount: wt.wrongCount,
+    mastery: 0 // Mastery not available from mistakes data
+  })) || [];
+  const hasWeakAreas = weakSubtopics.length > 0;
+  
+  // Transform chapter progress data for UI
+  const chapterProgress = stats?.chapters ? Object.entries(stats.chapters).map(([chapterId, data]) => ({
+    name: `Chapter ${chapterId}`,
+    pct: data.pct
+  })) : [];
+  
+  // Transform topic progress data for UI
+  const topicProgress = stats?.topics ? Object.entries(stats.topics).map(([topicId, data]) => ({
+    name: `Topic ${topicId}`, // Will need to fetch actual topic names
+    mastery: data.mastery,
+    attempts: data.attempts
+  })) : [];
+  
+  // Get recommended action (highest mistake topic OR lowest mastery topic)
+  const getRecommendedAction = () => {
+    if (hasWeakAreas) {
+      return weakSubtopics[0]; // Highest mistake count
+    }
+    if (topicProgress.length > 0) {
+      const lowestMastery = topicProgress
+        .filter(tp => tp.mastery < 70)
+        .sort((a, b) => a.mastery - b.mastery)[0];
+      return lowestMastery;
+    }
+    return null;
+  };
+  
+  const recommendedAction = getRecommendedAction();
+
   return (
     <AppShell>
-      <div className="max-w-6xl mx-auto">
-        {/* Header Stats */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-heading mb-2">
-            {profile.name}
-          </h1>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="glass-card p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{profile.xp}</div>
-              <div className="text-sm text-muted">Total XP</div>
-            </div>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Header with Name */}
+      
+
+        {/* Dynamic Greeting Banner */}
+        <GreetingBanner name={profile.name} stats={stats} profile={profile} />
+
+        {/* ONBOARDING-STYLE DASHBOARD - New User */}
+        {isNewUser && (
+          <div className="glass-card p-8 mb-8 text-center">
+            <div className="text-5xl mb-4">👋</div>
+            <h2 className="text-2xl font-bold text-heading mb-2">Welcome!</h2>
+            <p className="text-muted mb-6 max-w-md mx-auto">
+              Start your maths journey today
+            </p>
             
-            <div className="glass-card p-4 text-center">
-              <div className="text-2xl font-bold text-orange-600">{profile.streak}</div>
-              <div className="text-sm text-muted">Day Streak</div>
+            <div className="bg-blue-50 p-4 rounded-lg mb-6 max-w-md mx-auto text-left">
+              <div className="font-semibold text-blue-700 mb-2">Solve 10 questions to unlock:</div>
+              <ul className="text-sm text-blue-600 space-y-1">
+                <li>• Your progress</li>
+                <li>• Weak areas</li>
+                <li>• Personalized insights</li>
+              </ul>
             </div>
+
+            <button
+              onClick={() => router.push('/chapters')}
+              className="px-8 py-4 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors text-lg"
+            >
+              Start Practice
+            </button>
+
+            <p className="text-sm text-muted mt-6 max-w-md mx-auto">
+              Your dashboard will update as you practice
+            </p>
+          </div>
+        )}
+
+        {/* 1. TODAY'S PROGRESS (Hero Section) - Only for returning users */}
+        {!isNewUser && (
+          <div className="glass-card p-6 mb-8">
+            <h2 className="text-lg font-bold text-heading mb-4">Today's Progress</h2>
             
-            <div className="glass-card p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{profile.consistencyScore}%</div>
-              <div className="text-sm text-muted">Consistency</div>
-            </div>
-            
-            <div className="glass-card p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">
-                {profile.badges.filter(b => b.isRevealed).length}
-              </div>
-              <div className="text-sm text-muted">Badges Earned</div>
-            </div>
-          </div>
-
-          {unrevealedCount > 0 && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-light border border-primary rounded-full mb-4">
-              <span className="text-2xl">??</span>
-              <span className="text-sm font-semibold text-primary">
-                {unrevealedCount} reward{unrevealedCount > 1 ? 's' : ''} waiting
-              </span>
-            </div>
-          )}
-
-          
-
-          {/* Continue where you left off */}
-          {recentPracticeTarget && (
-            <div className="glass-card p-6 mb-8">
-              <h3 className="text-lg font-semibold text-heading mb-3">Continue where you left off</h3>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-sm text-muted mb-1">Pick up your progress</div>
-                  <div className="font-medium text-heading">
-                    {recentPracticeTarget.type === 'topic' ? 'Continue Topic Practice' : 'Continue Practice Mode'}
-                  </div>
-                </div>
-                <a 
-                  href={
-                    recentPracticeTarget.type === 'topic'
-                      ? `/practice/${recentPracticeTarget.id}`
-                      : `/practice-mode/${recentPracticeTarget.id}`
-                  }
-                  className="primary-btn px-4 py-2 bg-primary text-on-primary rounded-lg font-semibold hover:bg-primary-hover transition-colors"
-                >
-                  Continue
-                </a>
-              </div>
-            </div>
-          )}
-
-          {/* Section Divider */}
-          <div className="flex items-center gap-3 mb-8">
-            <span className="text-xs tracking-widest uppercase text-primary inline-flex items-center gap-3 font-semibold">
-              Practice by Goal
-            </span>
-            <span className="flex-1 h-px bg-subtle"></span>
-          </div>
-
-          {/* Exam Intelligence Section */}
-          <div id="practice" className="profile-section mb-8">
-            <div className="section-header mb-6">
-              <div className="section-title text-xl font-bold text-heading mb-2">Exam Intelligence</div>
-              <div className="section-sub text-sm text-muted">
-                Practice smart. Focus on what matters in exams.
-              </div>
-            </div>
-
-            <div className="modes-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {practiceModes.map((mode) => {
-                const isLocked = !mode.isUnlocked && !profile?.isPremium;
-                const lastScore = mode.lastScore || 0;
-                const sessionsCount = mode.attempts || 0;
-                
-                // Get icon and color from mapping, with fallback
-                const iconConfig = modeIconMap[mode.slug] || { icon: FaBookOpen, color: '#64748B' };
-                const Icon = iconConfig.icon;
-                const modeColor = iconConfig.color;
-                
-                return (
-                  <div 
-                    key={mode.id}
-                    className={`glass-card p-6 cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden ${
-                      isLocked ? 'opacity-75' : ''
-                    }`}
-                    style={{ '--mode-color': modeColor }}
-                    onClick={() => {
-                      if (isLocked) {
-                        // Open paywall modal logic here
-                        alert('This is a premium feature. Upgrade to unlock!');
-                      } else {
-                        router.push(`/practice-mode/${mode.slug}`);
-                      }
-                    }}
-                  >
-                    {/* Background accent */}
-                    <div 
-                      className="absolute inset-0 pointer-events-none opacity-5"
-                      style={{
-                        background: `radial-gradient(circle at top left, ${modeColor} 0%, transparent 60%)`
-                      }}
-                    />
-                    
-                    <div className="flex items-center justify-between mb-4 relative z-10">
-                      <div 
-                        className="mode-icon flex items-center justify-center rounded-lg transition-all"
-                        style={{
-                          width: '42px',
-                          height: '42px',
-                          fontSize: '18px',
-                          background: `${modeColor}10`,
-                          color: modeColor
-                        }}
-                      >
-                        <Icon />
-                      </div>
-                      <div className="text-xs text-muted">
-                        {isLocked ? '??' : lastScore > 0 ? `${lastScore}%` : 'Not started'}
-                      </div>
-                    </div>
-                    
-                    <h4 className="font-bold text-heading mb-2 relative z-10">{mode.title}</h4>
-                    <p className="text-sm text-muted mb-4 relative z-10">{mode.description}</p>
-                    
-                    <div className="flex items-center justify-between text-xs text-muted relative z-10">
-                      <span>{sessionsCount} session{sessionsCount !== 1 ? 's' : ''}</span>
-                      <span>10 questions ? 5 min</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Empty state for practice modes */}
-          {practiceModes.length === 0 && !loading && (
-            <div className="glass-card p-8 text-center mb-8">
-              <div className="text-3xl mb-4">🎯</div>
-              <h3 className="text-lg font-semibold text-heading mb-2">No Practice Modes Available</h3>
-              <p className="text-sm text-muted mb-4">Start with Previous Year Questions to build your foundation</p>
-              <a 
-                href="/chapters"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-lg font-semibold hover:bg-primary-hover transition-colors"
-              >
-                <span>📚</span>
-                <span>Start with Chapters</span>
-              </a>
-            </div>
-          )}
-        </div>
-
-        {/* Badge Locker - Gift Box Experience */}
-        <div className="mb-8">
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-heading mb-2">Badge Locker</h2>
-            <p className="text-sm text-muted">Unlock rewards as you stay consistent</p>
-          </div>
-
-          {/* Unopened count indicator */}
-          {unrevealedCount > 0 && (
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-light border border-primary rounded-full">
-                <span className="text-lg">??</span>
-                <span className="text-sm font-semibold text-primary">
-                  You have {unrevealedCount} reward{unrevealedCount > 1 ? 's' : ''} waiting
+            {/* Progress Bar */}
+            <div className="mb-4">
+              <div className="flex justify-between text-sm mb-2">
+                <span className="font-semibold text-heading">
+                  {stats?.todayQuestions || 0} / {stats?.dailyGoal || 15} questions
+                </span>
+                <span className="text-muted">
+                  {stats?.goalHit ? '🎉 Goal complete!' : `${(stats?.dailyGoal || 15) - (stats?.todayQuestions || 0)} more to go`}
                 </span>
               </div>
+              <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-primary to-primary-light transition-all duration-500"
+                  style={{ width: `${Math.min((stats?.todayQuestions || 0) / (stats?.dailyGoal || 15) * 100, 100)}%` }}
+                />
+              </div>
             </div>
-          )}
 
-          <div className="badge-grid grid grid-cols-3 md:grid-cols-5 gap-3">
-            {profile.badges.map((badge) => {
-              const isLocked = !badge.isUnlocked;
-              const isUnrevealed = badge.isUnlocked && !badge.isRevealed;
-              const isRevealed = badge.isRevealed;
-              const isRevealing = revealingBadges.has(badge.id);
-              const isOpening = openingBadges.has(badge.id);
-
-              const handleBadgeClick = () => {
-                if (isUnrevealed && !isRevealing) {
-                  // Start opening animation
-                  setOpeningBadges(prev => new Set(prev).add(badge.id));
-                  
-                  // After animation, reveal the badge
-                  setTimeout(() => {
-                    setOpeningBadges(prev => {
-                      const newSet = new Set(prev);
-                      newSet.delete(badge.id);
-                      return newSet;
-                    });
-                    handleRevealBadge(badge.id);
-                  }, 400);
-                }
-              };
-
-              return (
-                <div key={badge.id} className="text-center">
-                  {/* LOCKED STATE */}
-                  {isLocked && (
-                    <div 
-                      className="badge-box locked opacity-50 grayscale"
-                      title={badge.criteria || "Complete more sessions to unlock"}
-                    >
-                      <FaGift />
-                    </div>
-                  )}
-
-                  {/* UNLOCKED (GLOWING GIFT) */}
-                  {isUnrevealed && !isOpening && (
-                    <div 
-                      className="badge-box glow cursor-pointer"
-                      onClick={handleBadgeClick}
-                      title="Click to open your reward!"
-                    >
-                      <FaGift />
-                    </div>
-                  )}
-
-                  {/* OPENING ANIMATION */}
-                  {isUnrevealed && isOpening && (
-                    <div className="badge-box opening">
-                      <FaGift />
-                    </div>
-                  )}
-
-                  {/* REVEALED BADGE */}
-                  {isRevealed && (
-                    <div className="badge-revealed">
-                      <div className="badge-icon text-2xl mb-1">
-                        {badge.icon}
-                      </div>
-                      <div className="badge-name text-xs font-semibold text-muted">
-                        {badge.name}
-                      </div>
-                    </div>
-                  )}
+            {/* Stats Row */}
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <div className="text-center p-3 bg-orange-50 rounded-lg">
+                <div className="text-2xl mb-1">🔥</div>
+                <div className="text-xl font-bold text-orange-600">{stats?.streak || 0}</div>
+                <div className="text-xs text-muted">Day Streak</div>
+              </div>
+              <div className="text-center p-3 bg-green-50 rounded-lg">
+                <div className="text-2xl mb-1">📊</div>
+                <div className="text-xl font-bold text-green-600">
+                  {stats?.accuracy || 0}%
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="mt-12 pt-8 border-t border-subtle">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="text-center md:text-left">
-              <h3 className="text-lg font-semibold text-heading mb-2">Keep Practicing!</h3>
-              <p className="text-sm text-muted">Daily practice builds consistency and improves your scores</p>
+                <div className="text-xs text-muted">Accuracy Today</div>
+              </div>
+              <div className="text-center p-3 bg-purple-50 rounded-lg">
+                <div className="text-2xl mb-1">🎯</div>
+                <div className="text-xl font-bold text-purple-600">
+                  {stats?.goalHit ? '✓' : '○'}
+                </div>
+                <div className="text-xs text-muted">Daily Goal</div>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <a 
-                href="/chapters"
-                className="px-6 py-3 bg-primary text-on-primary rounded-lg font-semibold hover:bg-primary-hover transition-colors"
+
+            {/* Primary CTA */}
+            <button
+              onClick={() => router.push('/chapters')}
+              className="w-full px-4 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors flex items-center justify-center gap-2"
+            >
+              <span>Continue Practice</span>
+              <span>→</span>
+            </button>
+          </div>
+        )}
+
+        {/* 2. FOCUS AREAS (Performance Insights) - Only for returning users with weak areas */}
+        {!isNewUser && hasWeakAreas && (
+          <div className="glass-card p-6 mb-8">
+            <h2 className="text-lg font-bold text-heading mb-4">📍 You Should Focus On</h2>
+            <div className="space-y-3">
+              {weakSubtopics.slice(0, 3).map((weak, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
+                  <div className="flex-1">
+                    <div className="font-semibold text-red-700 mb-1">{weak.name}</div>
+                    <div className="text-sm text-red-600">
+                      {weak.mistakeCount || 0} mistakes
+                    </div>
+                  </div>
+                  <button 
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
+                    onClick={() => router.push('/chapters')}
+                  >
+                    Practice This →
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => router.push('/chapters')}
+              className="w-full mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+            >
+              Practice All Weak Areas →
+            </button>
+          </div>
+        )}
+
+        {/* No Weak Areas Message - For returning users with no weak areas */}
+        {!isNewUser && !hasWeakAreas && (
+          <div className="glass-card p-6 mb-8 text-center">
+            <div className="text-3xl mb-2">🎉</div>
+            <h3 className="font-semibold text-heading mb-2">Great job! No weak areas yet 👏</h3>
+            <p className="text-muted mb-4">Keep practicing to maintain your streak 🔥</p>
+            <button
+              onClick={() => router.push('/chapters')}
+              className="px-6 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
+            >
+              Keep Practicing →
+            </button>
+          </div>
+        )}
+
+        {/* RECOMMENDED ACTION - Smart Engine */}
+        {!isNewUser && recommendedAction && (
+          <div className="glass-card p-6 mb-8 border-l-4 border-green-500">
+            <h2 className="text-lg font-bold text-heading mb-4">🎯 Recommended for You</h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm text-muted mb-1">Fix:</div>
+                <div className="font-semibold text-heading text-lg">{recommendedAction.name}</div>
+                {recommendedAction.mistakeCount && (
+                  <div className="text-sm text-red-600 mt-1">{recommendedAction.mistakeCount} mistakes</div>
+                )}
+                {recommendedAction.mastery !== undefined && (
+                  <div className="text-sm text-orange-600 mt-1">Mastery: {recommendedAction.mastery}%</div>
+                )}
+              </div>
+              <button
+                onClick={() => router.push('/chapters')}
+                className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
               >
                 Start Practice
-              </a>
-              <a 
-                href="/dashboard"
-                className="px-6 py-3 bg-card text-body border border-subtle rounded-lg font-semibold hover:bg-card-hover transition-colors"
-              >
-                View Stats
-              </a>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* CHAPTER PROGRESS - Limited View (3-4 chapters) */}
+        {!isNewUser && chapterProgress.length > 0 && (
+          <div className="glass-card p-6 mb-8">
+            <h2 className="text-lg font-bold text-heading mb-4">📚 Your Progress</h2>
+            <div className="space-y-3">
+              {chapterProgress
+                .sort((a, b) => a.pct - b.pct)
+                .slice(0, 4)
+                .map((chapter, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="font-semibold text-heading mb-1">{chapter.name}</div>
+                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-primary to-primary-light transition-all duration-500"
+                          style={{ width: `${chapter.pct}%` }}
+                        />
+                      </div>
+                    </div>
+                    <div className="ml-4 text-sm font-semibold text-primary">{chapter.pct}%</div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {/* STRONG AREAS - Optional */}
+        {!isNewUser && topicProgress.filter(tp => tp.mastery > 70).length > 0 && (
+          <div className="glass-card p-6 mb-8">
+            <h2 className="text-lg font-bold text-heading mb-4">💪 You're Doing Great</h2>
+            <div className="space-y-2">
+              {topicProgress
+                .filter(tp => tp.mastery > 70)
+                .sort((a, b) => b.mastery - a.mastery)
+                .slice(0, 2)
+                .map((topic, index) => (
+                  <div key={index} className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                    <div className="text-2xl">✓</div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-green-700">{topic.name}</div>
+                      <div className="text-sm text-green-600">Mastery: {topic.mastery}%</div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {/* COMPACT STATS */}
+        <div className="glass-card p-4 mb-8">
+          <div className="flex items-center justify-around text-center">
+            <div>
+              <div className="text-xl font-bold text-primary">⚡ {profile.xp}</div>
+              <div className="text-xs text-muted">Total XP</div>
+            </div>
+            <div className="w-px h-8 bg-gray-200"></div>
+            <div>
+              <div className="text-xl font-bold text-orange-600">🏆 {profile.longestStreak}</div>
+              <div className="text-xs text-muted">Best Streak</div>
+            </div>
+            <div className="w-px h-8 bg-gray-200"></div>
+            <div>
+              <div className="text-xl font-bold text-purple-600">
+                🎯 {profile.badges.filter(b => b.isRevealed).length}
+              </div>
+              <div className="text-xs text-muted">Badges</div>
             </div>
           </div>
         </div>

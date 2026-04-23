@@ -38,6 +38,9 @@ export async function GET(request) {
       );
     }
 
+    // Debug logging to check user data
+    console.log('Profile user data:', { userId, userName: user.name, userEmail: user.email });
+
     // Calculate consistency score from daily stats
     const dailyStats = await prisma.dailyStats.findUnique({
       where: { userId }
@@ -56,7 +59,7 @@ export async function GET(request) {
     const badges = await getBadgesWithProgress(userId);
 
     return NextResponse.json({
-      name: user.name || 'Student',
+      name: user.name || user.email?.split('@')[0] || 'Student',
       email: user.email || '',
       xp: user.xp,
       streak: user.streak,

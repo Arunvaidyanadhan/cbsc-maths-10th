@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from '../../components/ThemeToggle';
+import ButtonLoader from '../../components/ButtonLoader';
 
 export default function Signup() {
   const router = useRouter();
@@ -114,13 +115,14 @@ export default function Signup() {
               />
             </div>
 
-            <button
+            <ButtonLoader
               type="submit"
-              disabled={loading}
+              isLoading={loading}
+              loadingText="Creating account..."
               className="auth-submit-btn"
             >
-              {loading ? 'Creating account...' : 'Sign Up Free'}
-            </button>
+              Sign Up Free
+            </ButtonLoader>
           </form>
 
           <p className="auth-footer-link">
