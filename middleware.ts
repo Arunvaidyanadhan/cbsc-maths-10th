@@ -11,19 +11,9 @@ export function middleware(request: NextRequest) {
     '/login',
     '/forgot-password',
   ]);
-  
-  // Protect all /admin/* routes except /admin/login
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-    const adminSession = request.cookies.get('admin_session');
-    
-    if (!adminSession || adminSession.value !== process.env.ADMIN_SECRET) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
-    }
-  }
 
   if (
     pathname.startsWith('/api/auth') ||
-    pathname.startsWith('/api/admin') ||
     pathname.startsWith('/_next') ||
     pathname === '/favicon.ico'
   ) {
@@ -37,10 +27,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (!pathname.startsWith('/api') && !pathname.startsWith('/admin') && !learnerSession) {
+  if (!pathname.startsWith('/api') && !learnerSession) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
-  
+
   return NextResponse.next();
 }
 

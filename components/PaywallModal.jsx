@@ -6,6 +6,8 @@ import { usePayment } from '../hooks/usePayment';
 
 export default function PaywallModal({ isOpen, onClose, onUpgrade }) {
   const { pricing, loading, fetchPricing } = usePricing();
+  const [userDetails, setUserDetails] = useState({ name: 'Student', email: '' });
+
   const { startPayment, paying, error } = usePayment({
     onSuccess: () => {
       onUpgrade();
@@ -17,16 +19,22 @@ export default function PaywallModal({ isOpen, onClose, onUpgrade }) {
   useEffect(() => {
     if (isOpen) {
       fetchPricing();
+      // Fetch user details for payment prefill
+      fetch('/api/profile')
+        .then(res => res.json())
+        .then(data => {
+          setUserDetails({
+            name: data.name || 'Student',
+            email: data.email || ''
+          });
+        })
+        .catch(err => console.error('Failed to fetch user details:', err));
     }
   }, [isOpen, fetchPricing]);
 
   if (!isOpen) return null;
 
   const handlePayment = () => {
-    const userDetails = {
-      name: 'Student',
-      email: 'student@example.com'
-    };
     startPayment(userDetails);
   };
 

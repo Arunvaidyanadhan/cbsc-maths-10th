@@ -231,15 +231,15 @@ export default function PracticePage() {
   return (
     <AppShell>
       {/* Sticky Header */}
-      <header className="practice-nav sticky top-20 z-10 p-4">
+      <header className="practice-nav sticky top-16 sm:top-20 z-10 p-3 sm:p-4">
         {/* Dashboard Link */}
-        <a href="/profile" className="practice-dash-link">
+        <a href="/profile" className="practice-dash-link text-sm sm:text-base">
           <span>⌂</span>
-          <span className="practice-dash-label">Profile</span>
+          <span className="practice-dash-label hidden sm:inline">Profile</span>
         </a>
 
         {/* Progress Bar */}
-        <div className="nav-progress-track h-2 bg-gray-200 rounded-full overflow-hidden mb-3">
+        <div className="nav-progress-track h-2 bg-gray-200 rounded-full overflow-hidden mb-2 sm:mb-3">
           <div
             className="nav-progress-fill"
             style={{ width: `${progressPercent}%` }}
@@ -247,11 +247,11 @@ export default function PracticePage() {
         </div>
 
         <div className="flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <span className="nav-pct text-sm font-semibold text-muted">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <span className="nav-pct text-xs sm:text-sm font-semibold text-muted">
               {progressPercent}%
             </span>
-            <span className="text-sm font-semibold text-muted">
+            <span className="text-xs sm:text-sm font-semibold text-muted">
               {currentIndex + 1} / {questions.length}
             </span>
           </div>
@@ -259,7 +259,7 @@ export default function PracticePage() {
       </header>
 
       {/* Question Content */}
-      <main className="p-6 pt-24 max-w-3xl mx-auto">
+      <main className="p-4 sm:p-6 pt-20 sm:pt-24 max-w-3xl mx-auto">
         {loading ? (
           <div className="animate-pulse">Loading questions...</div>
         ) : questions.length === 0 ? (

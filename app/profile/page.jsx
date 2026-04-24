@@ -8,6 +8,8 @@ import ExamCountdownCard from '../../components/ExamCountdownCard.jsx';
 import DailyActionCard from '../../components/DailyActionCard.jsx';
 import CoachCard from '../../components/CoachCard.jsx';
 import GreetingBanner from '../../components/GreetingBanner.jsx';
+import RecommendedActionCard from '../../components/RecommendedActionCard.jsx';
+import NewUserOnboarding from '../../components/NewUserOnboarding.jsx';
 import {
   FaClipboardList,
   FaFire,
@@ -264,126 +266,286 @@ export default function ProfilePage() {
   
   // Transform topic progress data for UI
   const topicProgress = stats?.topics ? Object.entries(stats.topics).map(([topicId, data]) => ({
+    id: topicId,
     name: `Topic ${topicId}`, // Will need to fetch actual topic names
-    mastery: data.mastery,
-    attempts: data.attempts
+    mastery: data.mastery || 0,
+    attempts: data.attempts || 0
   })) : [];
   
-  // Get recommended action (highest mistake topic OR lowest mastery topic)
-  const getRecommendedAction = () => {
-    if (hasWeakAreas) {
-      return weakSubtopics[0]; // Highest mistake count
+  // Get mistakes data with topic mapping
+  const mistakesData = stats?.weakTopics?.map(wt => ({
+    id: wt.topicId || wt.subtopicTag,
+    name: wt.topicName || wt.subtopicTag,
+    wrongCount: wt.wrongCount || 0
+  })) || [];
+  
+  // Beta: Available topic IDs (temporary solution until full content is ready)
+  const AVAILABLE_TOPIC_IDS = [
+    'real-numbers',
+    'polynomials'
+  ];
+
+  // Helper: Filter topics to only available ones
+  const getAvailableTopics = (allTopics) => {
+    return allTopics.filter(t => AVAILABLE_TOPIC_IDS.includes(t.id));
+  };
+
+  // Recommendation Engine
+  const getRecommendation = () => {
+    // Get only available topics
+    const availableTopicProgress = getAvailableTopics(topicProgress);
+    const availableMistakes = mistakesData.filter(m => AVAILABLE_TOPIC_IDS.includes(m.id));
+    
+    // Case 1: First-time user - suggest first available topic
+    if (isNewUser || availableTopicProgress.length === 0) {
+      // For beta, recommend a specific available topic
+      return {
+        topicName: 'Polynomials',
+        message: 'Start with Polynomials',
+        topicId: 'polynomials',
+        reason: 'new_user',
+        isBeta: true
+      };
     }
-    if (topicProgress.length > 0) {
-      const lowestMastery = topicProgress
-        .filter(tp => tp.mastery < 70)
+    
+    // Safe fallback: if no available topics at all
+    if (availableTopicProgress.length === 0) {
+      return {
+        topicName: null,
+        message: 'Start with available chapters',
+        topicId: null,
+        reason: 'no_available_content',
+        isBeta: true
+      };
+    }
+    
+    // Prepare topics with priority calculation (ONLY on available topics)
+    const topicsWithPriority = availableTopicProgress.map(topic => {
+      const mistakeData = availableMistakes.find(m => m.id === topic.id);
+      const wrongCount = mistakeData?.wrongCount || 0;
+      const mastery = topic.mastery || 0;
+      const attempts = topic.attempts || 0;
+      
+      // Priority formula: wrongCount + (100 - mastery)
+      const priority = wrongCount + (100 - mastery);
+      
+      return {
+        ...topic,
+        wrongCount,
+        priority
+      };
+    });
+    
+    // Case 2: All available topics strong (>70% mastery)
+    const allStrong = topicsWithPriority.every(t => t.mastery > 70);
+    if (allStrong && topicsWithPriority.length > 0) {
+      return {
+        topicName: 'Mixed Test',
+        message: 'Try a mixed test to challenge yourself',
+        topicId: null,
+        reason: 'all_strong',
+        isBeta: true
+      };
+    }
+    
+    // Case 3: No mistakes in available topics
+    const hasMistakes = topicsWithPriority.some(t => t.wrongCount > 0);
+    if (!hasMistakes) {
+      // Use lowest mastery available topic
+      const lowestMasteryTopic = topicsWithPriority
         .sort((a, b) => a.mastery - b.mastery)[0];
-      return lowestMastery;
+      
+      if (lowestMasteryTopic) {
+        return {
+          topicName: lowestMasteryTopic.name,
+          message: `Improve: ${lowestMasteryTopic.name}`,
+          topicId: lowestMasteryTopic.id,
+          reason: 'low_mastery',
+          isBeta: true
+        };
+      }
     }
-    return null;
+    
+    // Default: Sort by priority and pick highest (from available topics only)
+    const recommendedTopic = topicsWithPriority
+      .sort((a, b) => b.priority - a.priority)[0];
+    
+    // Safe fallback if recommended topic is undefined
+    if (!recommendedTopic) {
+      return {
+        topicName: 'Polynomials',
+        message: 'Start with Polynomials',
+        topicId: 'polynomials',
+        reason: 'fallback',
+        isBeta: true
+      };
+    }
+    
+    // Generate message based on reason
+    let message;
+    if (recommendedTopic.wrongCount > 0) {
+      message = `Fix: ${recommendedTopic.name}`;
+    } else if (recommendedTopic.mastery < 50) {
+      message = `Improve: ${recommendedTopic.name}`;
+    } else {
+      message = `Practice: ${recommendedTopic.name}`;
+    }
+    
+    return {
+      topicName: recommendedTopic.name,
+      message,
+      topicId: recommendedTopic.id,
+      reason: 'priority_based',
+      isBeta: true
+    };
   };
   
-  const recommendedAction = getRecommendedAction();
+  const recommendation = getRecommendation();
 
   return (
     <AppShell>
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header with Name */}
-      
+        {/* Header Stats - Real Data */}
+        {!isNewUser && stats && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="glass-card p-4 text-center bg-gradient-to-br from-orange-50 to-orange-100">
+              <div className="text-2xl mb-1">🔥</div>
+              <div className="text-2xl font-bold text-orange-600">{stats?.streak || 0}</div>
+              <div className="text-xs text-muted">Day Streak</div>
+            </div>
+            <div className="glass-card p-4 text-center bg-gradient-to-br from-yellow-50 to-yellow-100">
+              <div className="text-2xl mb-1">⚡</div>
+              <div className="text-2xl font-bold text-yellow-600">{stats?.xp || 0}</div>
+              <div className="text-xs text-muted">XP</div>
+            </div>
+            <div className="glass-card p-4 text-center bg-gradient-to-br from-green-50 to-green-100">
+              <div className="text-2xl mb-1">🎯</div>
+              <div className="text-2xl font-bold text-green-600">{stats?.accuracy || 0}%</div>
+              <div className="text-xs text-muted">Accuracy</div>
+            </div>
+            <div className="glass-card p-4 text-center bg-gradient-to-br from-purple-50 to-purple-100">
+              <div className="text-2xl mb-1">🏅</div>
+              <div className="text-2xl font-bold text-purple-600">{stats?.badgesEarned || 0}</div>
+              <div className="text-xs text-muted">Badges</div>
+            </div>
+          </div>
+        )}
 
-        {/* Dynamic Greeting Banner */}
-        <GreetingBanner name={profile.name} stats={stats} profile={profile} />
-
-        {/* ONBOARDING-STYLE DASHBOARD - New User */}
+        {/* NEW USER: Duolingo-style Onboarding (Action-Focused) */}
         {isNewUser && (
-          <div className="glass-card p-8 mb-8 text-center">
-            <div className="text-5xl mb-4">👋</div>
-            <h2 className="text-2xl font-bold text-heading mb-2">Welcome!</h2>
-            <p className="text-muted mb-6 max-w-md mx-auto">
-              Start your maths journey today
-            </p>
-            
-            <div className="bg-blue-50 p-4 rounded-lg mb-6 max-w-md mx-auto text-left">
-              <div className="font-semibold text-blue-700 mb-2">Solve 10 questions to unlock:</div>
-              <ul className="text-sm text-blue-600 space-y-1">
-                <li>• Your progress</li>
-                <li>• Weak areas</li>
-                <li>• Personalized insights</li>
-              </ul>
-            </div>
-
-            <button
-              onClick={() => router.push('/chapters')}
-              className="px-8 py-4 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors text-lg"
-            >
-              Start Practice
-            </button>
-
-            <p className="text-sm text-muted mt-6 max-w-md mx-auto">
-              Your dashboard will update as you practice
-            </p>
-          </div>
+          <NewUserOnboarding userName={profile.name} />
         )}
 
-        {/* 1. TODAY'S PROGRESS (Hero Section) - Only for returning users */}
+        {/* RETURNING USER: Full Dashboard */}
         {!isNewUser && (
-          <div className="glass-card p-6 mb-8">
-            <h2 className="text-lg font-bold text-heading mb-4">Today's Progress</h2>
+          <>
+            {/* Dynamic Greeting Banner */}
+            <GreetingBanner name={profile.name} stats={stats} profile={profile} />
+
+            <RecommendedActionCard 
+              topicName={recommendation.topicName}
+              message={recommendation.message}
+              topicId={recommendation.topicId}
+            />
+            {/* Beta info message for limited content */}
+            {recommendation.isBeta && (
+              <div className="text-center mb-4">
+                <p className="text-xs text-muted">
+                  We're starting with selected chapters. More coming soon!
+                </p>
+              </div>
+            )}
             
-            {/* Progress Bar */}
-            <div className="mb-4">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="font-semibold text-heading">
-                  {stats?.todayQuestions || 0} / {stats?.dailyGoal || 15} questions
-                </span>
-                <span className="text-muted">
-                  {stats?.goalHit ? '🎉 Goal complete!' : `${(stats?.dailyGoal || 15) - (stats?.todayQuestions || 0)} more to go`}
-                </span>
+            {/* 1. TODAY'S PROGRESS (Hero Section) */}
+            <div className="glass-card p-6 mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-bold text-heading">Today's Progress</h2>
+                <span className="text-xs text-muted">Last updated just now</span>
               </div>
-              <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-primary to-primary-light transition-all duration-500"
-                  style={{ width: `${Math.min((stats?.todayQuestions || 0) / (stats?.dailyGoal || 15) * 100, 100)}%` }}
-                />
+              
+              {/* Progress Bar */}
+              <div className="mb-4">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="font-semibold text-heading">
+                    {stats?.todayProgress?.done || 0} / {stats?.todayProgress?.goal || 15} questions
+                  </span>
+                  <span className="text-muted">
+                    {stats?.goalHit ? '🎉 Goal complete!' : `${(stats?.todayProgress?.goal || 15) - (stats?.todayProgress?.done || 0)} more to go`}
+                  </span>
+                </div>
+                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-primary to-primary-light transition-all duration-500 animate-pulse"
+                    style={{ width: `${Math.min((stats?.todayProgress?.done || 0) / (stats?.todayProgress?.goal || 15) * 100, 100)}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Stats Row */}
+              <div className="grid grid-cols-4 gap-4 mb-4">
+                <div className="text-center p-3 bg-orange-50 rounded-lg">
+                  <div className="text-2xl mb-1">🔥</div>
+                  <div className="text-xl font-bold text-orange-600">{stats?.streak || 0}</div>
+                  <div className="text-xs text-muted">Day Streak</div>
+                </div>
+                <div className="text-center p-3 bg-blue-50 rounded-lg">
+                  <div className="text-2xl mb-1">📈</div>
+                  <div className="text-xl font-bold text-blue-600">
+                    {stats?.consistency || 0}%
+                  </div>
+                  <div className="text-xs text-muted">Consistency</div>
+                </div>
+                <div className="text-center p-3 bg-green-50 rounded-lg">
+                  <div className="text-2xl mb-1">📊</div>
+                  <div className="text-xl font-bold text-green-600">
+                    {stats?.accuracy || 0}%
+                  </div>
+                  <div className="text-xs text-muted">Accuracy</div>
+                </div>
+                <div className="text-center p-3 bg-purple-50 rounded-lg">
+                  <div className="text-2xl mb-1">🎯</div>
+                  <div className="text-xl font-bold text-purple-600">
+                    {stats?.goalHit ? '✓' : '○'}
+                  </div>
+                  <div className="text-xs text-muted">Daily Goal</div>
+                </div>
+              </div>
+
+              {/* Primary CTA */}
+              <button
+                onClick={() => router.push('/chapters')}
+                className="w-full min-h-[44px] px-4 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors flex items-center justify-center gap-2"
+              >
+                <span>Continue Practice</span>
+                <span>→</span>
+              </button>
+            </div>
+
+            {/* Performance Snapshot */}
+            <div className="glass-card p-6 mb-8">
+              <h2 className="text-lg font-bold text-heading mb-4">Performance Snapshot</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <div className="text-3xl font-bold text-heading">{stats?.accuracy || 0}%</div>
+                  <div className="text-sm text-muted">Accuracy</div>
+                </div>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <div className="text-3xl font-bold text-heading">{stats?.avgScore || 0}/10</div>
+                  <div className="text-sm text-muted">Avg Score</div>
+                </div>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <div className="text-3xl font-bold text-heading">{stats?.totalQuestions || 0}</div>
+                  <div className="text-sm text-muted">Questions Solved</div>
+                </div>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <div className="text-3xl font-bold text-heading">{stats?.avgTime || 0}s</div>
+                  <div className="text-sm text-muted">Avg Speed</div>
+                </div>
               </div>
             </div>
 
-            {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              <div className="text-center p-3 bg-orange-50 rounded-lg">
-                <div className="text-2xl mb-1">🔥</div>
-                <div className="text-xl font-bold text-orange-600">{stats?.streak || 0}</div>
-                <div className="text-xs text-muted">Day Streak</div>
-              </div>
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <div className="text-2xl mb-1">📊</div>
-                <div className="text-xl font-bold text-green-600">
-                  {stats?.accuracy || 0}%
-                </div>
-                <div className="text-xs text-muted">Accuracy Today</div>
-              </div>
-              <div className="text-center p-3 bg-purple-50 rounded-lg">
-                <div className="text-2xl mb-1">🎯</div>
-                <div className="text-xl font-bold text-purple-600">
-                  {stats?.goalHit ? '✓' : '○'}
-                </div>
-                <div className="text-xs text-muted">Daily Goal</div>
-              </div>
-            </div>
-
-            {/* Primary CTA */}
-            <button
-              onClick={() => router.push('/chapters')}
-              className="w-full px-4 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors flex items-center justify-center gap-2"
-            >
-              <span>Continue Practice</span>
-              <span>→</span>
-            </button>
-          </div>
-        )}
-
-        {/* 2. FOCUS AREAS (Performance Insights) - Only for returning users with weak areas */}
-        {!isNewUser && hasWeakAreas && (
+            {/* 2. FOCUS AREAS (Performance Insights) - Only for returning users with weak areas */}
+            {hasWeakAreas && (
           <div className="glass-card p-6 mb-8">
             <h2 className="text-lg font-bold text-heading mb-4">📍 You Should Focus On</h2>
             <div className="space-y-3">
@@ -396,7 +558,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <button 
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
+                    className="min-h-[44px] px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
                     onClick={() => router.push('/chapters')}
                   >
                     Practice This →
@@ -406,30 +568,30 @@ export default function ProfilePage() {
             </div>
             <button
               onClick={() => router.push('/chapters')}
-              className="w-full mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+              className="w-full min-h-[44px] mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
             >
               Practice All Weak Areas →
             </button>
           </div>
         )}
 
-        {/* No Weak Areas Message - For returning users with no weak areas */}
-        {!isNewUser && !hasWeakAreas && (
+            {/* No Weak Areas Message - For returning users with no weak areas */}
+            {!hasWeakAreas && (
           <div className="glass-card p-6 mb-8 text-center">
             <div className="text-3xl mb-2">🎉</div>
             <h3 className="font-semibold text-heading mb-2">Great job! No weak areas yet 👏</h3>
             <p className="text-muted mb-4">Keep practicing to maintain your streak 🔥</p>
             <button
               onClick={() => router.push('/chapters')}
-              className="px-6 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
+              className="min-h-[44px] px-6 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
             >
               Keep Practicing →
             </button>
           </div>
         )}
 
-        {/* RECOMMENDED ACTION - Smart Engine */}
-        {!isNewUser && recommendedAction && (
+            {/* RECOMMENDED ACTION - Smart Engine */}
+            {recommendedAction && (
           <div className="glass-card p-6 mb-8 border-l-4 border-green-500">
             <h2 className="text-lg font-bold text-heading mb-4">🎯 Recommended for You</h2>
             <div className="flex items-center justify-between">
@@ -445,7 +607,7 @@ export default function ProfilePage() {
               </div>
               <button
                 onClick={() => router.push('/chapters')}
-                className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                className="min-h-[44px] px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
               >
                 Start Practice
               </button>
@@ -453,8 +615,8 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* CHAPTER PROGRESS - Limited View (3-4 chapters) */}
-        {!isNewUser && chapterProgress.length > 0 && (
+            {/* CHAPTER PROGRESS - Limited View (3-4 chapters) */}
+            {chapterProgress.length > 0 && (
           <div className="glass-card p-6 mb-8">
             <h2 className="text-lg font-bold text-heading mb-4">📚 Your Progress</h2>
             <div className="space-y-3">
@@ -479,8 +641,8 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* STRONG AREAS - Optional */}
-        {!isNewUser && topicProgress.filter(tp => tp.mastery > 70).length > 0 && (
+            {/* STRONG AREAS - Optional */}
+            {topicProgress.filter(tp => tp.mastery > 70).length > 0 && (
           <div className="glass-card p-6 mb-8">
             <h2 className="text-lg font-bold text-heading mb-4">💪 You're Doing Great</h2>
             <div className="space-y-2">
@@ -501,27 +663,123 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* COMPACT STATS */}
-        <div className="glass-card p-4 mb-8">
-          <div className="flex items-center justify-around text-center">
-            <div>
-              <div className="text-xl font-bold text-primary">⚡ {profile.xp}</div>
-              <div className="text-xs text-muted">Total XP</div>
+            {/* PRACTICE INTELLIGENCE */}
+            {stats?.practiceModesProgress && (
+          <div className="glass-card p-6 mb-8">
+            <h2 className="text-lg font-bold text-heading mb-4">📊 Practice Intelligence</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {stats.practiceModesProgress?.previousYear !== undefined && (
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-blue-700">Previous Year</span>
+                    <span className="text-2xl font-bold text-blue-600">
+                      {stats.practiceModesProgress.previousYear}%
+                    </span>
+                  </div>
+                  <div className="h-2 bg-blue-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-500 transition-all duration-500"
+                      style={{ width: `${Math.min(stats.practiceModesProgress.previousYear, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {stats.practiceModesProgress?.mostAsked !== undefined && (
+                <div className="p-4 bg-orange-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-orange-700">Most Asked</span>
+                    <span className="text-2xl font-bold text-orange-600">
+                      {stats.practiceModesProgress.mostAsked}%
+                    </span>
+                  </div>
+                  <div className="h-2 bg-orange-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-orange-500 transition-all duration-500"
+                      style={{ width: `${Math.min(stats.practiceModesProgress.mostAsked, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="w-px h-8 bg-gray-200"></div>
-            <div>
-              <div className="text-xl font-bold text-orange-600">🏆 {profile.longestStreak}</div>
-              <div className="text-xs text-muted">Best Streak</div>
-            </div>
-            <div className="w-px h-8 bg-gray-200"></div>
-            <div>
-              <div className="text-xl font-bold text-purple-600">
-                🎯 {profile.badges.filter(b => b.isRevealed).length}
+          </div>
+        )}
+
+            {/* EXAM COUNTDOWN */}
+            {stats?.examCountdownDays > 0 && (
+          <div className="glass-card p-6 mb-8 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-heading mb-1">
+                  Hi {profile.name}, you have {stats?.examCountdownDays} days to your board exam 🚀
+                </h2>
+                <p className="text-sm text-muted">
+                  Keep practicing to be fully prepared!
+                </p>
               </div>
-              <div className="text-xs text-muted">Badges</div>
+              <button
+                onClick={() => router.push('/chapters')}
+                className="min-h-[44px] px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              >
+                Start Practice
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* BADGE LOCKER */}
+        <div className="glass-card p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-heading">🏅 Badge Locker</h2>
+            {stats?.unrevealedBadges > 0 && (
+              <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                {stats?.unrevealedBadges} unrevealed!
+              </span>
+            )}
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-4 bg-purple-50 rounded-lg">
+              <div className="text-3xl font-bold text-purple-600">{stats?.badgesEarned || 0}</div>
+              <div className="text-sm text-muted">Badges Earned</div>
+            </div>
+            <div className="text-center p-4 bg-yellow-50 rounded-lg">
+              <div className="text-3xl font-bold text-yellow-600">{stats?.unrevealedBadges || 0}</div>
+              <div className="text-sm text-muted">Unrevealed</div>
+            </div>
+            <div className="text-center p-4 bg-blue-50 rounded-lg md:col-span-2">
+              <button
+                onClick={() => router.push('/badges')}
+                className="w-full min-h-[44px] py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
+              >
+                View All Badges →
+              </button>
             </div>
           </div>
         </div>
+
+      </>
+    )}
+
+            {/* COMPACT STATS */}
+            <div className="glass-card p-4 mb-8">
+              <div className="flex items-center justify-around text-center">
+                <div>
+                  <div className="text-xl font-bold text-primary">⚡ {stats?.xp || profile.xp}</div>
+                  <div className="text-xs text-muted">Total XP</div>
+                </div>
+                <div className="w-px h-8 bg-gray-200"></div>
+                <div>
+                  <div className="text-xl font-bold text-orange-600">🏆 {stats?.longestStreak || profile.longestStreak}</div>
+                  <div className="text-xs text-muted">Best Streak</div>
+                </div>
+                <div className="w-px h-8 bg-gray-200"></div>
+                <div>
+                  <div className="text-xl font-bold text-purple-600">
+                    🎯 {stats?.badgesEarned || 0}
+                  </div>
+                  <div className="text-xs text-muted">Badges</div>
+                </div>
+              </div>
+            </div>
       </div>
     </AppShell>
   );

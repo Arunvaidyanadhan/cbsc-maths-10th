@@ -1,12 +1,14 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { NavigationContext } from '../../lib/navigationContext.js';
+import { useState } from 'react';
 import AppShell from '../../components/AppShell.jsx';
+import SubtopicCompletion from '../../components/SubtopicCompletion.jsx';
 
 function ResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [showFeedback, setShowFeedback] = useState(false);
 
   // Defensive parsing with fallbacks
   const score = parseInt(searchParams.get('score') ?? '0') || 0;
@@ -29,139 +31,212 @@ function ResultPage() {
 
   const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
 
-  // Score-based emoji and color logic
-  const getScoreConfig = (acc) => {
-    if (acc >= 80) return { emoji: '🎉', label: 'Excellent!', color: '#0D7A6A' };
-    if (acc >= 60) return { emoji: '👍', label: 'Good effort!', color: '#E07B00' };
-    if (acc >= 40) return { emoji: '💪', label: 'Keep going!', color: '#B35C00' };
-    return { emoji: '📚', label: 'Needs practice', color: '#C0392B' };
+  // Dynamic headline based on score
+  const getHeadline = (acc, name) => {
+    if (acc >= 90) return `Outstanding, ${name}! 🔥`;
+    if (acc >= 75) return `Great job, ${name}! 💪`;
+    if (acc >= 60) return `Good effort, ${name} 👍`;
+    return `Let's improve this, ${name} 🎯`;
   };
 
-  const scoreConfig = getScoreConfig(accuracy);
-
-  // Personalized message based on score
-  const getMessage = (accuracy, firstName) => {
-    if (accuracy >= 90) return `Outstanding, ${firstName}! You've mastered this. 🎉`;
-    if (accuracy >= 75) return `Great work, ${firstName}! Almost there — one more round? 💪`;
-    if (accuracy >= 60) return `Good effort, ${firstName}! Review the weak areas and retry. 📖`;
-    if (accuracy >= 40) return `Keep going, ${firstName}. Every attempt builds your rhythm. 🎯`;
-    return `Don't give up, ${firstName}. Consistency is the key — try again! 🔁`;
+  // Personal message based on score
+  const getPersonalMessage = (acc) => {
+    if (acc >= 80) return "Great! Move to next topic or challenge yourself";
+    if (acc >= 60) return "You're close — one more attempt will improve this";
+    return "Focus on weak areas and retry once";
   };
 
-  const handleContinue = () => {
-    router.push('/profile');
+  // Primary CTA based on score
+  const getPrimaryCTA = (acc) => {
+    if (acc < 60) return "Fix Weak Areas";
+    if (acc < 80) return "Retry & Improve";
+    return "Go to Next Topic";
   };
 
-  const handleRetry = () => {
-    if (level === 'practice-mode' || mode) {
-      router.push(`/practice-mode/${topicId}`);
-    } else {
-      router.push(`/practice/${topicId}?level=${level}`);
+  // Motivation line based on score
+  const getMotivationLine = (acc) => {
+    if (acc >= 80) return "Consistency like this leads to 90+";
+    if (acc >= 60) return "You're very close — don't stop now";
+    return "Every attempt makes you better";
+  };
+
+  // Smart card content based on score
+  const getSmartCardContent = (acc, weakAreas, topicId) => {
+    if (acc < 60) {
+      return {
+        title: weakAreas.length > 0 ? `Fix your weak areas in this topic` : 'Practice more to improve',
+        subtitle: 'Improve your score quickly',
+        cta: 'Start Practice',
+        action: () => router.push(`/practice/${topicId}?level=pass`)
+      };
     }
+    if (acc < 80) {
+      return {
+        title: 'Retry this topic once',
+        subtitle: 'You can easily reach 80%+',
+        cta: 'Retry Now',
+        action: () => router.push(`/practice/${topicId}?level=${level}`)
+      };
+    }
+    return {
+      title: 'Move to next topic',
+      subtitle: 'Keep your momentum going',
+      cta: 'Continue',
+      action: () => router.push('/chapters')
+    };
+  };
+
+  const smartCard = getSmartCardContent(accuracy, weakAreas, topicId);
+
+  const handlePrimaryAction = () => {
+    if (accuracy >= 80) {
+      router.push('/chapters');
+    } else {
+      if (level === 'practice-mode' || mode) {
+        router.push(`/practice-mode/${topicId}`);
+      } else {
+        router.push(`/practice/${topicId}?level=${level}`);
+      }
+    }
+  };
+
+  const handleDashboard = () => {
+    router.push('/profile');
   };
 
   return (
     <AppShell>
-      <div className="result-card glass-card">
-        {/* Personalized Greeting */}
-        <div className="result-greeting">
-          Hey {firstName}! Here's how you did 👇
-        </div>
-
-        {/* Score Header */}
-        <div className="result-score-number" style={{ color: scoreConfig.color }}>
-          {score}<span className="result-score-denom">/{total}</span>
-        </div>
-        <div className="result-label">{scoreConfig.emoji} {scoreConfig.label}</div>
-        <div className="result-accuracy">{accuracy}% Accuracy</div>
-        {modeName && (
-          <div className="result-mode-tag">{modeName}</div>
-        )}
-
-        {/* Personalized Message */}
-        <div className="result-personal-msg">
-          {getMessage(accuracy, firstName)}
-        </div>
-
-        {/* Stats Row */}
-        <div className="result-stats-row">
-          <div className="result-stat-chip">
-            <div className="result-stat-label">Mastery</div>
-            <div className="result-stat-value green">{mastery}%</div>
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="result-card glass-card p-4 sm:p-8">
+          {/* 1. Emotional Headline */}
+          <div className="text-center mb-6">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-heading mb-2">
+              {getHeadline(accuracy, firstName)}
+            </h1>
           </div>
-          <div className="result-stat-chip">
-            <div className="result-stat-label">XP Earned</div>
-            <div className="result-stat-value amber">+{xpEarned}</div>
-          </div>
-          <div className="result-stat-chip">
-            <div className="result-stat-label">Correct</div>
-            <div className="result-stat-value">{score}/{total}</div>
-          </div>
-        </div>
 
-        {/* Weak Areas Section */}
-        {weakAreas.length > 0 && (
-          <div className="result-weak-box">
-            <div className="result-weak-title">⚠ Focus areas</div>
-            <div className="result-weak-tags">
-              {weakAreas.map((area, idx) => (
-                <span key={idx} className="result-weak-tag">{area}</span>
-              ))}
+          {/* 2. Score Display */}
+          <div className="text-center mb-6">
+            <div className="text-6xl md:text-7xl font-extrabold text-primary mb-2">
+              {score}<span className="text-4xl text-muted">/{total}</span>
+            </div>
+            <div className="text-lg text-secondary mb-1">
+              {accuracy}% Accuracy
+            </div>
+            <div className="text-sm text-muted">
+              You are {accuracy}% ready in this topic
             </div>
           </div>
-        )}
 
-        {/* Divider */}
-        <hr style={{ width: '100%', border: 'none', borderTop: '0.5px solid var(--border-subtle)', marginBottom: '24px' }} />
+          {/* 3. Personal Message */}
+          <div className="bg-primary-light border border-subtle rounded-xl p-4 mb-6 text-center">
+            <p className="text-heading font-semibold">
+              {getPersonalMessage(accuracy)}
+            </p>
+          </div>
 
-        {/* Conditional Message */}
-        {accuracy < 60 ? (
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '16px' }}>
-            Review the weak areas above and try again to improve your mastery.
-          </p>
-        ) : accuracy >= 80 ? (
-          <p style={{ fontSize: '13px', color: '#0D7A6A', textAlign: 'center', marginBottom: '16px' }}>
-            Great job! Ready to tackle the next topic?
-          </p>
-        ) : null}
-
-        {/* What Next Section */}
-        <div className="result-what-next section">
-          <h3 className="result-section-title">What next?</h3>
-          <div className="result-suggestions">
-            {(() => {
-              const suggestion = NavigationContext.getNextSuggestion(score, accuracy);
-              return (
-                <div className="result-suggestion-card hover-card">
-                  <div className="suggestion-icon">{suggestion.icon}</div>
-                  <div className="suggestion-content">
-                    <div className="suggestion-title">{suggestion.text}</div>
-                    <div className="suggestion-reason">{suggestion.reason}</div>
-                  </div>
-                  <a href={suggestion.href} className="suggestion-btn primary-btn">
-                    Go
-                  </a>
+          {/* 4. Weak Areas - Priority Based */}
+          {weakAreas.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-3">
+                Focus here first
+              </h3>
+              <div className="space-y-2">
+                {/* Primary weak area - highlighted */}
+                <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <span className="text-xl">👉</span>
+                  <span className="font-bold text-red-700">{weakAreas[0]}</span>
+                  <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded-full ml-auto">Primary</span>
                 </div>
-              );
-            })()}
+                {/* Other weak areas */}
+                {weakAreas.slice(1).map((area, idx) => (
+                  <div key={idx} className="flex items-center gap-3 p-3 bg-orange-50 border border-orange-100 rounded-lg">
+                    <span className="text-muted">→</span>
+                    <span className="text-secondary text-sm">{area}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 5. Minimal Stats */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="text-center p-4 bg-green-50 rounded-xl">
+              <div className="text-2xl font-bold text-green-600">{mastery}%</div>
+              <div className="text-xs text-muted uppercase tracking-wider">Mastery</div>
+            </div>
+            <div className="text-center p-4 bg-yellow-50 rounded-xl">
+              <div className="text-2xl font-bold text-yellow-600">+{xpEarned}</div>
+              <div className="text-xs text-muted uppercase tracking-wider">XP Earned</div>
+            </div>
+          </div>
+
+          {/* 6. Smart "What Next" Card */}
+          <div className="bg-card border-2 border-primary rounded-xl p-6 mb-6">
+            <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-4">
+              What should you do now?
+            </h3>
+            <div className="mb-4">
+              <h4 className="text-lg font-bold text-heading mb-1">{smartCard.title}</h4>
+              <p className="text-sm text-secondary">{smartCard.subtitle}</p>
+            </div>
+            <button 
+              onClick={smartCard.action}
+              className="w-full min-h-[44px] py-3 bg-primary text-on-primary rounded-lg font-semibold hover:bg-primary-hover transition-all"
+            >
+              {smartCard.cta}
+            </button>
+          </div>
+
+          {/* 7. Primary Action Button */}
+          <button 
+            onClick={handlePrimaryAction}
+            className="w-full min-h-[48px] py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-hover transition-all mb-4 shadow-lg"
+          >
+            {getPrimaryCTA(accuracy)}
+          </button>
+
+          {/* 8. Feedback Button */}
+          <button 
+            onClick={() => setShowFeedback(true)}
+            className="w-full min-h-[44px] py-3 bg-blue-50 border border-blue-200 text-blue-700 rounded-xl font-medium hover:bg-blue-100 transition-all mb-3"
+          >
+            Give Feedback 📋
+          </button>
+
+          {/* 9. Secondary Action */}
+          <button 
+            onClick={handleDashboard}
+            className="w-full min-h-[44px] py-3 bg-card border border-subtle text-body rounded-xl font-medium hover:bg-card-hover transition-all"
+          >
+            Go to Dashboard
+          </button>
+
+          {/* 10. Motivation Line */}
+          <div className="text-center mt-6 pt-6 border-t border-subtle">
+            <p className="text-sm text-muted italic">
+              {getMotivationLine(accuracy)}
+            </p>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <button className="result-btn-primary primary-btn" onClick={handleContinue}>
-          Continue
-        </button>
-        <button className="result-btn-secondary" onClick={handleRetry}>
-          Try Again
-        </button>
-        <button className="result-btn-secondary" onClick={() => router.push('/practice-modes')}>
-          Try Practice Mode
-        </button>
-
-        {/* Tagline */}
-        <div className="result-tagline">
-          Keep Your Rhythm Consistent · Rithamio
-        </div>
+        {/* Feedback Modal */}
+        <SubtopicCompletion
+          isOpen={showFeedback}
+          onClose={() => setShowFeedback(false)}
+          subtopicName={topicId}
+          subtopicTag={topicId}
+          accuracy={accuracy}
+          totalQuestions={total}
+          onComplete={(data) => {
+            // Navigate to next subtopic based on feedback
+            if (data.nextSubtopic && data.nextSubtopic !== topicId) {
+              router.push(`/practice/${data.nextSubtopic}`);
+            } else {
+              setShowFeedback(false);
+            }
+          }}
+        />
       </div>
     </AppShell>
   );
@@ -170,11 +245,20 @@ function ResultPage() {
 // Wrap with Suspense to handle useSearchParams
 import { Suspense } from 'react';
 
+function LoadingState() {
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-page)' }}>
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+        <div className="text-lg font-semibold text-heading">Calculating your performance...</div>
+      </div>
+    </div>
+  );
+}
+
 export default function ResultPageWrapper() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-page)' }}>
-      <div className="text-xl font-bold text-heading">Loading results...</div>
-    </div>}>
+    <Suspense fallback={<LoadingState />}>
       <ResultPage />
     </Suspense>
   );

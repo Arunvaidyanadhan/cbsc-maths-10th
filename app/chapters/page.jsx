@@ -47,26 +47,26 @@ export default function Chapters() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-14 py-4 backdrop-blur-12 border-b border-subtle transition-all" style={{ background: 'var(--bg-navbar)' }}>
+        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 sm:px-6 lg:px-14 py-4 backdrop-blur-12 border-b border-subtle transition-all" style={{ background: 'var(--bg-navbar)' }}>
           <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
           <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
         </nav>
-        <section className="px-14 py-32">
+        <section className="px-4 sm:px-6 lg:px-14 py-20 sm:py-32">
           <div className="max-w-4xl mx-auto">
             <div className="mb-8">
               <div className="h-4 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
-              <div className="h-12 w-64 bg-gray-200 rounded animate-pulse mb-3"></div>
-              <div className="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-10 sm:h-12 w-48 sm:w-64 bg-gray-200 rounded animate-pulse mb-3"></div>
+              <div className="h-4 w-32 sm:w-48 bg-gray-200 rounded animate-pulse"></div>
             </div>
             <div className="flex flex-col gap-px border border-subtle">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="grid grid-cols-[auto_1fr_auto] gap-8 items-start p-8 bg-card border-b border-subtle">
+                <div key={i} className="grid grid-cols-[auto_1fr_auto] gap-4 sm:gap-8 items-start p-4 sm:p-8 bg-card border-b border-subtle">
                   <div className="h-4 w-8 bg-gray-200 rounded animate-pulse"></div>
                   <div>
-                    <div className="h-6 w-48 bg-gray-200 rounded animate-pulse mb-2"></div>
-                    <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-5 sm:h-6 w-36 sm:w-48 bg-gray-200 rounded animate-pulse mb-2"></div>
+                    <div className="h-3 sm:h-4 w-24 sm:w-32 bg-gray-200 rounded animate-pulse"></div>
                   </div>
-                  <div className="h-6 w-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-5 sm:h-6 w-5 sm:w-6 bg-gray-200 rounded animate-pulse"></div>
                 </div>
               ))}
             </div>
@@ -82,14 +82,14 @@ export default function Chapters() {
   return (
     <AppShell>
       {/* Chapters Content */}
-      <section className="py-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
-            <p className="text-xs tracking-widest uppercase text-primary inline-flex items-center gap-3 mb-4 font-semibold">
-              <span className="w-9 h-px bg-primary"></span>
+      <section className="py-8 sm:py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 sm:mb-8">
+            <p className="text-xs tracking-widest uppercase text-primary inline-flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 font-semibold">
+              <span className="w-6 sm:w-9 h-px bg-primary"></span>
               Chapters
             </p>
-            <h1 className="text-5xl font-extrabold tracking-tight text-heading leading-[1.1] mb-3">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-heading leading-[1.1] mb-2 sm:mb-3">
               CBSE Class 10 Maths
             </h1>
             <p className="text-secondary text-sm leading-relaxed">
@@ -139,15 +139,15 @@ export default function Chapters() {
           </div>
 
           {/* Paywall Notice */}
-          <div className="mt-8 bg-card-hover border border-subtle p-6 rounded-xl">
+          <div className="mt-6 sm:mt-8 bg-card-hover border border-subtle p-4 sm:p-6 rounded-xl">
             <div className="flex items-center gap-3 mb-3">
-              <span className="text-2xl">🔒</span>
-              <h3 className="text-xl font-bold text-heading">Unlock Full Access</h3>
+              <span className="text-xl sm:text-2xl">🔒</span>
+              <h3 className="text-lg sm:text-xl font-bold text-heading">Unlock Full Access</h3>
             </div>
             <p className="text-sm text-secondary mb-4 leading-relaxed">
               Get access to all chapters, levels, and unlimited questions
             </p>
-            <button className="text-xs tracking-widest uppercase bg-cta text-white px-6 py-3 rounded-lg font-semibold transition-all hover:bg-cta-hover">
+            <button className="w-full sm:w-auto text-xs tracking-widest uppercase bg-cta text-white px-6 py-3 rounded-lg font-semibold transition-all hover:bg-cta-hover min-h-[44px]">
               ₹299/year
             </button>
           </div>

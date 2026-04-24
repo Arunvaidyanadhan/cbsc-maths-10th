@@ -58,8 +58,11 @@ export async function POST(request) {
     });
     
     // Update or create daily stats
-    const todayStr = new Date().toISOString().split('T')[0];
-    const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    // Use toDateString() for proper unique day tracking
+    const todayStr = new Date().toDateString();
+    const yesterdayDate = new Date();
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+    const yesterdayStr = yesterdayDate.toDateString();
     
     const existingDailyStats = await prisma.dailyStats.findUnique({
       where: { userId }

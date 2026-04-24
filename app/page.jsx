@@ -57,38 +57,34 @@ export default function Home() {
               Daily Maths Practice for CBSE Class 10 Students
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-heading mb-6 animate-fade-in delay-200">
-              Master CBSE Class 10 Maths with Daily Practice
+              Don't just practice Maths.<br />Know what to practice.
             </h1>
             <p className="text-base text-secondary leading-relaxed mb-10 max-w-md animate-fade-in delay-300">
-              Small daily practice → big exam improvement. Build consistency, track progress, and score 90+.
+              Stop guessing what to study. Practice daily, fix weak areas, and improve your score step by step.
             </p>
-            <div className="flex gap-4 flex-wrap animate-fade-in delay-400">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in delay-400">
               <button
                 onClick={handleStart}
-                className="inline-flex items-center gap-2 bg-primary text-on-primary rounded-lg px-8 py-4 font-semibold text-base transition-all hover:bg-primary-hover hover:-translate-y-0.5 hover:scale-105"
+                className="inline-flex items-center justify-center min-h-[48px] gap-2 bg-primary text-on-primary rounded-lg px-6 sm:px-8 py-4 font-semibold text-base transition-all hover:bg-primary-hover hover:-translate-y-0.5 hover:scale-105"
               >
-                Start Practicing
+                Start Free Practice
               </button>
               <button
                 onClick={() => router.push('/login')}
-                className="inline-flex items-center gap-2 bg-card text-body border border-subtle rounded-lg px-8 py-4 font-medium text-base hover:bg-card-hover transition-all hover:-translate-y-0.5 hover:scale-105"
+                className="inline-flex items-center justify-center min-h-[48px] gap-2 bg-card text-body border border-subtle rounded-lg px-6 sm:px-8 py-4 font-medium text-base hover:bg-card-hover transition-all hover:-translate-y-0.5 hover:scale-105"
               >
-                Log In
+                Already have an account? Log in
               </button>
             </div>
-            <a href="#features" className="mt-6 inline-block text-sm text-muted hover:text-primary transition-colors animate-fade-in delay-500">
-              Preview the experience
-            </a>
-
             {/* Social Proof Badge */}
-            <div className="hero-social-proof animate-fade-in delay-600">
+            <div className="hero-social-proof animate-fade-in delay-500">
               <div className="hero-proof-avatars">
                 <div className="proof-avatar" style={{background: '#0D7A6A'}}>A</div>
                 <div className="proof-avatar" style={{background: '#E07B00'}}>R</div>
                 <div className="proof-avatar" style={{background: '#6366F1'}}>P</div>
               </div>
               <span className="hero-proof-text">
-                <strong>2,400+ students</strong> practicing today
+                Used by students preparing for CBSE Class 10 boards
               </span>
               <span className="hero-live-dot"></span>
             </div>
@@ -163,27 +159,60 @@ export default function Home() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="px-5 py-20 bg-card border-y border-subtle">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="text-xs font-bold tracking-widest uppercase text-primary mb-3 animate-fade-in">Simple Steps</div>
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-heading mb-4 animate-fade-in delay-100">
+            How Rithamio Works
+          </h2>
+          <p className="text-secondary max-w-lg mx-auto leading-relaxed mb-12 animate-fade-in delay-200">
+            No confusion. No overload. Just clear progress.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { step: '1', title: 'Choose a chapter', desc: 'Pick any topic from your syllabus' },
+              { step: '2', title: 'Answer a few questions', desc: 'Practice with exam-style problems' },
+              { step: '3', title: 'See your weak areas instantly', desc: 'Know exactly what to fix next' },
+            ].map((item, index) => (
+              <div
+                key={item.step}
+                className="relative animate-fade-in"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className="w-16 h-16 bg-primary text-on-primary rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                  {item.step}
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-heading">{item.title}</h3>
+                <p className="text-sm text-secondary">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section id="features" className="px-5 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12">
             <div className="text-xs font-bold tracking-widest uppercase text-primary mb-3 animate-fade-in">Why Rithamio?</div>
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-heading mb-4 animate-fade-in delay-100">
-              Everything you need to<br />score 90+
+              Practice smart. Improve fast.
             </h2>
             <p className="text-secondary max-w-lg leading-relaxed animate-fade-in delay-200">
-              Chapter-wise learning, daily practice system, exam-focused questions, and progress tracking.
+              Six powerful features to guide your preparation every day.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              [' ', 'Chapter-wise Learning', 'Structured learning from Chapter → Topic → Questions'],
-              [' ', 'Daily Practice System', 'Build consistency with daily goals and streaks'],
-              [' ', 'Exam-focused Questions', 'Questions designed for CBSE Class 10 exams'],
-              [' ', 'Track Your Progress', 'See your accuracy, weak areas, and improvement'],
-              [' ', 'Instant Feedback', 'Get explanations for every answer'],
-              [' ', 'Build Streaks', 'Stay motivated with daily streaks and XP'],
+              [' ', 'Know exactly what to fix', 'Instantly identify your weak topics after every practice'],
+              [' ', 'Practice what matters', 'Focus on important and exam-relevant questions'],
+              [' ', 'Track real improvement', 'See your accuracy, streak, and progress clearly'],
+              [' ', 'Get instant explanations', 'Learn from every mistake with clear answers'],
+              [' ', 'Stay consistent daily', 'Build habit with small daily practice sessions'],
+              [' ', 'Study smart, not more', 'Follow clear next steps instead of guessing'],
             ].map(([icon, title, desc], index) => (
               <div
                 key={title}
@@ -201,6 +230,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Differentiation Section */}
+      <section className="px-5 py-16 bg-primary-light border-y border-subtle">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-heading mb-8 animate-fade-in">
+            What makes Rithamio different?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              'We don\'t overload you with content',
+              'We don\'t just teach — we guide your practice',
+              'We show what to do next, every day',
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-card border border-subtle p-6 rounded-xl animate-fade-in"
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                <div className="text-2xl mb-3">✓</div>
+                <p className="text-heading font-semibold">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Pricing Section */}
       <section id="pricing" className="px-5 py-20">
         <div className="max-w-6xl mx-auto">
@@ -210,7 +264,7 @@ export default function Home() {
               Simple, affordable pricing
             </h2>
             <p className="text-secondary max-w-lg leading-relaxed animate-fade-in delay-200">
-              Invest in your future with the best CBSE Class 10 Maths practice platform.
+              One small investment for your board exam confidence.
             </p>
           </div>
 
@@ -297,59 +351,109 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="text-secondary leading-relaxed space-y-6 animate-fade-in delay-200">
-            <p>
-              I spent a lot of time talking to students and teachers across different backgrounds. One thing became very clear — students are willing to study, but they are often confused about what exactly to study.
+          <div className="text-secondary leading-relaxed space-y-5 animate-fade-in delay-200">
+            <p className="text-lg">
+              Most students are willing to study. But they don't know what to study next.
             </p>
 
             <p>
-              There is no shortage of content, tutorials, or classes. The real problem is something deeper:
+              I spent months talking to Class 10 students across India. One thing became crystal clear — the problem isn't motivation. It's direction.
+            </p>
+
+            <p>
+              Students are drowning in content but starving for clarity:
             </p>
 
             <ul className="list-disc pl-6 space-y-2 text-secondary">
               <li>What should I focus on first?</li>
-              <li>How do I know if I'm actually prepared for the exam?</li>
+              <li>How do I know if I'm actually prepared?</li>
               <li>Where am I strong, and where am I weak?</li>
             </ul>
 
             <p>
-              Most learning platforms either overload students with content or completely depend on coaching-style teaching. But that doesn't solve the day-to-day confusion students face while preparing for exams.
+              Most platforms either overload you with videos or just track your time. That doesn't help.
             </p>
 
             <p>
-              That is where Rithamio comes in.
+              Rithamio is different. It's not a content library. It's a practice guide that tells you what to do next.
             </p>
 
             <p>
-              Rithamio is not a content-heavy tutorial platform, and it is not a replacement for your school or tuition. It is a practice and validation layer built on top of your learning.
+              Every time you practice, we learn about you. Then we point you to the exact topics that need work.
             </p>
 
-            <p>
-              It helps you understand where you stand — without pressure, without overload, and without confusion.
-            </p>
-
-            <p>
-              The idea is simple:
-            </p>
-
-            <div className="bg-primary-light border border-subtle rounded-xl p-6 space-y-2">
-              <p className="text-heading"> Come every day</p>
-              <p className="text-heading"> Spend 30 focused minutes</p>
-              <p className="text-heading"> Improve a little consistently</p>
+            <div className="bg-primary-light border border-subtle rounded-xl p-6 space-y-2 my-6">
+              <p className="text-heading font-semibold"> Come every day</p>
+              <p className="text-heading font-semibold"> Spend 30 focused minutes</p>
+              <p className="text-heading font-semibold"> Improve a little consistently</p>
             </div>
 
-            <p>
-              Because consistency is what turns average preparation into confidence — and confidence into 90+ marks in your board exams.
-            </p>
-
-            <p className="text-xl font-semibold text-heading">
-              Rithamio is built on one belief:
+            <p className="text-xl font-semibold text-heading mt-6">
+              This is what we believe:
             </p>
 
             <p className="text-2xl font-bold text-primary">
-              Small daily progress is more powerful than last-minute stress.
+              Small daily progress beats last-minute stress. Every time.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* What's Next Section */}
+      <section className="px-5 py-20 bg-primary-light border-t border-subtle">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="text-xs font-bold tracking-widest uppercase text-primary mb-3 animate-fade-in">Roadmap</div>
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-heading mb-4 animate-fade-in delay-100">
+            What's coming next?
+          </h2>
+          <p className="text-secondary max-w-lg mx-auto leading-relaxed mb-10 animate-fade-in delay-200">
+            We are continuously improving Rithamio to give you a better learning experience.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+            {[
+              { title: 'Better content quality', desc: 'Across all chapters with more exam-focused questions' },
+              { title: 'Smoother experience', desc: 'Polished UI and faster, more responsive interface' },
+              { title: 'Mobile app coming soon', desc: 'Practice anywhere, anytime on your phone' },
+              { title: '3-step verification', desc: 'Every question and answer goes through rigorous quality checks' },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-card border border-subtle p-6 rounded-xl animate-fade-in"
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-primary text-xl">→</span>
+                  <div>
+                    <h3 className="font-bold text-heading mb-1">{item.title}</h3>
+                    <p className="text-sm text-secondary">{item.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-lg text-heading font-semibold mt-10 animate-fade-in delay-500">
+            Our goal is simple: Help you prepare with clarity and confidence.
+          </p>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="px-5 py-20 bg-card">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-heading mb-4 animate-fade-in">
+            Start your preparation today
+          </h2>
+          <p className="text-lg text-secondary mb-8 animate-fade-in delay-100">
+            Just 30 minutes a day can change your result
+          </p>
+          <button
+            onClick={handleStart}
+            className="inline-flex items-center min-h-[48px] gap-2 bg-primary text-on-primary rounded-lg px-6 sm:px-10 py-4 sm:py-5 font-semibold text-base sm:text-lg transition-all hover:bg-primary-hover hover:-translate-y-0.5 hover:scale-105 animate-fade-in delay-200"
+          >
+            Start Free Practice
+          </button>
         </div>
       </section>
 
