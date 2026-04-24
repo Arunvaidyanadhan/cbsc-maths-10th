@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
-import Razorpay from 'razorpay';
 import { getRequestUserId } from '../../../lib/auth.js';
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// Lazy initialize Razorpay to avoid build errors
+let razorpay;
+function getRazorpay() {
+  if (!razorpay) {
+    const Razorpay = require('razorpay');
+    razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+  }
+  return razorpay;
+}
 
 export async function POST(request) {
   try {
@@ -44,7 +51,7 @@ export async function POST(request) {
     }
     
     // Create Razorpay order
-    const order = await razorpay.orders.create({
+    const order = await getRazorpay().orders.create({
       amount: price * 100, // paise
       currency: 'INR',
       receipt: `receipt_${userId}_${Date.now()}`
