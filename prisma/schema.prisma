@@ -32,6 +32,11 @@ model User {
   // Daily goal
   dailyGoal     Int       @default(15)
   
+  // Personalization from subtopic feedback
+  lastExperienceLevel String?
+  lastPreferences     String[]
+  lastAccuracy        Int       @default(0)
+  
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
@@ -55,6 +60,7 @@ model Chapter {
   isActive     Boolean  @default(true)
   
   topics       Topic[]
+  chapterProgress ChapterProgress[]
   
   @@index([order])
 }
@@ -76,6 +82,8 @@ model Topic {
   chapter       Chapter  @relation(fields: [chapterId], references: [id])
   questions     Question[]
   attempts      Attempt[]
+  topicProgress TopicProgress[]
+  mistakes      Mistake[]
   
   @@index([chapterId, order])
   @@index([level])
@@ -178,6 +186,8 @@ model TopicProgress {
   completedAt   DateTime?
   lastDoneAt    DateTime?
   
+  topic         Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  
   @@unique([userId, topicId])
   @@index([userId])
 }
@@ -188,6 +198,8 @@ model Mistake {
   topicId       String
   subtopicTag   String
   wrongCount    Int      @default(0)
+  
+  topic         Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
   
   @@unique([userId, topicId, subtopicTag])
   @@index([userId])
@@ -200,6 +212,8 @@ model ChapterProgress {
   completedTopicIds String[]
   pct              Int      @default(0)
   lastPractisedAt  DateTime?
+  
+  chapter          Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   
   @@unique([userId, chapterId])
   @@index([userId])
@@ -291,14 +305,16 @@ model Badge {
 }
 
 model UserBadge {
-  id        String   @id @default(cuid())
-  userId    String
-  badgeId   String
-  earnedAt  DateTime @default(now())
+  id         String   @id @default(cuid())
+  userId     String
+  badgeId    String
+  earnedAt   DateTime @default(now())
+  revealedAt DateTime?
   isRevealed Boolean  @default(false)
+  progress   Int      @default(0)
   
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge      Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
   
   @@unique([userId, badgeId])
   @@index([userId])
@@ -309,4 +325,22 @@ model PricingStats {
   totalPaidUsers  Int      @default(0)
   
   @@unique([id])
+}
+
+model SubtopicFeedback {
+  id              String   @id @default(cuid())
+  userId          String
+  subtopicTag     String
+  experienceLevel String
+  preferences     String[]
+  accuracy        Int
+  totalQuestions  Int
+  nextLevel       String
+  nextSubtopic    String
+  message         String
+  createdAt       DateTime @default(now())
+  
+  @@index([userId])
+  @@index([subtopicTag])
+  @@index([createdAt])
 }

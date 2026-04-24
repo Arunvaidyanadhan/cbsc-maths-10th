@@ -12,6 +12,13 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <script src="https://checkout.razorpay.com/v1/checkout.js" />
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const theme = savedTheme || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+          })();
+        ` }} />
       </head>
       <body>{children}</body>
     </html>

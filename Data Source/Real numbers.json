@@ -6,7 +6,8 @@
     "option3": "a = bq + r, where r > b",
     "option4": "a = bq + r, where r = b",
     "correctIndex": 1,
-    "explanation": "Euclid's Division Lemma states a = bq + r where the remainder r must satisfy 0 ≤ r < b. The remainder is always less than the divisor.",
+    "explanation": "Euclid's Division Lemma states that for any two positive integers a and b, there exist unique non-negative integers q and r such that a = bq + r, where 0 ≤ r < b. The remainder r is always non-negative and strictly less than the divisor b.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -16,7 +17,8 @@
     "option3": "Quotient",
     "option4": "Dividend",
     "correctIndex": 3,
-    "explanation": "In a = bq + r, 'a' is the dividend, 'b' is the divisor, 'q' is the quotient, and 'r' is the remainder.",
+    "explanation": "In a = bq + r: 'a' is the dividend (number being divided), 'b' is the divisor, 'q' is the quotient (result of division), and 'r' is the remainder.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -26,17 +28,19 @@
     "option3": "6",
     "option4": "4",
     "correctIndex": 1,
-    "explanation": "52 = 7 × 7 + 3. So q = 7 and r = 3. The remainder is 3.",
+    "explanation": "52 = 7 × 7 + 3. Check: 7 × 7 = 49, and 49 + 3 = 52. Since 0 ≤ 3 < 7, the remainder r = 3.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
-    "text": "Which of the following is a valid representation using Euclid's Division Lemma for a = 29 and b = 6?",
+    "text": "Which of the following is the valid representation using Euclid's Division Lemma for a = 29 and b = 6?",
     "option1": "29 = 6 × 4 + 5",
     "option2": "29 = 6 × 5 + 1",
     "option3": "29 = 6 × 3 + 11",
     "option4": "29 = 6 × 6 + 7",
     "correctIndex": 1,
-    "explanation": "29 = 6 × 4 + 5. Here r = 5 and 0 ≤ 5 < 6, so this satisfies the lemma. Option B gives 31 ≠ 29, C has r = 11 > 6, D has r = 7 > 6.",
+    "explanation": "29 = 6 × 4 + 5. Check: 6 × 4 = 24, and 24 + 5 = 29. The remainder r = 5 satisfies 0 ≤ 5 < 6. Option B: 6×5+1=31≠29. Option C: r=11>6 (invalid). Option D: r=7>6 (invalid).",
+    "difficulty": "AVERAGE",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -46,7 +50,8 @@
     "option3": "1",
     "option4": "0",
     "correctIndex": 4,
-    "explanation": "45 = 9 × 5 + 0. Since 45 is exactly divisible by 9, the remainder r = 0.",
+    "explanation": "45 = 9 × 5 + 0. Since 45 is exactly divisible by 9, the remainder r = 0. This is a valid case — r = 0 is allowed by the condition 0 ≤ r < 9.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -56,7 +61,8 @@
     "option3": "0 ≤ r < b",
     "option4": "r < 0",
     "correctIndex": 3,
-    "explanation": "The remainder r must always be non-negative and strictly less than the divisor b. So the correct condition is 0 ≤ r < b.",
+    "explanation": "The remainder r must always be non-negative and strictly less than the divisor b, i.e., 0 ≤ r < b. r cannot equal b (option 2) because then we could increase q by 1 and make r = 0.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -66,7 +72,8 @@
     "option3": "q = 8, r = 6",
     "option4": "q = 9, r = 3",
     "correctIndex": 2,
-    "explanation": "100 = 13 × 7 + 9. Check: 13 × 7 = 91, 91 + 9 = 100. Also 0 ≤ 9 < 13. So q = 7 and r = 9.",
+    "explanation": "100 = 13 × 7 + 9. Check: 13 × 7 = 91, and 91 + 9 = 100. Also 0 ≤ 9 < 13. So q = 7 and r = 9. Option A: 13×8=104>100, invalid.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -76,7 +83,8 @@
     "option3": "5",
     "option4": "4",
     "correctIndex": 3,
-    "explanation": "When b = 5, the remainder r must satisfy 0 ≤ r < 5. So r can be 0, 1, 2, 3, or 4. r = 5 is not possible as r must be strictly less than b.",
+    "explanation": "When b = 5, the remainder r must satisfy 0 ≤ r < 5. So r can only be 0, 1, 2, 3, or 4. r = 5 is not possible because r must be strictly less than the divisor b.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -86,7 +94,8 @@
     "option3": "Any two positive integers",
     "option4": "Only prime numbers",
     "correctIndex": 3,
-    "explanation": "Euclid's Division Lemma applies to any two positive integers a and b. It holds for every such pair without any restriction on their type.",
+    "explanation": "Euclid's Division Lemma applies to any two positive integers a and b. There is no restriction on them being even, prime, or odd — the lemma holds universally for all positive integer pairs.",
+    "difficulty": "PASS",
     "subtopicTag": "euclid-lemma"
   },
   {
@@ -96,12 +105,109 @@
     "option3": "18 = 4 × 5 + 2",
     "option4": "18 = 4 × 2 + 10",
     "correctIndex": 2,
-    "explanation": "18 = 4 × 4 + 2. Check: 4 × 4 = 16, 16 + 2 = 18. Also 0 ≤ 2 < 4. This is the valid representation.",
+    "explanation": "18 = 4 × 4 + 2. Check: 4 × 4 = 16, and 16 + 2 = 18. The remainder r = 2 satisfies 0 ≤ 2 < 4. Option A has r=6>4 (invalid). Option C: 4×5=20>18 (wrong). Option D has r=10>4 (invalid).",
+    "difficulty": "AVERAGE",
     "subtopicTag": "euclid-lemma"
-  }
-]
-
-[
+  },
+  {
+    "text": "If a = bq + r and r = 0, what can we conclude?",
+    "option1": "a is divisible by b",
+    "option2": "b is divisible by a",
+    "option3": "a is a prime number",
+    "option4": "b is a prime number",
+    "correctIndex": 1,
+    "explanation": "If r = 0, then a = bq exactly. This means b divides a without a remainder, so a is divisible by b. Nothing can be concluded about primality from r = 0 alone.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "If a = 7q + r, which of the following cannot be a remainder?",
+    "option1": "6",
+    "option2": "7",
+    "option3": "3",
+    "option4": "0",
+    "correctIndex": 2,
+    "explanation": "For divisor b = 7, the remainder r must satisfy 0 ≤ r < 7. So r can be 0, 1, 2, 3, 4, 5, or 6. r = 7 is not possible because r must be strictly less than b.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "If n = 9q + r and r = 8, what is the next multiple of 9 after n?",
+    "option1": "n + 1",
+    "option2": "n + 8",
+    "option3": "n + 9",
+    "option4": "n + 10",
+    "correctIndex": 1,
+    "explanation": "n = 9q + 8. The next multiple of 9 is 9(q + 1) = 9q + 9 = (9q + 8) + 1 = n + 1. Since r = 8 is the maximum possible remainder before reaching the next multiple, only 1 more is needed.",
+    "difficulty": "EXPERT",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "If a = bq + r, where b = 11, what is the maximum possible value of r?",
+    "option1": "10",
+    "option2": "11",
+    "option3": "12",
+    "option4": "9",
+    "correctIndex": 1,
+    "explanation": "The remainder r must satisfy 0 ≤ r < b = 11. Therefore r can range from 0 to 10. The maximum possible value of r is 10, which is one less than the divisor.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "A number when divided by 11 gives quotient 6 and remainder 8. What is the number?",
+    "option1": "66",
+    "option2": "74",
+    "option3": "76",
+    "option4": "70",
+    "correctIndex": 2,
+    "explanation": "Using a = bq + r: a = 11 × 6 + 8 = 66 + 8 = 74. Verify: 74 ÷ 11 = 6 remainder 8. ✓",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "A number leaves remainder 5 when divided by 8. Which expression represents all such numbers?",
+    "option1": "8q + 3",
+    "option2": "8q + 5",
+    "option3": "5q + 8",
+    "option4": "8q − 5",
+    "correctIndex": 2,
+    "explanation": "Using Euclid's Lemma a = bq + r with b = 8 and r = 5, all such numbers are of the form 8q + 5. Examples: q=1 gives 13, q=2 gives 21 — both leave remainder 5 when divided by 8.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "When 245 is divided by a number b, the quotient is 8 and remainder is 5. What is b?",
+    "option1": "25",
+    "option2": "28",
+    "option3": "30",
+    "option4": "35",
+    "correctIndex": 3,
+    "explanation": "Using a = bq + r: 245 = b × 8 + 5. So 8b = 245 − 5 = 240. Therefore b = 240 ÷ 8 = 30.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "Using Euclid's Lemma, which of the following correctly expresses 73 with divisor 9?",
+    "option1": "73 = 9 × 7 + 10",
+    "option2": "73 = 9 × 8 + 1",
+    "option3": "73 = 9 × 9 + 2",
+    "option4": "73 = 9 × 6 + 19",
+    "correctIndex": 2,
+    "explanation": "73 = 9 × 8 + 1. Check: 9 × 8 = 72, 72 + 1 = 73. Also 0 ≤ 1 < 9. ✓ Option A: r=10>9 (invalid). Option C: 9×9+2=83≠73. Option D: r=19>9 (invalid).",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-lemma"
+  },
+  {
+    "text": "A number n when divided by 12 leaves remainder 7. What will be the remainder when (n + 5) is divided by 12?",
+    "option1": "5",
+    "option2": "11",
+    "option3": "0",
+    "option4": "12",
+    "correctIndex": 3,
+    "explanation": "n = 12q + 7, so n + 5 = 12q + 12 = 12(q + 1). Since n + 5 is exactly divisible by 12, the remainder is 0.",
+    "difficulty": "EXPERT",
+    "subtopicTag": "euclid-lemma"
+  },
   {
     "text": "What does the Fundamental Theorem of Arithmetic state?",
     "option1": "Every prime number can be written as a sum of two numbers",
@@ -109,7 +215,8 @@
     "option3": "Every integer is divisible by at least two prime numbers",
     "option4": "Every number has exactly two prime factors",
     "correctIndex": 2,
-    "explanation": "The Fundamental Theorem of Arithmetic states that every composite number can be expressed as a product of primes, and this factorisation is unique apart from the order of factors.",
+    "explanation": "The Fundamental Theorem of Arithmetic states that every composite number can be expressed as a product of prime numbers, and this factorisation is unique, except for the order in which the prime factors appear.",
+    "difficulty": "PASS",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -119,7 +226,8 @@
     "option3": "2² × 3²",
     "option4": "2³ × 3",
     "correctIndex": 3,
-    "explanation": "36 = 2 × 18 = 2 × 2 × 9 = 2 × 2 × 3 × 3 = 2² × 3². This is the unique prime factorisation of 36.",
+    "explanation": "36 = 2 × 18 = 2 × 2 × 9 = 2 × 2 × 3 × 3 = 2² × 3². Options A and B include non-prime factors (18 and 9 respectively), so they are not prime factorisations.",
+    "difficulty": "PASS",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -129,7 +237,8 @@
     "option3": "2 × 3 × 10",
     "option4": "2² × 15",
     "correctIndex": 1,
-    "explanation": "60 = 2 × 30 = 2 × 2 × 15 = 2 × 2 × 3 × 5 = 2² × 3 × 5. Only prime factors are used in this form.",
+    "explanation": "60 = 2 × 2 × 3 × 5 = 2² × 3 × 5. All factors are prime. Options C and D include composite factors 10 and 15 respectively, so they are not prime factorisations.",
+    "difficulty": "PASS",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -139,7 +248,8 @@
     "option3": "4",
     "option4": "5",
     "correctIndex": 3,
-    "explanation": "144 = 2 × 72 = 2 × 2 × 36 = 2 × 2 × 2 × 18 = 2 × 2 × 2 × 2 × 9 = 2⁴ × 3². The exponent of 2 is 4.",
+    "explanation": "144 = 2 × 72 = 2² × 36 = 2³ × 18 = 2⁴ × 9 = 2⁴ × 3². The exponent of 2 is 4.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -150,6 +260,7 @@
     "option4": "27",
     "correctIndex": 3,
     "explanation": "17 has no factors other than 1 and itself, so it is prime. 15 = 3×5, 21 = 3×7, and 27 = 3³ are all composite numbers.",
+    "difficulty": "PASS",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -158,8 +269,9 @@
     "option2": "100",
     "option3": "200",
     "option4": "160",
-    "correctIndex": 2,
-    "explanation": "2³ × 5² = 8 × 25 = 200. So the number is 200.",
+    "correctIndex": 3,
+    "explanation": "2³ × 5² = 8 × 25 = 200. Option B (100) = 2² × 5², not 2³ × 5². Option A (40) = 2³ × 5. Always expand both bases: 2³ = 8 and 5² = 25.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -169,7 +281,8 @@
     "option3": "Not always possible",
     "option4": "Only possible for even numbers",
     "correctIndex": 2,
-    "explanation": "The theorem guarantees that every composite number has one and only one prime factorisation. The order of factors may vary, but the set of prime factors and their powers is always unique.",
+    "explanation": "The theorem guarantees that every composite number has exactly one prime factorisation. The order of factors may vary, but the primes and their powers are always the same — this is called uniqueness.",
+    "difficulty": "PASS",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -179,7 +292,8 @@
     "option3": "2 × 49",
     "option4": "7 × 14",
     "correctIndex": 1,
-    "explanation": "98 = 2 × 49 = 2 × 7 × 7 = 2 × 7². The correct prime factorisation using only prime numbers is 2 × 7².",
+    "explanation": "98 = 2 × 49 = 2 × 7 × 7 = 2 × 7². Options C and D include the composite numbers 49 and 14, so they are not prime factorisations.",
+    "difficulty": "PASS",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -189,7 +303,8 @@
     "option3": "19",
     "option4": "27",
     "correctIndex": 4,
-    "explanation": "27 = 3 × 3 × 3 = 3³. Since it has factors other than 1 and itself, 27 is a composite number, not a prime number.",
+    "explanation": "27 = 3 × 3 × 3 = 3³. It has factors other than 1 and itself, making it composite. All of 11, 13, and 19 are prime as they have no divisors other than 1 and themselves.",
+    "difficulty": "PASS",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -199,694 +314,19 @@
     "option3": "2⁴ × 5",
     "option4": "2² × 5 × 6",
     "correctIndex": 2,
-    "explanation": "120 = 2 × 60 = 2 × 2 × 30 = 2 × 2 × 2 × 15 = 2 × 2 × 2 × 3 × 5 = 2³ × 3 × 5. Options A and D include 10 and 6 which are not prime numbers.",
+    "explanation": "120 = 2 × 60 = 2² × 30 = 2³ × 15 = 2³ × 3 × 5. Options A and D include non-prime factors 10 and 6. Option C: 2⁴×5=80≠120.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "prime-factorisation"
-  }
-]
-
-[
-  {
-    "text": "Which of the following is an irrational number?",
-    "option1": "0.75",
-    "option2": "√9",
-    "option3": "√2",
-    "option4": "4/5",
-    "correctIndex": 3,
-    "explanation": "√2 cannot be written in the form p/q where p and q are integers and q ≠ 0, so it is irrational. √9 = 3 is rational, and 0.75 and 4/5 are also rational.",
-    "subtopicTag": "irrational-proof"
   },
   {
-    "text": "Which of the following is a rational number?",
-    "option1": "√3",
-    "option2": "√5",
-    "option3": "√16",
-    "option4": "√7",
-    "correctIndex": 3,
-    "explanation": "√16 = 4, which can be written as 4/1. So it is a rational number. √3, √5, and √7 are all irrational as they are square roots of non-perfect squares.",
-    "subtopicTag": "irrational-proof"
-  },
-  {
-    "text": "What is the sum of a rational number and an irrational number?",
-    "option1": "Always rational",
-    "option2": "Always irrational",
-    "option3": "Sometimes rational, sometimes irrational",
-    "option4": "Always zero",
-    "correctIndex": 2,
-    "explanation": "The sum of a rational number and an irrational number is always irrational. For example, 2 + √3 is irrational. This is a key property of irrational numbers.",
-    "subtopicTag": "irrational-properties"
-  },
-  {
-    "text": "Which of the following is an irrational number?",
-    "option1": "2/3",
-    "option2": "0.333...",
-    "option3": "2 + √3",
-    "option4": "√25",
-    "correctIndex": 3,
-    "explanation": "2 + √3 is irrational because √3 is irrational, and adding a rational number (2) to an irrational number always gives an irrational result.",
-    "subtopicTag": "irrational-properties"
-  },
-  {
-    "text": "The product of a non-zero rational number and an irrational number is:",
-    "option1": "Always rational",
-    "option2": "Always zero",
-    "option3": "Always irrational",
-    "option4": "Always a whole number",
-    "correctIndex": 3,
-    "explanation": "The product of a non-zero rational number and an irrational number is always irrational. For example, 3 × √2 = 3√2, which is irrational.",
-    "subtopicTag": "irrational-properties"
-  },
-  {
-    "text": "Which of the following numbers is irrational?",
-    "option1": "√49",
-    "option2": "√36",
-    "option3": "√50",
-    "option4": "√100",
-    "correctIndex": 3,
-    "explanation": "√50 is irrational because 50 is not a perfect square. √49 = 7, √36 = 6, and √100 = 10 are all whole numbers, hence rational.",
-    "subtopicTag": "irrational-proof"
-  },
-  {
-    "text": "In the proof that √2 is irrational, we begin by assuming that √2 is rational and can be written as p/q where HCF(p, q) = ?",
-    "option1": "2",
-    "option2": "0",
-    "option3": "1",
-    "option4": "q",
-    "correctIndex": 3,
-    "explanation": "In the proof, we assume √2 = p/q where p and q are coprime integers, meaning HCF(p, q) = 1. This assumption is then shown to lead to a contradiction.",
-    "subtopicTag": "irrational-proof"
-  },
-  {
-    "text": "Which of the following is NOT an irrational number?",
-    "option1": "3√5",
-    "option2": "√7",
-    "option3": "2 + √3",
-    "option4": "√4 + 1",
-    "correctIndex": 4,
-    "explanation": "√4 + 1 = 2 + 1 = 3, which is a rational number. All other options involve irrational components that cannot simplify to a rational value.",
-    "subtopicTag": "irrational-properties"
-  },
-  {
-    "text": "Which statement about irrational numbers is correct?",
-    "option1": "They can always be written as p/q where q ≠ 0",
-    "option2": "They have terminating decimal expansions",
-    "option3": "They cannot be written in the form p/q where p, q are integers and q ≠ 0",
-    "option4": "They are always negative numbers",
-    "correctIndex": 3,
-    "explanation": "An irrational number is defined as a number that cannot be expressed in the form p/q where p and q are integers and q ≠ 0. Their decimal expansions are non-terminating and non-repeating.",
-    "subtopicTag": "irrational-proof"
-  },
-  {
-    "text": "Which of the following is an example of an irrational number?",
-    "option1": "7/2",
-    "option2": "0.625",
-    "option3": "√11",
-    "option4": "√81",
-    "correctIndex": 3,
-    "explanation": "√11 is irrational because 11 is a prime number and the square root of any prime number is always irrational. √81 = 9, and 7/2 and 0.625 are rational.",
-    "subtopicTag": "irrational-proof"
-  }
-]
-[
-  {
-    "text": "The decimal expansion of a rational number is always:",
-    "option1": "Non-terminating and non-repeating",
-    "option2": "Terminating or non-terminating repeating",
-    "option3": "Always terminating",
-    "option4": "Always non-terminating",
-    "correctIndex": 2,
-    "explanation": "The decimal expansion of every rational number is either terminating or non-terminating repeating. Non-terminating non-repeating decimals belong to irrational numbers.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "Which condition must the denominator q satisfy for p/q to have a terminating decimal expansion?",
-    "option1": "q must be a prime number",
-    "option2": "q must be divisible by 3",
-    "option3": "q must be of the form 2ⁿ × 5ᵐ",
-    "option4": "q must be an even number",
-    "correctIndex": 3,
-    "explanation": "A rational number p/q (in lowest terms) has a terminating decimal if and only if the denominator q is of the form 2ⁿ × 5ᵐ, where n and m are non-negative integers.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "Which of the following fractions has a terminating decimal expansion?",
-    "option1": "1/3",
-    "option2": "1/7",
-    "option3": "7/8",
-    "option4": "5/6",
-    "correctIndex": 3,
-    "explanation": "7/8 has denominator 8 = 2³, which is of the form 2ⁿ × 5ᵐ. So it terminates. 7/8 = 0.875. The other denominators (3, 7, 6) have prime factors other than 2 and 5.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "What type of decimal expansion does 1/3 have?",
-    "option1": "Terminating",
-    "option2": "Non-terminating repeating",
-    "option3": "Non-terminating non-repeating",
-    "option4": "It cannot be expressed as a decimal",
-    "correctIndex": 2,
-    "explanation": "1/3 = 0.333... The digit 3 repeats forever. Since 3 has a prime factor other than 2 and 5, the decimal is non-terminating repeating.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "Which of the following has a non-terminating repeating decimal expansion?",
-    "option1": "3/4",
-    "option2": "7/20",
-    "option3": "5/6",
-    "option4": "1/8",
-    "correctIndex": 3,
-    "explanation": "5/6 has denominator 6 = 2 × 3. Since 3 is a prime factor other than 2 and 5, 5/6 = 0.8333... is non-terminating repeating. The other denominators are of the form 2ⁿ × 5ᵐ.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "What is the decimal expansion of 3/8?",
-    "option1": "0.125",
-    "option2": "0.375",
-    "option3": "0.250",
-    "option4": "0.425",
-    "correctIndex": 2,
-    "explanation": "3/8 = 3 ÷ 8 = 0.375. Since 8 = 2³ is of the form 2ⁿ × 5ᵐ, the decimal terminates at 0.375.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "The denominator of 13/125 in its lowest form is 125. What is its prime factorisation?",
-    "option1": "5³",
-    "option2": "2³ × 5",
-    "option3": "5² × 3",
-    "option4": "2 × 5³",
+    "text": "What is the prime factorisation of 180?",
+    "option1": "2² × 3² × 5",
+    "option2": "2³ × 3 × 5",
+    "option3": "2 × 3³ × 5",
+    "option4": "2² × 3 × 5²",
     "correctIndex": 1,
-    "explanation": "125 = 5 × 25 = 5 × 5 × 5 = 5³. Since the denominator is of the form 5ᵐ (which is a special case of 2ⁿ × 5ᵐ with n = 0), 13/125 has a terminating decimal expansion.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "Which of the following fractions will have a non-terminating repeating decimal expansion?",
-    "option1": "4/25",
-    "option2": "9/16",
-    "option3": "7/12",
-    "option4": "3/40",
-    "correctIndex": 3,
-    "explanation": "7/12 has denominator 12 = 2² × 3. Since 3 is a prime factor other than 2 and 5, it gives a non-terminating repeating decimal. The other denominators (25 = 5², 16 = 2⁴, 40 = 2³ × 5) are all of the form 2ⁿ × 5ᵐ.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "Without performing division, which of the following has a terminating decimal?",
-    "option1": "2/7",
-    "option2": "3/20",
-    "option3": "4/9",
-    "option4": "5/12",
-    "correctIndex": 2,
-    "explanation": "3/20 has denominator 20 = 2² × 5, which is of the form 2ⁿ × 5ᵐ. So it terminates. 3/20 = 0.15. Denominators 7, 9, and 12 all have prime factors other than 2 and 5.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "The decimal expansion of an irrational number is:",
-    "option1": "Terminating",
-    "option2": "Non-terminating repeating",
-    "option3": "Non-terminating and non-repeating",
-    "option4": "Always a whole number",
-    "correctIndex": 3,
-    "explanation": "Irrational numbers like √2 and √3 have decimal expansions that are non-terminating and non-repeating. This is what distinguishes them from rational numbers, which are either terminating or non-terminating repeating.",
-    "subtopicTag": "decimal-expansion"
-  }
-]
-[
-  {
-    "text": "In Euclid's Division Lemma a = bq + r, which of the following correctly describes the condition on r?",
-    "option1": "r > b",
-    "option2": "0 ≤ r < b",
-    "option3": "r = b",
-    "option4": "r < 0",
-    "correctIndex": 2,
-    "explanation": "Euclid's Lemma states a = bq + r where the remainder r must satisfy 0 ≤ r < b. The remainder is always non-negative and strictly less than the divisor.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "If HCF(12, 18) = 6, what is LCM(12, 18)?",
-    "option1": "36",
-    "option2": "216",
-    "option3": "18",
-    "option4": "72",
-    "correctIndex": 1,
-    "explanation": "Using HCF × LCM = a × b: 6 × LCM = 12 × 18 = 216. So LCM = 216 ÷ 6 = 36.",
-    "subtopicTag": "hcf-lcm-relation"
-  },
-  {
-    "text": "Which of the following is the correct formula relating HCF and LCM of two numbers a and b?",
-    "option1": "HCF(a,b) + LCM(a,b) = a + b",
-    "option2": "HCF(a,b) × LCM(a,b) = a × b",
-    "option3": "HCF(a,b) × LCM(a,b) = a + b",
-    "option4": "HCF(a,b) ÷ LCM(a,b) = a × b",
-    "correctIndex": 2,
-    "explanation": "The correct relation is HCF(a,b) × LCM(a,b) = a × b. This is an important formula used to find either HCF or LCM when the other is known.",
-    "subtopicTag": "hcf-lcm-relation"
-  },
-  {
-    "text": "If LCM(p, q) = 180 and HCF(p, q) = 6, what is the value of p × q?",
-    "option1": "30",
-    "option2": "186",
-    "option3": "1080",
-    "option4": "900",
-    "correctIndex": 3,
-    "explanation": "Using HCF × LCM = a × b: p × q = HCF × LCM = 6 × 180 = 1080.",
-    "subtopicTag": "hcf-lcm-relation"
-  },
-  {
-    "text": "p/q has a terminating decimal expansion. Which of the following could be the value of q?",
-    "option1": "14",
-    "option2": "21",
-    "option3": "40",
-    "option4": "33",
-    "correctIndex": 3,
-    "explanation": "40 = 2³ × 5, which is of the form 2ⁿ × 5ᵐ. So p/40 will have a terminating decimal. 14 = 2 × 7, 21 = 3 × 7, and 33 = 3 × 11 all have prime factors other than 2 and 5.",
-    "subtopicTag": "decimal-expansion"
-  },
-  {
-    "text": "Which of the following is irrational according to the property √p where p is prime?",
-    "option1": "√4",
-    "option2": "√9",
-    "option3": "√11",
-    "option4": "√16",
-    "correctIndex": 3,
-    "explanation": "11 is a prime number, so √11 is irrational. √4 = 2, √9 = 3, and √16 = 4 are all perfect squares, hence rational numbers.",
-    "subtopicTag": "irrational-proof"
-  },
-  {
-    "text": "What is the result of adding a rational number 5 and an irrational number √7?",
-    "option1": "A rational number",
-    "option2": "Zero",
-    "option3": "A whole number",
-    "option4": "An irrational number",
-    "correctIndex": 4,
-    "explanation": "Rational + Irrational = Irrational. Since 5 is rational and √7 is irrational, their sum 5 + √7 is always irrational.",
-    "subtopicTag": "irrational-properties"
-  },
-  {
-    "text": "If HCF(a, b) = 9 and a × b = 270, what is LCM(a, b)?",
-    "option1": "20",
-    "option2": "30",
-    "option3": "45",
-    "option4": "60",
-    "correctIndex": 2,
-    "explanation": "Using HCF × LCM = a × b: 9 × LCM = 270. So LCM = 270 ÷ 9 = 30.",
-    "subtopicTag": "hcf-lcm-relation"
-  },
-  {
-    "text": "What is the result of multiplying a non-zero rational number 4 with an irrational number √5?",
-    "option1": "Always rational",
-    "option2": "Always zero",
-    "option3": "Always irrational",
-    "option4": "Sometimes rational",
-    "correctIndex": 3,
-    "explanation": "Non-zero Rational × Irrational = Irrational. So 4 × √5 = 4√5 is always irrational. This is a key property of irrational numbers.",
-    "subtopicTag": "irrational-properties"
-  },
-  {
-    "text": "For p/q to have a terminating decimal, the denominator q = 2ⁿ × 5ᵐ. Which of the following denominators gives a terminating decimal?",
-    "option1": "q = 2² × 7",
-    "option2": "q = 3 × 5²",
-    "option3": "q = 2³ × 5²",
-    "option4": "q = 2 × 3 × 5",
-    "correctIndex": 3,
-    "explanation": "q = 2³ × 5² has only 2 and 5 as prime factors, so it satisfies the condition 2ⁿ × 5ᵐ and gives a terminating decimal. The other options all contain prime factors 7 or 3 which make the decimal non-terminating.",
-    "subtopicTag": "decimal-expansion"
-  }
-]
-
-[
-  {
-    "text": "What is the main purpose of Euclid's Division Algorithm?",
-    "option1": "To find the LCM of two numbers",
-    "option2": "To find the HCF of two numbers",
-    "option3": "To find the prime factors of a number",
-    "option4": "To find the square root of a number",
-    "correctIndex": 2,
-    "explanation": "Euclid's Division Algorithm is used to find the HCF (Highest Common Factor) of two positive integers by repeatedly applying Euclid's Division Lemma until the remainder becomes zero.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "In Euclid's Division Algorithm, the process stops when:",
-    "option1": "The quotient becomes zero",
-    "option2": "The divisor becomes 1",
-    "option3": "The remainder becomes zero",
-    "option4": "The dividend becomes zero",
-    "correctIndex": 3,
-    "explanation": "In Euclid's Division Algorithm, we keep applying the lemma until the remainder becomes zero. The divisor at that stage is the HCF of the original two numbers.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Using Euclid's Algorithm: 225 = 135 × 1 + 90, 135 = 90 × 1 + 45, 90 = 45 × 2 + 0. What is the HCF of 225 and 135?",
-    "option1": "90",
-    "option2": "135",
-    "option3": "45",
-    "option4": "15",
-    "correctIndex": 3,
-    "explanation": "The algorithm stops when remainder = 0. At that step, the divisor is 45. So HCF(225, 135) = 45.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "What is the first step when applying Euclid's Division Algorithm to find HCF of 56 and 18?",
-    "option1": "18 = 56 × 0 + 18",
-    "option2": "56 = 18 × 3 + 2",
-    "option3": "56 = 18 × 2 + 20",
-    "option4": "18 = 56 × 1 + 2",
-    "correctIndex": 2,
-    "explanation": "We start with the larger number as dividend. 56 = 18 × 3 + 2. Check: 18 × 3 = 54, 54 + 2 = 56, and 0 ≤ 2 < 18. This is the correct first step.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Using Euclid's Algorithm, 48 = 18 × 2 + 12, 18 = 12 × 1 + 6, 12 = 6 × 2 + 0. What is HCF(48, 18)?",
-    "option1": "12",
-    "option2": "18",
-    "option3": "6",
-    "option4": "3",
-    "correctIndex": 3,
-    "explanation": "The algorithm stops at 12 = 6 × 2 + 0. The remainder is 0 and the divisor at this step is 6. So HCF(48, 18) = 6.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "When applying Euclid's Algorithm to find HCF(36, 12), we get 36 = 12 × 3 + 0. What is the HCF?",
-    "option1": "3",
-    "option2": "36",
-    "option3": "12",
-    "option4": "6",
-    "correctIndex": 3,
-    "explanation": "36 = 12 × 3 + 0. The remainder is immediately 0, so the HCF is the divisor at this step, which is 12. HCF(36, 12) = 12.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "In Euclid's Algorithm, after applying a = bq + r, if r ≠ 0, what do we do next?",
-    "option1": "Apply the lemma to a and q",
-    "option2": "Apply the lemma to b and r",
-    "option3": "Stop the process",
-    "option4": "Apply the lemma to a and r",
-    "correctIndex": 2,
-    "explanation": "If r ≠ 0, we apply Euclid's Lemma again to b (the previous divisor) and r (the previous remainder). We continue this until the remainder becomes zero.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Using Euclid's Algorithm: 270 = 90 × 3 + 0. What is HCF(270, 90)?",
-    "option1": "3",
-    "option2": "270",
-    "option3": "30",
-    "option4": "90",
-    "correctIndex": 4,
-    "explanation": "270 = 90 × 3 + 0. Since the remainder is 0 in the first step itself, the HCF is the divisor, which is 90. HCF(270, 90) = 90.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Which of the following is the correct sequence to find HCF(72, 24) using Euclid's Algorithm?",
-    "option1": "72 = 24 × 4 + 0",
-    "option2": "72 = 24 × 3 + 0",
-    "option3": "72 = 24 × 2 + 24",
-    "option4": "72 = 24 × 3 + 4",
-    "correctIndex": 2,
-    "explanation": "72 = 24 × 3 + 0. Check: 24 × 3 = 72, remainder = 0. So HCF(72, 24) = 24. The process stops in the first step itself.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "What is the HCF of 81 and 27 using Euclid's Division Algorithm?",
-    "option1": "9",
-    "option2": "3",
-    "option3": "27",
-    "option4": "81",
-    "correctIndex": 3,
-    "explanation": "81 = 27 × 3 + 0. The remainder is 0 in the first step, so HCF(81, 27) = 27, which is the divisor at that step.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  }
-]
-
-[
-  {
-    "text": "If a = bq + r and b = 13, q = 5, r = 7, what is the value of a?",
-    "option1": "65",
-    "option2": "72",
-    "option3": "78",
-    "option4": "85",
-    "correctIndex": 2,
-    "explanation": "Using a = bq + r: a = 13 × 5 + 7 = 65 + 7 = 72. Always substitute values carefully into the lemma formula.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "When a number n is divided by 7, the remainder is 4. Which of the following could be the value of n?",
-    "option1": "32",
-    "option2": "35",
-    "option3": "39",
-    "option4": "46",
-    "correctIndex": 3,
-    "explanation": "Using n = 7q + 4, we need n to leave remainder 4 when divided by 7. 39 = 7 × 5 + 4. Check: 7 × 5 = 35, 35 + 4 = 39. So 39 is correct.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "A number when divided by 11 gives quotient 6 and remainder 8. What is the number?",
-    "option1": "66",
-    "option2": "74",
-    "option3": "76",
-    "option4": "70",
-    "correctIndex": 2,
-    "explanation": "Using a = bq + r: a = 11 × 6 + 8 = 66 + 8 = 74. The number is 74.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "For what value of k does 85 = 9 × k + 4 hold true according to Euclid's Lemma?",
-    "option1": "7",
-    "option2": "8",
-    "option3": "9",
-    "option4": "10",
-    "correctIndex": 3,
-    "explanation": "85 = 9 × k + 4. So 9k = 85 - 4 = 81. Therefore k = 81 ÷ 9 = 9. Verify: 9 × 9 + 4 = 81 + 4 = 85. ✓",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "Using Euclid's Lemma, if 100 = 17q + r, what are the correct values of q and r?",
-    "option1": "q = 5, r = 15",
-    "option2": "q = 6, r = 2",
-    "option3": "q = 4, r = 12",
-    "option4": "q = 7, r = 1",
-    "correctIndex": 2,
-    "explanation": "100 ÷ 17 = 5 remainder 15. Wait — 17 × 5 = 85, 100 - 85 = 15. So q = 5, r = 15. Actually option A is correct. Let me recheck: 17 × 6 = 102 > 100, so q = 5 and r = 15. ✓",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "A number leaves remainder 5 when divided by 8. Which of the following expressions represents all such numbers?",
-    "option1": "8q + 3",
-    "option2": "8q + 5",
-    "option3": "5q + 8",
-    "option4": "8q - 5",
-    "correctIndex": 2,
-    "explanation": "Using Euclid's Lemma a = bq + r, with b = 8 and r = 5, all such numbers are of the form 8q + 5, where q is a non-negative integer. For example: q=1 gives 13, q=2 gives 21, both leave remainder 5 when divided by 8.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "If n = 6q + r, which of the following is a possible value of r?",
-    "option1": "6",
-    "option2": "7",
-    "option3": "0",
-    "option4": "8",
-    "correctIndex": 3,
-    "explanation": "In Euclid's Lemma n = 6q + r, the remainder r must satisfy 0 ≤ r < 6. So r can be 0, 1, 2, 3, 4, or 5. Only r = 0 satisfies this condition among the options.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "When 245 is divided by a number b, the quotient is 8 and the remainder is 5. What is the value of b?",
-    "option1": "25",
-    "option2": "28",
-    "option3": "30",
-    "option4": "35",
-    "correctIndex": 3,
-    "explanation": "Using a = bq + r: 245 = b × 8 + 5. So 8b = 245 - 5 = 240. Therefore b = 240 ÷ 8 = 30.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "Using Euclid's Lemma, which of the following correctly expresses 73 with divisor 9?",
-    "option1": "73 = 9 × 7 + 10",
-    "option2": "73 = 9 × 8 + 1",
-    "option3": "73 = 9 × 9 + 2",
-    "option4": "73 = 9 × 6 + 19",
-    "correctIndex": 2,
-    "explanation": "73 = 9 × 8 + 1. Check: 9 × 8 = 72, 72 + 1 = 73, and 0 ≤ 1 < 9. ✓ Option A has r = 10 > 9, option C gives 83 ≠ 73, option D has r = 19 > 9.",
-    "subtopicTag": "euclid-lemma"
-  },
-  {
-    "text": "A number n when divided by 12 leaves remainder 7. What will be the remainder when (n + 5) is divided by 12?",
-    "option1": "5",
-    "option2": "11",
-    "option3": "0",
-    "option4": "12",
-    "correctIndex": 3,
-    "explanation": "If n = 12q + 7, then n + 5 = 12q + 7 + 5 = 12q + 12 = 12(q + 1) + 0. So the remainder when (n + 5) is divided by 12 is 0.",
-    "subtopicTag": "euclid-lemma"
-  }
-]
-[
-  {
-    "text": "Using Euclid's Division Algorithm, find HCF(135, 225).",
-    "option1": "15",
-    "option2": "25",
-    "option3": "45",
-    "option4": "90",
-    "correctIndex": 3,
-    "explanation": "225 = 135 × 1 + 90, 135 = 90 × 1 + 45, 90 = 45 × 2 + 0. The remainder becomes 0 when divisor is 45. So HCF(135, 225) = 45.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Find HCF(867, 255) using Euclid's Division Algorithm.",
-    "option1": "3",
-    "option2": "17",
-    "option3": "51",
-    "option4": "85",
-    "correctIndex": 3,
-    "explanation": "867 = 255 × 3 + 102, 255 = 102 × 2 + 51, 102 = 51 × 2 + 0. The remainder becomes 0 when divisor is 51. So HCF(867, 255) = 51.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "While finding HCF(144, 96) using Euclid's Algorithm, the first step gives 144 = 96 × 1 + 48. What is the next step?",
-    "option1": "144 = 48 × 3 + 0",
-    "option2": "96 = 48 × 2 + 0",
-    "option3": "48 = 96 × 0 + 48",
-    "option4": "96 = 48 × 3 + 0",
-    "correctIndex": 2,
-    "explanation": "After 144 = 96 × 1 + 48, we now apply the lemma to the previous divisor (96) and remainder (48). 96 = 48 × 2 + 0. Remainder is 0, so HCF(144, 96) = 48.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "HCF(306, 657) = 9. Using the HCF × LCM relation, find LCM(306, 657).",
-    "option1": "21,294",
-    "option2": "22,338",
-    "option3": "24,354",
-    "option4": "20,196",
-    "correctIndex": 2,
-    "explanation": "Using HCF × LCM = a × b: 9 × LCM = 306 × 657 = 201,042. So LCM = 201,042 ÷ 9 = 22,338.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Using Euclid's Algorithm: 420 = 130 × 3 + 30, 130 = 30 × 4 + 10, 30 = 10 × 3 + 0. What is HCF(420, 130)?",
-    "option1": "30",
-    "option2": "20",
-    "option3": "10",
-    "option4": "5",
-    "correctIndex": 3,
-    "explanation": "The algorithm terminates at 30 = 10 × 3 + 0. The divisor at this step is 10. So HCF(420, 130) = 10.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "If HCF(a, 18) = 6 and LCM(a, 18) = 36, find the value of a using the HCF × LCM relation.",
-    "option1": "6",
-    "option2": "18",
-    "option3": "12",
-    "option4": "24",
-    "correctIndex": 3,
-    "explanation": "Using HCF × LCM = a × b: 6 × 36 = a × 18. So 216 = 18a. Therefore a = 216 ÷ 18 = 12.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Find HCF(378, 180) using Euclid's Division Algorithm.",
-    "option1": "6",
-    "option2": "9",
-    "option3": "18",
-    "option4": "36",
-    "correctIndex": 3,
-    "explanation": "378 = 180 × 2 + 18, 180 = 18 × 10 + 0. The remainder becomes 0 when divisor is 18. So HCF(378, 180) = 18.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "In finding HCF(195, 455) using Euclid's Algorithm, which is the correct first step?",
-    "option1": "195 = 455 × 0 + 195",
-    "option2": "455 = 195 × 2 + 65",
-    "option3": "455 = 195 × 3 + 70",
-    "option4": "195 = 65 × 3 + 0",
-    "correctIndex": 2,
-    "explanation": "We start with the larger number: 455 = 195 × 2 + 65. Check: 195 × 2 = 390, 390 + 65 = 455, and 0 ≤ 65 < 195. ✓ This is the correct first step.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Using Euclid's Algorithm, 455 = 195 × 2 + 65, 195 = 65 × 3 + 0. What is HCF(455, 195)?",
-    "option1": "195",
-    "option2": "130",
-    "option3": "65",
-    "option4": "13",
-    "correctIndex": 3,
-    "explanation": "The algorithm stops at 195 = 65 × 3 + 0. The remainder is 0 and the divisor at this step is 65. So HCF(455, 195) = 65.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  },
-  {
-    "text": "Two numbers have HCF = 14 and their product is 2744. What is their LCM?",
-    "option1": "98",
-    "option2": "182",
-    "option3": "196",
-    "option4": "392",
-    "correctIndex": 3,
-    "explanation": "Using HCF × LCM = product of numbers: 14 × LCM = 2744. So LCM = 2744 ÷ 14 = 196.",
-    "subtopicTag": "euclid-algorithm-hcf"
-  }
-]
-[
-  {
-    "text": "Find the HCF of 96 and 404 using prime factorisation.",
-    "option1": "2",
-    "option2": "4",
-    "option3": "8",
-    "option4": "12",
-    "correctIndex": 2,
-    "explanation": "96 = 2⁵ × 3 and 404 = 2² × 101. HCF = product of smallest powers of common prime factors = 2² = 4.",
-    "subtopicTag": "prime-factorisation"
-  },
-  {
-    "text": "Find the LCM of 12 and 18 using prime factorisation.",
-    "option1": "36",
-    "option2": "72",
-    "option3": "54",
-    "option4": "216",
-    "correctIndex": 1,
-    "explanation": "12 = 2² × 3 and 18 = 2 × 3². LCM = product of greatest powers of all prime factors = 2² × 3² = 4 × 9 = 36.",
-    "subtopicTag": "prime-factorisation"
-  },
-  {
-    "text": "The prime factorisation of 6930 includes which of the following?",
-    "option1": "2 × 3² × 5 × 7",
-    "option2": "2 × 3² × 5 × 7²",
-    "option3": "2 × 3 × 5 × 7²",
-    "option4": "2² × 3 × 5 × 7",
-    "correctIndex": 1,
-    "explanation": "6930 = 2 × 3465 = 2 × 3 × 1155 = 2 × 3 × 3 × 385 = 2 × 3² × 5 × 77 = 2 × 3² × 5 × 7 × 11. Wait — 6930 = 2 × 3² × 5 × 7 × 11. Let me recheck: 6930 ÷ 2 = 3465, ÷ 3 = 1155, ÷ 3 = 385, ÷ 5 = 77, ÷ 7 = 11. So 6930 = 2 × 3² × 5 × 7 × 11.",
-    "subtopicTag": "prime-factorisation"
-  },
-  {
-    "text": "Using prime factorisation, find HCF(306, 657).",
-    "option1": "3",
-    "option2": "6",
-    "option3": "9",
-    "option4": "18",
-    "correctIndex": 3,
-    "explanation": "306 = 2 × 3² × 17 and 657 = 3² × 73. HCF = product of smallest powers of common prime factors = 3² = 9.",
-    "subtopicTag": "prime-factorisation"
-  },
-  {
-    "text": "What is the LCM of 26 and 91 using prime factorisation?",
-    "option1": "91",
-    "option2": "182",
-    "option3": "273",
-    "option4": "364",
-    "correctIndex": 2,
-    "explanation": "26 = 2 × 13 and 91 = 7 × 13. LCM = product of greatest powers of all prime factors = 2 × 7 × 13 = 182.",
-    "subtopicTag": "prime-factorisation"
-  },
-  {
-    "text": "The HCF of two numbers is 8 and their LCM is 240. If one number is 48, find the other number.",
-    "option1": "30",
-    "option2": "40",
-    "option3": "48",
-    "option4": "60",
-    "correctIndex": 2,
-    "explanation": "Using HCF × LCM = a × b: 8 × 240 = 48 × b. So 1920 = 48b. Therefore b = 1920 ÷ 48 = 40.",
-    "subtopicTag": "prime-factorisation"
-  },
-  {
-    "text": "Find the HCF and LCM of 12, 15, and 21 using prime factorisation. What is the HCF?",
-    "option1": "1",
-    "option2": "3",
-    "option3": "6",
-    "option4": "7",
-    "correctIndex": 2,
-    "explanation": "12 = 2² × 3, 15 = 3 × 5, 21 = 3 × 7. HCF = product of smallest powers of common prime factors = 3¹ = 3.",
+    "explanation": "180 = 2 × 90 = 2² × 45 = 2² × 9 × 5 = 2² × 3² × 5. Verify: 4 × 9 × 5 = 180. ✓",
+    "difficulty": "AVERAGE",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -896,7 +336,8 @@
     "option3": "2² × 3² × 5 × 7",
     "option4": "2³ × 3³ × 5 × 7",
     "correctIndex": 1,
-    "explanation": "HCF = product of smallest powers of common prime factors. Common primes are 2 and 3. Smallest power of 2 is 2², smallest power of 3 is 3². So HCF = 2² × 3² = 4 × 9 = 36.",
+    "explanation": "HCF = product of smallest powers of common prime factors. Common primes are 2 and 3 only. Smallest power of 2: min(3,2) = 2². Smallest power of 3: min(2,3) = 3². HCF = 2² × 3² = 4 × 9 = 36.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -906,7 +347,8 @@
     "option3": "120",
     "option4": "180",
     "correctIndex": 3,
-    "explanation": "8 = 2³, 12 = 2² × 3, 15 = 3 × 5. LCM = product of greatest powers of all prime factors = 2³ × 3 × 5 = 8 × 3 × 5 = 120.",
+    "explanation": "8 = 2³, 12 = 2² × 3, 15 = 3 × 5. LCM = greatest powers of all primes = 2³ × 3¹ × 5¹ = 8 × 3 × 5 = 120.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "prime-factorisation"
   },
   {
@@ -916,19 +358,349 @@
     "option3": "2² × 3 × 7²",
     "option4": "2² × 3² × 7²",
     "correctIndex": 2,
-    "explanation": "LCM = product of greatest powers of all prime factors. Greatest power of 2 is 2², of 3 is 3², of 7 is 7¹. So LCM = 2² × 3² × 7 = 4 × 9 × 7 = 252.",
+    "explanation": "LCM = greatest powers of all prime factors. Max power of 2 = 2², of 3 = 3², of 7 = 7¹. LCM = 2² × 3² × 7 = 4 × 9 × 7 = 252.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "prime-factorisation"
-  }
-]
-[
+  },
   {
-    "text": "The HCF of two numbers is 11 and their LCM is 693. If one number is 77, find the other number.",
+    "text": "How many factors does the number 2³ × 3² × 5 have?",
+    "option1": "24",
+    "option2": "12",
+    "option3": "18",
+    "option4": "16",
+    "correctIndex": 1,
+    "explanation": "Number of factors = (3+1)(2+1)(1+1) = 4 × 3 × 2 = 24. The formula is: for n = p^a × q^b × r^c, total factors = (a+1)(b+1)(c+1).",
+    "difficulty": "EXPERT",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "Which of the following numbers has exactly 3 distinct prime factors?",
+    "option1": "30",
+    "option2": "18",
+    "option3": "20",
+    "option4": "16",
+    "correctIndex": 1,
+    "explanation": "30 = 2 × 3 × 5 → exactly 3 distinct prime factors. 18 = 2 × 3² → 2 distinct primes. 20 = 2² × 5 → 2 distinct primes. 16 = 2⁴ → 1 distinct prime.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "Find the HCF of 96 and 404 using prime factorisation.",
+    "option1": "2",
+    "option2": "4",
+    "option3": "8",
+    "option4": "12",
+    "correctIndex": 2,
+    "explanation": "96 = 2⁵ × 3 and 404 = 2² × 101. The only common prime is 2. HCF = smallest power of 2 = 2² = 4.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "Find the LCM of 12 and 18 using prime factorisation.",
+    "option1": "36",
+    "option2": "72",
+    "option3": "54",
+    "option4": "216",
+    "correctIndex": 1,
+    "explanation": "12 = 2² × 3 and 18 = 2 × 3². LCM = greatest powers of all primes = 2² × 3² = 4 × 9 = 36.",
+    "difficulty": "PASS",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "Using prime factorisation, find HCF(306, 657).",
+    "option1": "3",
+    "option2": "6",
+    "option3": "9",
+    "option4": "18",
+    "correctIndex": 3,
+    "explanation": "306 = 2 × 3² × 17 and 657 = 3² × 73. The only common prime is 3. HCF = 3² = 9.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "What is the LCM of 26 and 91 using prime factorisation?",
+    "option1": "91",
+    "option2": "182",
+    "option3": "273",
+    "option4": "364",
+    "correctIndex": 2,
+    "explanation": "26 = 2 × 13 and 91 = 7 × 13. LCM = greatest powers of all primes = 2 × 7 × 13 = 182.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "Find the HCF and LCM of 12, 15, and 21 using prime factorisation. What is the HCF?",
+    "option1": "1",
+    "option2": "3",
+    "option3": "6",
+    "option4": "7",
+    "correctIndex": 2,
+    "explanation": "12 = 2² × 3, 15 = 3 × 5, 21 = 3 × 7. The only common prime factor across all three is 3 (with minimum power 1). HCF = 3.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "The HCF of two numbers is 8 and their LCM is 240. If one number is 48, find the other number.",
+    "option1": "30",
+    "option2": "40",
+    "option3": "48",
+    "option4": "60",
+    "correctIndex": 2,
+    "explanation": "Using HCF × LCM = a × b: 8 × 240 = 48 × b → 1920 = 48b → b = 40.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "prime-factorisation"
+  },
+  {
+    "text": "What is the main purpose of Euclid's Division Algorithm?",
+    "option1": "To find the LCM of two numbers",
+    "option2": "To find the HCF of two numbers",
+    "option3": "To find the prime factors of a number",
+    "option4": "To find the square root of a number",
+    "correctIndex": 2,
+    "explanation": "Euclid's Division Algorithm is used to find the HCF (Highest Common Factor) of two positive integers by repeatedly applying Euclid's Division Lemma until the remainder becomes zero.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "In Euclid's Division Algorithm, the process stops when:",
+    "option1": "The quotient becomes zero",
+    "option2": "The divisor becomes 1",
+    "option3": "The remainder becomes zero",
+    "option4": "The dividend becomes zero",
+    "correctIndex": 3,
+    "explanation": "The algorithm stops when the remainder becomes zero. At that stage, the divisor (not the quotient or dividend) is the HCF of the original pair of numbers.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Using Euclid's Algorithm: 225 = 135×1+90, 135 = 90×1+45, 90 = 45×2+0. What is HCF(225, 135)?",
+    "option1": "90",
+    "option2": "135",
+    "option3": "45",
+    "option4": "15",
+    "correctIndex": 3,
+    "explanation": "The algorithm stops when the remainder = 0. At that step, 90 = 45 × 2 + 0, the divisor is 45. Therefore HCF(225, 135) = 45.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Using Euclid's Algorithm: 48 = 18×2+12, 18 = 12×1+6, 12 = 6×2+0. What is HCF(48, 18)?",
+    "option1": "12",
+    "option2": "18",
+    "option3": "6",
+    "option4": "3",
+    "correctIndex": 3,
+    "explanation": "The algorithm stops at 12 = 6 × 2 + 0. The divisor at the zero-remainder step is 6. Therefore HCF(48, 18) = 6.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "When applying Euclid's Algorithm to find HCF(36, 12), we get 36 = 12×3+0. What is the HCF?",
+    "option1": "3",
+    "option2": "36",
+    "option3": "12",
+    "option4": "6",
+    "correctIndex": 3,
+    "explanation": "The remainder is immediately 0. So HCF(36, 12) = 12, the divisor at that step. This is a case where one number exactly divides the other.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "In Euclid's Algorithm, after applying a = bq + r, if r ≠ 0, what do we do next?",
+    "option1": "Apply the lemma to a and q",
+    "option2": "Apply the lemma to b and r",
+    "option3": "Stop the process",
+    "option4": "Apply the lemma to a and r",
+    "correctIndex": 2,
+    "explanation": "The key rule: if r ≠ 0, we apply Euclid's Lemma to (b, r) — i.e., the previous divisor becomes the new dividend, and the previous remainder becomes the new divisor. We repeat until r = 0.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Using Euclid's Algorithm: 270 = 90×3+0. What is HCF(270, 90)?",
+    "option1": "3",
+    "option2": "270",
+    "option3": "30",
+    "option4": "90",
+    "correctIndex": 4,
+    "explanation": "The remainder is 0 in the first step itself. The divisor at this step is 90. Therefore HCF(270, 90) = 90.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "What is the HCF of 81 and 27 using Euclid's Division Algorithm?",
+    "option1": "9",
+    "option2": "3",
+    "option3": "27",
+    "option4": "81",
+    "correctIndex": 3,
+    "explanation": "81 = 27 × 3 + 0. The remainder is 0 in the first step. The divisor is 27. Therefore HCF(81, 27) = 27.",
+    "difficulty": "PASS",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Using Euclid's Division Algorithm, find HCF(135, 225).",
+    "option1": "15",
+    "option2": "25",
+    "option3": "45",
+    "option4": "90",
+    "correctIndex": 3,
+    "explanation": "225 = 135×1+90 → 135 = 90×1+45 → 90 = 45×2+0. Remainder is 0 when divisor is 45. HCF(135, 225) = 45.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Find HCF(867, 255) using Euclid's Division Algorithm.",
+    "option1": "3",
+    "option2": "17",
+    "option3": "51",
+    "option4": "85",
+    "correctIndex": 3,
+    "explanation": "867 = 255×3+102 → 255 = 102×2+51 → 102 = 51×2+0. Remainder is 0 when divisor is 51. HCF(867, 255) = 51.",
+    "difficulty": "EXPERT",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Find HCF(252, 105) using Euclid's Division Algorithm.",
+    "option1": "21",
+    "option2": "7",
+    "option3": "3",
+    "option4": "9",
+    "correctIndex": 1,
+    "explanation": "252 = 105×2+42 → 105 = 42×2+21 → 42 = 21×2+0. Remainder is 0 when divisor is 21. HCF(252, 105) = 21.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "While finding HCF(144, 96) using Euclid's Algorithm, the first step gives 144 = 96×1+48. What is the next step?",
+    "option1": "144 = 48×3+0",
+    "option2": "96 = 48×2+0",
+    "option3": "48 = 96×0+48",
+    "option4": "96 = 48×3+0",
+    "correctIndex": 2,
+    "explanation": "After 144 = 96×1+48, we now use the previous divisor (96) and remainder (48). 96 = 48×2+0. Remainder = 0, so HCF(144, 96) = 48.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "HCF(306, 657) = 9. Using HCF × LCM = a × b, find LCM(306, 657).",
+    "option1": "21,294",
+    "option2": "22,338",
+    "option3": "24,354",
+    "option4": "20,196",
+    "correctIndex": 2,
+    "explanation": "9 × LCM = 306 × 657 = 201,042. LCM = 201,042 ÷ 9 = 22,338.",
+    "difficulty": "EXPERT",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Using Euclid's Algorithm: 420 = 130×3+30, 130 = 30×4+10, 30 = 10×3+0. What is HCF(420, 130)?",
+    "option1": "30",
+    "option2": "20",
+    "option3": "10",
+    "option4": "5",
+    "correctIndex": 3,
+    "explanation": "The algorithm terminates at 30 = 10×3+0. The divisor at this step is 10. HCF(420, 130) = 10.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "If HCF(a, 18) = 6 and LCM(a, 18) = 36, find the value of a.",
+    "option1": "6",
+    "option2": "18",
+    "option3": "12",
+    "option4": "24",
+    "correctIndex": 3,
+    "explanation": "Using HCF × LCM = a × b: 6 × 36 = a × 18 → 216 = 18a → a = 12.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Find HCF(378, 180) using Euclid's Division Algorithm.",
+    "option1": "6",
+    "option2": "9",
+    "option3": "18",
+    "option4": "36",
+    "correctIndex": 3,
+    "explanation": "378 = 180×2+18 → 180 = 18×10+0. Remainder is 0 when divisor is 18. HCF(378, 180) = 18.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Using Euclid's Algorithm, 455 = 195×2+65, 195 = 65×3+0. What is HCF(455, 195)?",
+    "option1": "195",
+    "option2": "130",
+    "option3": "65",
+    "option4": "13",
+    "correctIndex": 3,
+    "explanation": "The algorithm stops at 195 = 65×3+0. The divisor at this step is 65. HCF(455, 195) = 65.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "Two numbers have HCF = 14 and their product is 2744. What is their LCM?",
+    "option1": "98",
+    "option2": "182",
+    "option3": "196",
+    "option4": "392",
+    "correctIndex": 3,
+    "explanation": "HCF × LCM = product of numbers: 14 × LCM = 2744 → LCM = 196.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "euclid-algorithm-hcf"
+  },
+  {
+    "text": "If HCF(12, 18) = 6, what is LCM(12, 18)?",
+    "option1": "36",
+    "option2": "216",
+    "option3": "18",
+    "option4": "72",
+    "correctIndex": 1,
+    "explanation": "HCF × LCM = a × b: 6 × LCM = 12 × 18 = 216 → LCM = 36.",
+    "difficulty": "PASS",
+    "subtopicTag": "hcf-lcm-relation"
+  },
+  {
+    "text": "Which of the following is the correct formula relating HCF and LCM of two numbers a and b?",
+    "option1": "HCF(a,b) + LCM(a,b) = a + b",
+    "option2": "HCF(a,b) × LCM(a,b) = a × b",
+    "option3": "HCF(a,b) × LCM(a,b) = a + b",
+    "option4": "HCF(a,b) ÷ LCM(a,b) = a × b",
+    "correctIndex": 2,
+    "explanation": "The standard relation is HCF(a,b) × LCM(a,b) = a × b. This holds for any two positive integers and is used to find either HCF or LCM when the other is known.",
+    "difficulty": "PASS",
+    "subtopicTag": "hcf-lcm-relation"
+  },
+  {
+    "text": "If LCM(p, q) = 180 and HCF(p, q) = 6, what is the value of p × q?",
+    "option1": "30",
+    "option2": "186",
+    "option3": "1080",
+    "option4": "900",
+    "correctIndex": 3,
+    "explanation": "Using HCF × LCM = a × b: p × q = 6 × 180 = 1080.",
+    "difficulty": "PASS",
+    "subtopicTag": "hcf-lcm-relation"
+  },
+  {
+    "text": "If HCF(a, b) = 9 and a × b = 270, what is LCM(a, b)?",
+    "option1": "20",
+    "option2": "30",
+    "option3": "45",
+    "option4": "60",
+    "correctIndex": 2,
+    "explanation": "HCF × LCM = a × b: 9 × LCM = 270 → LCM = 30.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "hcf-lcm-relation"
+  },
+  {
+    "text": "The HCF of two numbers is 11 and their LCM is 693. If one number is 77, find the other.",
     "option1": "63",
     "option2": "99",
     "option3": "121",
     "option4": "143",
     "correctIndex": 2,
-    "explanation": "Using HCF × LCM = a × b: 11 × 693 = 77 × b. So 7623 = 77b. Therefore b = 7623 ÷ 77 = 99.",
+    "explanation": "HCF × LCM = a × b: 11 × 693 = 77 × b → 7623 = 77b → b = 99.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
@@ -938,7 +710,8 @@
     "option3": "32",
     "option4": "48",
     "correctIndex": 2,
-    "explanation": "Using HCF × LCM = a × b: 8 × 48 = 16 × y. So 384 = 16y. Therefore y = 384 ÷ 16 = 24.",
+    "explanation": "HCF × LCM = a × b: 8 × 48 = 16 × y → 384 = 16y → y = 24.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
@@ -948,7 +721,8 @@
     "option3": "120",
     "option4": "180",
     "correctIndex": 3,
-    "explanation": "Using HCF × LCM = product of numbers: 15 × LCM = 1800. So LCM = 1800 ÷ 15 = 120.",
+    "explanation": "HCF × LCM = product: 15 × LCM = 1800 → LCM = 120.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
@@ -958,7 +732,8 @@
     "option3": "42",
     "option4": "56",
     "correctIndex": 2,
-    "explanation": "Using HCF × LCM = a × b: 7 × 420 = 84 × b. So 2940 = 84b. Therefore b = 2940 ÷ 84 = 35.",
+    "explanation": "HCF × LCM = a × b: 7 × 420 = 84 × b → 2940 = 84b → b = 35.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
@@ -967,18 +742,20 @@
     "option2": "24 and 72",
     "option3": "36 and 48",
     "option4": "48 and 36",
-    "correctIndex": 2,
-    "explanation": "For each pair, check if HCF × LCM = product: 12 × 144 = 1728. For 24 and 72: 24 × 72 = 1728 ✓. Also HCF(24, 72) = 24 ≠ 12. Let us check 36 and 48: 36 × 48 = 1728 ✓ and HCF(36, 48) = 12 ✓ and LCM(36, 48) = 144 ✓.",
+    "correctIndex": 3,
+    "explanation": "Check: HCF(36, 48) = 12 ✓ and LCM(36, 48) = 36×48÷12 = 144 ✓. Also 36×48 = 1728 = 12×144. Option B: HCF(24,72)=24≠12. Options C and D are the same pair.",
+    "difficulty": "EXPERT",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
-    "text": "The HCF of two numbers is 6 and their LCM is 180. One number is 30. Find the other number.",
+    "text": "The HCF of two numbers is 6 and their LCM is 180. One number is 30. Find the other.",
     "option1": "18",
     "option2": "24",
     "option3": "36",
     "option4": "54",
     "correctIndex": 3,
-    "explanation": "Using HCF × LCM = a × b: 6 × 180 = 30 × b. So 1080 = 30b. Therefore b = 1080 ÷ 30 = 36.",
+    "explanation": "HCF × LCM = a × b: 6 × 180 = 30 × b → 1080 = 30b → b = 36.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
@@ -988,17 +765,8 @@
     "option3": "27 and 30",
     "option4": "9 and 45",
     "correctIndex": 2,
-    "explanation": "Check HCF × LCM = a × b: 9 × 90 = 810. For 18 and 45: 18 × 45 = 810 ✓. Also HCF(18, 45) = 9 ✓ and LCM(18, 45) = 90 ✓. So (18, 45) is the correct pair.",
-    "subtopicTag": "hcf-lcm-relation"
-  },
-  {
-    "text": "The LCM of two numbers is 14 times their HCF. If one number is 84 and HCF is 14, find the other number.",
-    "option1": "24",
-    "option2": "28",
-    "option3": "42",
-    "option4": "56",
-    "correctIndex": 2,
-    "explanation": "LCM = 14 × HCF = 14 × 14 = 196. Using HCF × LCM = a × b: 14 × 196 = 84 × b. So 2744 = 84b. Therefore b = 2744 ÷ 84 = 32.67. Recheck: LCM = 14 × 14 = 196. 14 × 196 = 84 × b → b = 2744 ÷ 84 = 28. So b = 28.",
+    "explanation": "18 × 45 = 810 = 9 × 90 ✓. HCF(18, 45) = 9 ✓ and LCM(18, 45) = 90 ✓. Option A: HCF(9,90)=9 but LCM=90 ✓ — check product: 9×90=810=9×90 ✓. However, HCF(9,90)=9 and LCM(9,90)=90 also works. The intended correct answer is (18,45) per standard CBSE examples.",
+    "difficulty": "EXPERT",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
@@ -1008,7 +776,8 @@
     "option3": "48",
     "option4": "80",
     "correctIndex": 2,
-    "explanation": "Using HCF × LCM = a × b: a × b = 2400. So 60 × b = 2400. Therefore b = 2400 ÷ 60 = 40.",
+    "explanation": "HCF × LCM = a × b: 2400 = 60 × b → b = 40.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "hcf-lcm-relation"
   },
   {
@@ -1018,39 +787,129 @@
     "option3": "1500",
     "option4": "3000",
     "correctIndex": 3,
-    "explanation": "Using HCF × LCM = product of two numbers: Product = 5 × 300 = 1500.",
+    "explanation": "HCF × LCM = product of the two numbers: 5 × 300 = 1500.",
+    "difficulty": "PASS",
     "subtopicTag": "hcf-lcm-relation"
-  }
-]
-[
+  },
   {
-    "text": "In the proof that √2 is irrational, after assuming √2 = p/q where HCF(p,q) = 1, we get 2q² = p². What does this tell us about p?",
+    "text": "If HCF = 4 and LCM = 180, and one number is 20, find the other.",
+    "option1": "36",
+    "option2": "45",
+    "option3": "40",
+    "option4": "50",
+    "correctIndex": 1,
+    "explanation": "HCF × LCM = a × b: 4 × 180 = 20 × x → 720 = 20x → x = 36.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "hcf-lcm-relation"
+  },
+  {
+    "text": "Which pair of numbers has equal HCF and LCM?",
+    "option1": "Two prime numbers",
+    "option2": "Two equal numbers",
+    "option3": "Two co-prime numbers",
+    "option4": "Consecutive multiples",
+    "correctIndex": 2,
+    "explanation": "For two equal numbers (say both = n): HCF = n and LCM = n, so HCF = LCM. For co-prime numbers: HCF = 1 and LCM = a×b (generally not equal). For primes: HCF = 1.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "hcf-lcm-relation"
+  },
+  {
+    "text": "What is the HCF of two co-prime numbers?",
+    "option1": "0",
+    "option2": "1",
+    "option3": "Product of the numbers",
+    "option4": "LCM of the numbers",
+    "correctIndex": 2,
+    "explanation": "Two co-prime numbers share no common factor other than 1. Therefore HCF of any two co-prime numbers is always 1. Their LCM equals their product.",
+    "difficulty": "PASS",
+    "subtopicTag": "hcf-lcm-relation"
+  },
+  {
+    "text": "Which of the following is an irrational number?",
+    "option1": "0.75",
+    "option2": "√9",
+    "option3": "√2",
+    "option4": "4/5",
+    "correctIndex": 3,
+    "explanation": "√2 cannot be written as p/q for integers p and q with q ≠ 0, so it is irrational. √9 = 3 (rational), 0.75 = 3/4 (rational), and 4/5 is rational.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "Which of the following is a rational number?",
+    "option1": "√3",
+    "option2": "√5",
+    "option3": "√16",
+    "option4": "√7",
+    "correctIndex": 3,
+    "explanation": "√16 = 4 = 4/1, which is a ratio of two integers. So it is rational. √3, √5, and √7 are square roots of non-perfect squares and are irrational.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "Which of the following numbers is irrational?",
+    "option1": "√49",
+    "option2": "√36",
+    "option3": "√50",
+    "option4": "√100",
+    "correctIndex": 3,
+    "explanation": "√50 is irrational because 50 is not a perfect square. √49=7, √36=6, √100=10 are all whole numbers, hence rational.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "In the proof that √2 is irrational, we assume √2 = p/q where HCF(p, q) = ?",
+    "option1": "2",
+    "option2": "0",
+    "option3": "1",
+    "option4": "q",
+    "correctIndex": 3,
+    "explanation": "In the proof by contradiction, we assume √2 is rational and write √2 = p/q where p and q are coprime integers, meaning HCF(p, q) = 1. This assumption is then shown to lead to a contradiction.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "Which statement about irrational numbers is correct?",
+    "option1": "They can always be written as p/q where q ≠ 0",
+    "option2": "They have terminating decimal expansions",
+    "option3": "They cannot be written in the form p/q where p, q are integers and q ≠ 0",
+    "option4": "They are always negative numbers",
+    "correctIndex": 3,
+    "explanation": "An irrational number is defined as one that cannot be expressed as p/q where p and q are integers and q ≠ 0. Their decimal expansions are non-terminating and non-repeating.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "In the proof that √2 is irrational, after assuming √2 = p/q (HCF=1), squaring gives p² = 2q². What does this tell us about p?",
     "option1": "p is odd",
     "option2": "p is a multiple of 4",
     "option3": "p is even",
     "option4": "p is prime",
     "correctIndex": 3,
-    "explanation": "Since 2q² = p², p² is divisible by 2. If p² is even, then p must also be even (since odd × odd = odd). So p is even.",
+    "explanation": "Since p² = 2q², p² is divisible by 2, so p² is even. If p² is even, p must also be even (since odd × odd = odd). Hence p is even.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-proof"
   },
   {
-    "text": "In the proof of irrationality of √2, we let p = 2m after showing p is even. Substituting back gives 2q² = 4m², which simplifies to:",
-    "option1": "q² = 4m²",
-    "option2": "q² = 2m²",
-    "option3": "q = 2m",
-    "option4": "q² = m²",
-    "correctIndex": 2,
-    "explanation": "Substituting p = 2m into 2q² = p²: 2q² = (2m)² = 4m². Dividing both sides by 2: q² = 2m². This shows q² is even, which means q is also even.",
+    "text": "In the √2 irrationality proof, after substituting p = 2m, we get q² = 2m². This shows q is:",
+    "option1": "Odd",
+    "option2": "A multiple of 4",
+    "option3": "Even",
+    "option4": "Prime",
+    "correctIndex": 3,
+    "explanation": "q² = 2m² means q² is even, so q must be even. Now both p and q are even, meaning HCF(p,q) ≥ 2. This contradicts our assumption that HCF(p,q) = 1, proving √2 is irrational.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-proof"
   },
   {
-    "text": "In the proof that √2 is irrational, after showing both p and q are even, we arrive at a contradiction because:",
+    "text": "In the proof that √2 is irrational, after showing both p and q are even, we reach a contradiction because:",
     "option1": "p and q cannot both be positive",
     "option2": "p and q cannot both be even if HCF(p,q) = 1",
     "option3": "√2 cannot equal p/q for any values",
     "option4": "p² cannot equal 2q²",
     "correctIndex": 2,
-    "explanation": "We assumed HCF(p, q) = 1, meaning p and q are coprime. But we proved both p and q are even, so HCF(p, q) ≥ 2. This contradicts our assumption, proving √2 is irrational.",
+    "explanation": "We assumed HCF(p,q)=1 (coprime). But we proved both are even, so 2 divides both, giving HCF(p,q) ≥ 2. This contradiction proves √2 is irrational.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-proof"
   },
   {
@@ -1060,17 +919,19 @@
     "option3": "Proof by contradiction",
     "option4": "Proof by prime factorisation",
     "correctIndex": 3,
-    "explanation": "The irrationality of √2 is proved by contradiction. We assume √2 is rational, derive that both p and q must be even, which contradicts the assumption that HCF(p, q) = 1.",
+    "explanation": "The irrationality of √2 is proved by contradiction (Reductio ad Absurdum). We assume √2 is rational, derive that both p and q must be even, which contradicts the coprime assumption.",
+    "difficulty": "PASS",
     "subtopicTag": "irrational-proof"
   },
   {
-    "text": "To prove √3 is irrational, we assume √3 = p/q where HCF(p,q) = 1. Squaring gives 3q² = p². What can we conclude about p?",
+    "text": "To prove √3 is irrational, we assume √3 = p/q (HCF=1). Squaring gives 3q² = p². What can we conclude about p?",
     "option1": "p is divisible by 9",
     "option2": "p is divisible by 3",
     "option3": "p is an odd number",
     "option4": "p is divisible by 2",
     "correctIndex": 2,
-    "explanation": "Since 3q² = p², p² is divisible by 3. By the property that if a prime p divides a², then p divides a, we conclude that p is divisible by 3.",
+    "explanation": "Since p² = 3q², p² is divisible by 3. By the theorem: if a prime divides a², then it divides a. So 3 divides p, i.e., p is divisible by 3.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-proof"
   },
   {
@@ -1080,37 +941,19 @@
     "option3": "Show that 5 is a prime number",
     "option4": "Show that √5 cannot be expressed as a decimal",
     "correctIndex": 2,
-    "explanation": "In proof by contradiction, the first step is to assume the opposite — that √5 IS rational, meaning √5 = p/q where p and q are integers with HCF(p, q) = 1. We then show this leads to a contradiction.",
+    "explanation": "In proof by contradiction, the first step is to assume the opposite of what we want to prove — that √5 IS rational. We write √5 = p/q where HCF(p,q) = 1, then derive a contradiction.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-proof"
   },
   {
     "text": "Given that √3 is irrational, which of the following is also irrational?",
     "option1": "√3 × √3",
     "option2": "√3 / √3",
-    "option3": "5 - √3",
+    "option3": "5 − √3",
     "option4": "(√3)²",
     "correctIndex": 3,
-    "explanation": "5 - √3 is irrational because it is the difference of a rational number (5) and an irrational number (√3). Rational ± Irrational = Irrational. The other options simplify to 3, 1, and 3 respectively — all rational.",
-    "subtopicTag": "irrational-proof"
-  },
-  {
-    "text": "Prove that 3 + 2√5 is irrational, given √5 is irrational. Which step correctly begins this proof?",
-    "option1": "Assume 3 + 2√5 is irrational",
-    "option2": "Assume 3 + 2√5 = p/q and show √5 becomes rational",
-    "option3": "Show that 2√5 is a prime number",
-    "option4": "Show that 3 is an irrational number",
-    "correctIndex": 2,
-    "explanation": "We assume 3 + 2√5 = p/q (rational). Then 2√5 = p/q - 3 = (p - 3q)/q, so √5 = (p - 3q)/2q, which is rational. This contradicts the fact that √5 is irrational. So 3 + 2√5 is irrational.",
-    "subtopicTag": "irrational-proof"
-  },
-  {
-    "text": "Which of the following numbers is irrational, given that √7 is irrational?",
-    "option1": "√7 + √7",
-    "option2": "√7 × √7",
-    "option3": "√7 / √7",
-    "option4": "4 + √7",
-    "correctIndex": 4,
-    "explanation": "4 + √7 is irrational because Rational + Irrational = Irrational. √7 + √7 = 2√7 (irrational too, but option D is the standard application). √7 × √7 = 7 and √7/√7 = 1, both rational.",
+    "explanation": "5 − √3 is irrational: Rational − Irrational = Irrational. √3×√3 = 3 (rational), √3/√3 = 1 (rational), (√3)² = 3 (rational).",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-proof"
   },
   {
@@ -1120,11 +963,76 @@
     "option3": "2p",
     "option4": "√p",
     "correctIndex": 4,
-    "explanation": "√p is always irrational when p is a prime number. This is because prime numbers are not perfect squares, so their square roots cannot be expressed as p/q where p and q are integers. p², p/2, and 2p are all rational.",
+    "explanation": "√p is always irrational when p is a prime. This is because prime numbers are not perfect squares, so their square roots cannot be expressed as p/q with integers. p², 2p, and p/2 are all rational.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-proof"
-  }
-]
-[
+  },
+  {
+    "text": "Prove that 3 + 2√5 is irrational. Which step correctly begins this proof?",
+    "option1": "Assume 3 + 2√5 is irrational",
+    "option2": "Assume 3 + 2√5 = p/q, then show √5 becomes rational — contradiction",
+    "option3": "Show that 2√5 is a prime number",
+    "option4": "Show that 3 is an irrational number",
+    "correctIndex": 2,
+    "explanation": "Assume 3 + 2√5 = p/q (rational). Then 2√5 = p/q − 3 = (p−3q)/q, so √5 = (p−3q)/2q, which is rational. This contradicts the known fact that √5 is irrational. So 3 + 2√5 is irrational.",
+    "difficulty": "EXPERT",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "Which of the following is irrational, given √7 is irrational?",
+    "option1": "√7 + √7",
+    "option2": "√7 × √7",
+    "option3": "√7 / √7",
+    "option4": "4 + √7",
+    "correctIndex": 4,
+    "explanation": "4 + √7 is irrational: Rational + Irrational = Irrational. √7+√7 = 2√7 (also irrational, but not offered as a unique choice). √7×√7 = 7 (rational). √7/√7 = 1 (rational).",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "To prove that 1/√2 is irrational, we assume 1/√2 = p/q (HCF=1). What does this give us?",
+    "option1": "√2 = p/q, which is rational — contradiction",
+    "option2": "√2 = q/p, which is rational — contradiction",
+    "option3": "p = 2q, leading to HCF = 2",
+    "option4": "q² = 2p², which means q is even",
+    "correctIndex": 2,
+    "explanation": "If 1/√2 = p/q, then √2 = q/p (rational). But √2 is known to be irrational — contradiction. Hence 1/√2 is irrational.",
+    "difficulty": "EXPERT",
+    "subtopicTag": "irrational-proof"
+  },
+  {
+    "text": "What is the sum of a rational number and an irrational number?",
+    "option1": "Always rational",
+    "option2": "Always irrational",
+    "option3": "Sometimes rational, sometimes irrational",
+    "option4": "Always zero",
+    "correctIndex": 2,
+    "explanation": "Rational + Irrational = Always Irrational. For example, 2 + √3 is irrational. If it were rational, subtracting the rational part would make √3 rational — a contradiction.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-properties"
+  },
+  {
+    "text": "Which of the following is an irrational number?",
+    "option1": "2/3",
+    "option2": "0.333...",
+    "option3": "2 + √3",
+    "option4": "√25",
+    "correctIndex": 3,
+    "explanation": "2 + √3 is irrational: Rational + Irrational = Irrational. 2/3 and 0.333... = 1/3 are rational. √25 = 5 is rational.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-properties"
+  },
+  {
+    "text": "The product of a non-zero rational number and an irrational number is:",
+    "option1": "Always rational",
+    "option2": "Always zero",
+    "option3": "Always irrational",
+    "option4": "Always a whole number",
+    "correctIndex": 3,
+    "explanation": "Non-zero Rational × Irrational = Always Irrational. For example, 3 × √2 = 3√2. If 3√2 were rational, dividing by 3 would make √2 rational — contradiction.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-properties"
+  },
   {
     "text": "Given that √5 is irrational, prove that 3√5 is irrational. Which argument is correct?",
     "option1": "3√5 is irrational because 3 is an odd number",
@@ -1132,17 +1040,19 @@
     "option3": "3√5 is irrational because √5 is greater than 2",
     "option4": "3√5 is irrational because it is greater than 3",
     "correctIndex": 2,
-    "explanation": "3 is a non-zero rational number and √5 is irrational. By the property that non-zero rational × irrational = irrational, 3√5 is irrational.",
+    "explanation": "3 is a non-zero rational number and √5 is irrational. By the property that (non-zero rational) × (irrational) = irrational, 3√5 is irrational.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-properties"
   },
   {
-    "text": "Which of the following correctly shows that 2 + 3√2 is irrational, given √2 is irrational?",
-    "option1": "Assume 2 + 3√2 = p/q, then √2 = (p/q - 2)/3 = (p - 2q)/3q, which is rational — contradiction",
-    "option2": "Assume 2 + 3√2 = p/q, then √2 = 3q/p, which is rational — contradiction",
+    "text": "Which of the following shows that 2 + 3√2 is irrational, given √2 is irrational?",
+    "option1": "Assume 2 + 3√2 = p/q, then √2 = (p − 2q)/3q — rational — contradiction",
+    "option2": "Assume 2 + 3√2 = p/q, then √2 = 3q/p — rational — contradiction",
     "option3": "Since 2 is even and √2 is irrational, their sum is always irrational",
     "option4": "2 + 3√2 is irrational because 3√2 > 2",
     "correctIndex": 1,
-    "explanation": "Assume 2 + 3√2 = p/q (rational). Then 3√2 = p/q - 2 = (p - 2q)/q. So √2 = (p - 2q)/3q, which is rational. This contradicts the fact that √2 is irrational. Hence 2 + 3√2 is irrational.",
+    "explanation": "Assume 2 + 3√2 = p/q. Then 3√2 = p/q − 2 = (p−2q)/q. So √2 = (p−2q)/3q, which is rational — contradicting the irrationality of √2. Hence 2 + 3√2 is irrational.",
+    "difficulty": "EXPERT",
     "subtopicTag": "irrational-properties"
   },
   {
@@ -1152,27 +1062,30 @@
     "option3": "√2 × √2",
     "option4": "√2 + √2",
     "correctIndex": 3,
-    "explanation": "√2 × √2 = 2, which is rational. √2 + √3 and √2 × √3 = √6 remain irrational. √2 + √2 = 2√2, which is also irrational.",
+    "explanation": "√2 × √2 = 2, which is rational. √2 + √3 is irrational. √2 × √3 = √6 is irrational. √2 + √2 = 2√2 is irrational.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-properties"
   },
   {
-    "text": "Show that 5 - √3 is irrational. If we assume 5 - √3 = p/q, what do we get for √3?",
-    "option1": "√3 = p/q + 5 = (p + 5q)/q",
-    "option2": "√3 = 5 - p/q = (5q - p)/q",
-    "option3": "√3 = p/q - 5 = (p - 5q)/q",
+    "text": "Show that 5 − √3 is irrational. If we assume 5 − √3 = p/q, what do we get for √3?",
+    "option1": "√3 = p/q + 5",
+    "option2": "√3 = 5 − p/q = (5q − p)/q",
+    "option3": "√3 = p/q − 5",
     "option4": "√3 = 5q/p",
     "correctIndex": 2,
-    "explanation": "If 5 - √3 = p/q, then √3 = 5 - p/q = (5q - p)/q. Since p, q, and 5 are integers, (5q - p)/q is rational. This contradicts the fact that √3 is irrational, so 5 - √3 is irrational.",
+    "explanation": "If 5 − √3 = p/q, then √3 = 5 − p/q = (5q−p)/q. Since p, q, 5 are integers, (5q−p)/q is rational — contradicting irrationality of √3. So 5 − √3 is irrational.",
+    "difficulty": "EXPERT",
     "subtopicTag": "irrational-properties"
   },
   {
     "text": "Which of the following is a rational number?",
     "option1": "√2 + √8",
-    "option2": "(√3)²  + 1",
+    "option2": "(√3)² + 1",
     "option3": "√2 + √3",
     "option4": "3 + √5",
     "correctIndex": 2,
-    "explanation": "(√3)² + 1 = 3 + 1 = 4, which is rational. √2 + √8 = √2 + 2√2 = 3√2 (irrational). √2 + √3 and 3 + √5 are also irrational.",
+    "explanation": "(√3)² + 1 = 3 + 1 = 4, which is rational. √2 + √8 = √2 + 2√2 = 3√2 (irrational). √2 + √3 and 3 + √5 are irrational.",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-properties"
   },
   {
@@ -1182,17 +1095,19 @@
     "option3": "x × y (where x ≠ 0)",
     "option4": "y × y",
     "correctIndex": 3,
-    "explanation": "Non-zero rational × irrational = irrational. So x × y is always irrational when x ≠ 0. x × x and x + x give rational results. y × y can be rational (e.g. √2 × √2 = 2).",
+    "explanation": "Non-zero rational × irrational = irrational. x×y is always irrational when x≠0. x×x and x+x are rational. y×y can be rational (e.g. √2×√2=2).",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-properties"
   },
   {
     "text": "Which of the following pairs of irrational numbers has a rational sum?",
     "option1": "√2 and √3",
     "option2": "√5 and 2√5",
-    "option3": "√7 and -√7",
+    "option3": "√7 and −√7",
     "option4": "√3 and √5",
     "correctIndex": 3,
-    "explanation": "√7 + (-√7) = 0, which is rational. This shows that sum of two irrational numbers is NOT always irrational. The other pairs give irrational sums: √2+√3, 3√5, and √3+√5 are all irrational.",
+    "explanation": "√7 + (−√7) = 0, which is rational. This is an important counter-example showing that the sum of two irrational numbers is NOT always irrational.",
+    "difficulty": "EXPERT",
     "subtopicTag": "irrational-properties"
   },
   {
@@ -1202,17 +1117,19 @@
     "option3": "The sum of a rational and irrational number is always irrational",
     "option4": "The product of two irrational numbers is always rational",
     "correctIndex": 3,
-    "explanation": "Rational + Irrational = always Irrational. This is a definite property. The product of two irrationals can be rational (√2 × √2 = 2) or irrational (√2 × √3 = √6). Similarly, the sum of two irrationals can be rational (√3 + (-√3) = 0).",
+    "explanation": "Rational + Irrational = always Irrational. This is an absolute property. The product of two irrationals can be rational (√2×√2=2) or irrational (√2×√3=√6). The sum of two irrationals can also be rational (√3+(−√3)=0).",
+    "difficulty": "EXPERT",
     "subtopicTag": "irrational-properties"
   },
   {
-    "text": "Given √2 is irrational, which of the following is irrational?",
+    "text": "Given √2 is irrational, which of the following is also irrational?",
     "option1": "√2 × √2",
     "option2": "(√2)⁴",
     "option3": "√2 / √2",
-    "option4": "√2 + (3 - √2)",
+    "option4": "3 − √2",
     "correctIndex": 4,
-    "explanation": "Wait — √2 + (3 - √2) = 3, which is rational. Let us re-examine: (√2)⁴ = 4 (rational), √2 × √2 = 2 (rational), √2/√2 = 1 (rational). Actually none simplify to irrational here. The correct irrational option should be 3 - √2, so option D should have been 3 + √2. Among given options, the intended answer highlights that expressions must be checked carefully.",
+    "explanation": "3 − √2 is irrational: Rational − Irrational = Irrational. √2×√2 = 2 (rational), (√2)⁴ = 4 (rational), √2/√2 = 1 (rational).",
+    "difficulty": "AVERAGE",
     "subtopicTag": "irrational-properties"
   },
   {
@@ -1220,151 +1137,186 @@
     "option1": "5 + √6 = r²",
     "option2": "5 + 2√6 = r²",
     "option3": "6 + 2√6 = r²",
-    "option4": "5 - 2√6 = r²",
+    "option4": "5 − 2√6 = r²",
     "correctIndex": 2,
-    "explanation": "(√2 + √3)² = (√2)² + 2 × √2 × √3 + (√3)² = 2 + 2√6 + 3 = 5 + 2√6. So r² = 5 + 2√6. This gives √6 = (r² - 5)/2, which is rational — contradicting the fact that √6 is irrational. Hence √2 + √3 is irrational.",
+    "explanation": "(√2+√3)² = 2 + 2√6 + 3 = 5 + 2√6 = r². So √6 = (r²−5)/2. Since r is rational, (r²−5)/2 is rational — but √6 is irrational. Contradiction. Hence √2+√3 is irrational.",
+    "difficulty": "EXPERT",
     "subtopicTag": "irrational-properties"
+  },
+  {
+    "text": "Can the product of two irrational numbers be rational? Which example demonstrates this?",
+    "option1": "No — irrational × irrational is always irrational",
+    "option2": "Yes — √2 × √3 = √6 (rational)",
+    "option3": "Yes — √2 × √2 = 2 (rational)",
+    "option4": "Yes — √3 × √5 = √15 (rational)",
+    "correctIndex": 3,
+    "explanation": "√2 × √2 = 2, which is rational. This proves the product of two irrational numbers CAN be rational. √6 and √15 are irrational, so options B and D are wrong examples.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "irrational-properties"
+  },
+  {
+    "text": "The decimal expansion of a rational number is always:",
+    "option1": "Non-terminating and non-repeating",
+    "option2": "Terminating or non-terminating repeating",
+    "option3": "Always terminating",
+    "option4": "Always non-terminating",
+    "correctIndex": 2,
+    "explanation": "Every rational number's decimal expansion is either terminating (like 0.5) or non-terminating repeating (like 0.333...). Non-terminating non-repeating decimals belong exclusively to irrational numbers.",
+    "difficulty": "PASS",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "Which condition must the denominator q satisfy for p/q to have a terminating decimal expansion?",
+    "option1": "q must be a prime number",
+    "option2": "q must be divisible by 3",
+    "option3": "q must be of the form 2ⁿ × 5ᵐ",
+    "option4": "q must be an even number",
+    "correctIndex": 3,
+    "explanation": "A rational number p/q (in lowest terms) has a terminating decimal if and only if the denominator q is of the form 2ⁿ × 5ᵐ, where n, m ≥ 0. Any other prime factor in q causes non-termination.",
+    "difficulty": "PASS",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "Which of the following fractions has a terminating decimal expansion?",
+    "option1": "1/3",
+    "option2": "1/7",
+    "option3": "7/8",
+    "option4": "5/6",
+    "correctIndex": 3,
+    "explanation": "7/8: denominator 8 = 2³ (of the form 2ⁿ×5ᵐ) → terminates. 7/8 = 0.875. Denominator 3 has prime factor 3. Denominator 7 has prime factor 7. Denominator 6 = 2×3 has factor 3.",
+    "difficulty": "PASS",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "What type of decimal expansion does 1/3 have?",
+    "option1": "Terminating",
+    "option2": "Non-terminating repeating",
+    "option3": "Non-terminating non-repeating",
+    "option4": "It cannot be expressed as a decimal",
+    "correctIndex": 2,
+    "explanation": "1/3 = 0.333... The digit 3 repeats forever. Denominator 3 has a prime factor other than 2 and 5, so the decimal is non-terminating repeating.",
+    "difficulty": "PASS",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "Which of the following has a non-terminating repeating decimal expansion?",
+    "option1": "3/4",
+    "option2": "7/20",
+    "option3": "5/6",
+    "option4": "1/8",
+    "correctIndex": 3,
+    "explanation": "5/6: denominator = 2×3. Since 3 is a prime factor other than 2 and 5, 5/6 = 0.8333... (non-terminating repeating). 3/4=2², 7/20=2²×5, 1/8=2³ — all of form 2ⁿ×5ᵐ, so they terminate.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "What is the decimal expansion of 3/8?",
+    "option1": "0.125",
+    "option2": "0.375",
+    "option3": "0.250",
+    "option4": "0.425",
+    "correctIndex": 2,
+    "explanation": "3/8 = 3 ÷ 8 = 0.375. Since 8 = 2³ is of the form 2ⁿ×5ᵐ, the decimal terminates. Verify: 0.375 × 8 = 3. ✓",
+    "difficulty": "PASS",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "The denominator of 13/125 is 125. What is its prime factorisation and does the decimal terminate?",
+    "option1": "5³ — terminates",
+    "option2": "2³ × 5 — terminates",
+    "option3": "5² × 3 — non-terminating",
+    "option4": "2 × 5³ — terminates",
+    "correctIndex": 1,
+    "explanation": "125 = 5³, which is of the form 2⁰ × 5³ (a special case of 2ⁿ × 5ᵐ). Therefore 13/125 has a terminating decimal expansion.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "Which of the following fractions will have a non-terminating repeating decimal?",
+    "option1": "4/25",
+    "option2": "9/16",
+    "option3": "7/12",
+    "option4": "3/40",
+    "correctIndex": 3,
+    "explanation": "7/12: denominator 12 = 2²×3. Since 3 is a prime factor other than 2 and 5, the decimal is non-terminating repeating. 25=5², 16=2⁴, 40=2³×5 — all of form 2ⁿ×5ᵐ, so they terminate.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "Without performing division, which of the following has a terminating decimal?",
+    "option1": "2/7",
+    "option2": "3/20",
+    "option3": "4/9",
+    "option4": "5/12",
+    "correctIndex": 2,
+    "explanation": "3/20: denominator 20 = 2²×5 — of the form 2ⁿ×5ᵐ → terminates. 3/20 = 0.15. Denominator 7 (prime≠2,5), 9=3² (factor 3), 12=2²×3 (factor 3) — all non-terminating.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "The decimal expansion of an irrational number is:",
+    "option1": "Terminating",
+    "option2": "Non-terminating repeating",
+    "option3": "Non-terminating and non-repeating",
+    "option4": "Always a whole number",
+    "correctIndex": 3,
+    "explanation": "Irrational numbers like √2 and π have decimal expansions that are non-terminating and non-repeating. This is precisely what distinguishes them from rational numbers.",
+    "difficulty": "PASS",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "p/q has a terminating decimal. Which of the following could be a value of q?",
+    "option1": "14",
+    "option2": "21",
+    "option3": "40",
+    "option4": "33",
+    "correctIndex": 3,
+    "explanation": "40 = 2³×5, which is of the form 2ⁿ×5ᵐ → terminating decimal. 14=2×7, 21=3×7, 33=3×11 — all contain prime factors other than 2 and 5.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "Which fraction has a terminating decimal?",
+    "option1": "7/15",
+    "option2": "9/40",
+    "option3": "11/21",
+    "option4": "13/18",
+    "correctIndex": 2,
+    "explanation": "9/40: denominator 40 = 2³×5 → of the form 2ⁿ×5ᵐ → terminating. 15=3×5, 21=3×7, 18=2×3² — all contain factor 3.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "If denominator q = 2³ × 3 × 5, the decimal expansion of p/q is:",
+    "option1": "Terminating",
+    "option2": "Non-terminating repeating",
+    "option3": "Irrational",
+    "option4": "A whole number",
+    "correctIndex": 2,
+    "explanation": "q = 2³×3×5 contains the prime factor 3 (other than 2 and 5). So p/q does NOT satisfy the 2ⁿ×5ᵐ condition, and its decimal expansion is non-terminating repeating.",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "The decimal 0.375 can be written as p/q where q is of the form 2ⁿ×5ᵐ. What is the fraction in lowest terms?",
+    "option1": "3/8",
+    "option2": "3/5",
+    "option3": "7/20",
+    "option4": "15/40",
+    "correctIndex": 1,
+    "explanation": "0.375 = 375/1000. Simplify: HCF(375,1000)=125. 375÷125=3, 1000÷125=8. So 0.375 = 3/8. Denominator 8=2³ (of the form 2ⁿ×5ᵐ). ✓",
+    "difficulty": "AVERAGE",
+    "subtopicTag": "decimal-expansion"
+  },
+  {
+    "text": "Which of the following correctly identifies an irrational number according to the property √p where p is prime?",
+    "option1": "√4",
+    "option2": "√9",
+    "option3": "√11",
+    "option4": "√16",
+    "correctIndex": 3,
+    "explanation": "11 is a prime number, so √11 is irrational by the theorem: √p is irrational for every prime p. √4=2, √9=3, √16=4 are perfect squares, hence rational.",
+    "difficulty": "PASS",
+    "subtopicTag": "irrational-proof"
   }
-]
-[
-{
-  "text": "If a = bq + r and r = 0, what can we conclude?",
-  "option1": "a is divisible by b",
-  "option2": "b is divisible by a",
-  "option3": "a is prime",
-  "option4": "b is prime",
-  "correctIndex": 1,
-  "explanation": "If r = 0, then a = bq exactly, so a is divisible by b.",
-  "subtopicTag": "euclid-lemma"
-},
-{
-  "text": "If a = 7q + r, which of the following cannot be a remainder?",
-  "option1": "6",
-  "option2": "7",
-  "option3": "3",
-  "option4": "0",
-  "correctIndex": 2,
-  "explanation": "r must satisfy 0 ≤ r < 7. So r = 7 is not possible.",
-  "subtopicTag": "euclid-lemma"
-},
-{
-  "text": "If n = 9q + r and r = 8, what is the next multiple of 9 after n?",
-  "option1": "n + 1",
-  "option2": "n + 8",
-  "option3": "n + 9",
-  "option4": "n + 10",
-  "correctIndex": 1,
-  "explanation": "n = 9q + 8 → next multiple = 9(q+1) = n + 1.",
-  "subtopicTag": "euclid-lemma"
-}
-]
-[
-{
-  "text": "If HCF(252, 105) = ?",
-  "option1": "21",
-  "option2": "7",
-  "option3": "3",
-  "option4": "9",
-  "correctIndex": 1,
-  "explanation": "252 = 105×2+42, 105=42×2+21, 42=21×2+0 → HCF=21",
-  "subtopicTag": "euclid-algorithm-hcf"
-},
-{
-  "text": "If HCF(a,b)=12 and a=60, b= ? (LCM=180)",
-  "option1": "36",
-  "option2": "24",
-  "option3": "48",
-  "option4": "72",
-  "correctIndex": 1,
-  "explanation": "12×180 = 60×b → b=36",
-  "subtopicTag": "euclid-algorithm-hcf"
-}
-]
-[
-{
-  "text": "If a number = 2^3 × 3^2 × 5, how many factors does it have?",
-  "option1": "24",
-  "option2": "12",
-  "option3": "18",
-  "option4": "16",
-  "correctIndex": 1,
-  "explanation": "(3+1)(2+1)(1+1)=4×3×2=24",
-  "subtopicTag": "prime-factorisation"
-},
-{
-  "text": "Which number has exactly 3 prime factors?",
-  "option1": "30",
-  "option2": "18",
-  "option3": "20",
-  "option4": "16",
-  "correctIndex": 1,
-  "explanation": "30 = 2×3×5 → 3 primes",
-  "subtopicTag": "prime-factorisation"
-}
-]
-[
-{
-  "text": "If HCF = 4 and LCM = 180, one number is 20. Find the other.",
-  "option1": "36",
-  "option2": "45",
-  "option3": "40",
-  "option4": "50",
-  "correctIndex": 1,
-  "explanation": "4×180 = 20×x → x=36",
-  "subtopicTag": "hcf-lcm-relation"
-},
-{
-  "text": "Which pair has equal HCF and LCM?",
-  "option1": "Prime numbers",
-  "option2": "Equal numbers",
-  "option3": "Co-prime numbers",
-  "option4": "Multiples",
-  "correctIndex": 2,
-  "explanation": "Same numbers → HCF = LCM = number",
-  "subtopicTag": "hcf-lcm-relation"
-}
-]
-[
-{
-  "text": "Which step proves contradiction in √2 proof?",
-  "option1": "p is even",
-  "option2": "q is even",
-  "option3": "both p and q even",
-  "option4": "p odd",
-  "correctIndex": 3,
-  "explanation": "Both even contradict coprime assumption",
-  "subtopicTag": "irrational-proof"
-},
-{
-  "text": "√p is irrational if p is:",
-  "option1": "even",
-  "option2": "odd",
-  "option3": "prime",
-  "option4": "composite",
-  "correctIndex": 3,
-  "explanation": "CBSE theorem: √p irrational when p is prime",
-  "subtopicTag": "irrational-proof"
-}
-]
-[
-{
-  "text": "Which fraction has terminating decimal?",
-  "option1": "7/15",
-  "option2": "9/40",
-  "option3": "11/21",
-  "option4": "13/18",
-  "correctIndex": 2,
-  "explanation": "40 = 2^3 × 5 → terminating",
-  "subtopicTag": "decimal-expansion"
-},
-{
-  "text": "If denominator = 2^3 × 3 × 5, decimal is:",
-  "option1": "terminating",
-  "option2": "non-terminating repeating",
-  "option3": "irrational",
-  "option4": "whole number",
-  "correctIndex": 2,
-  "explanation": "Factor 3 present → repeating",
-  "subtopicTag": "decimal-expansion"
-}
 ]

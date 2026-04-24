@@ -1,0 +1,607 @@
+
+  [{
+    "text": "What is meant by a zero of a polynomial p(x)?",
+    "option1": "The value of x for which p(x) = 1",
+    "option2": "The value of x for which p(x) = 0",
+    "option3": "The highest power of x in p(x)",
+    "option4": "The coefficient of x in p(x)",
+    "correctIndex": 2,
+    "explanation": "A zero (or root) of a polynomial p(x) is a value of x for which p(x) = 0. It is the input that makes the polynomial evaluate to zero.",
+    "subtopicTag": "POLY_ZERO_MEANING"
+  },
+  {
+    "text": "If p(x) = x – 5, which of the following is a zero of p(x)?",
+    "option1": "x = –5",
+    "option2": "x = 0",
+    "option3": "x = 5",
+    "option4": "x = 1",
+    "correctIndex": 3,
+    "explanation": "Set p(x) = 0: x – 5 = 0 → x = 5. Substituting: p(5) = 5 – 5 = 0. So x = 5 is the zero.",
+    "subtopicTag": "POLY_ZERO_FIND_LINEAR"
+  },
+  {
+    "text": "A polynomial of degree n can have at most how many zeros?",
+    "option1": "Exactly n zeros",
+    "option2": "At most n – 1 zeros",
+    "option3": "At most n zeros",
+    "option4": "Exactly 2 zeros",
+    "correctIndex": 3,
+    "explanation": "A polynomial of degree n can have at most n zeros. This is a fundamental property of polynomials.",
+    "subtopicTag": "POLY_ZERO_COUNT_BY_DEGREE"
+  },
+  {
+    "text": "What does it mean geometrically when x = 3 is a zero of a polynomial p(x)?",
+    "option1": "The graph passes through the point (0, 3)",
+    "option2": "The graph cuts the y-axis at y = 3",
+    "option3": "The graph cuts the x-axis at x = 3",
+    "option4": "The degree of the polynomial is 3",
+    "correctIndex": 3,
+    "explanation": "A zero of p(x) is where p(x) = 0. Geometrically, this is where the graph of y = p(x) intersects the x-axis — at the point (3, 0).",
+    "subtopicTag": "POLY_ZERO_MEANING"
+  },
+  {
+    "text": "Find the zero of the linear polynomial p(x) = 2x + 8.",
+    "option1": "x = 4",
+    "option2": "x = –4",
+    "option3": "x = 8",
+    "option4": "x = –8",
+    "correctIndex": 2,
+    "explanation": "Set 2x + 8 = 0 → 2x = –8 → x = –4. So the zero is x = –4.",
+    "subtopicTag": "POLY_ZERO_FIND_LINEAR"
+  },
+  {
+    "text": "How many zeros can a quadratic polynomial have?",
+    "option1": "Exactly 2 zeros always",
+    "option2": "At most 2 zeros",
+    "option3": "Exactly 1 zero always",
+    "option4": "At most 3 zeros",
+    "correctIndex": 2,
+    "explanation": "A quadratic polynomial has degree 2, so it can have at most 2 zeros. It may have 0, 1, or 2 zeros depending on the discriminant.",
+    "subtopicTag": "POLY_ZERO_COUNT_BY_DEGREE"
+  },
+  {
+    "text": "If p(x) = x² – 9, what are the zeros of p(x)?",
+    "option1": "x = 3 only",
+    "option2": "x = 9 and x = –9",
+    "option3": "x = 3 and x = –3",
+    "option4": "x = 0 and x = 9",
+    "correctIndex": 3,
+    "explanation": "Set x² – 9 = 0 → x² = 9 → x = ±3. Both 3 and –3 are zeros since p(3) = 0 and p(–3) = 0.",
+    "subtopicTag": "POLY_ZERO_FIND_QUADRATIC"
+  },
+  {
+    "text": "A linear polynomial always has exactly how many zeros?",
+    "option1": "0",
+    "option2": "2",
+    "option3": "1",
+    "option4": "3",
+    "correctIndex": 3,
+    "explanation": "A linear polynomial ax + b (a ≠ 0) always has exactly one zero: x = –b/a. The graph is a straight line that cuts the x-axis exactly once.",
+    "subtopicTag": "POLY_ZERO_COUNT_BY_DEGREE"
+  },
+  {
+    "text": "What is the zero of the linear polynomial p(x) = 3x – 12?",
+    "option1": "x = –4",
+    "option2": "x = 3",
+    "option3": "x = 12",
+    "option4": "x = 4",
+    "correctIndex": 4,
+    "explanation": "Set 3x – 12 = 0 → 3x = 12 → x = 4. Verify: p(4) = 3(4) – 12 = 12 – 12 = 0 ✓",
+    "subtopicTag": "POLY_ZERO_FIND_LINEAR"
+  },
+  {
+    "text": "Which of the following is TRUE about the zeros of a polynomial?",
+    "option1": "Zeros are the coefficients of the polynomial",
+    "option2": "Zeros are values of x where the polynomial equals zero",
+    "option3": "Zeros are always positive numbers",
+    "option4": "Zeros are values of x where the polynomial equals 1",
+    "correctIndex": 2,
+    "explanation": "By definition, a zero of p(x) is a value of x such that p(x) = 0. Zeros can be positive, negative, or zero, and are not the same as coefficients.",
+    "subtopicTag": "POLY_ZERO_MEANING"
+  },
+  {
+    "text": "Find the zeros of p(x) = x² – 5x + 6.",
+    "option1": "x = 1 and x = 6",
+    "option2": "x = 2 and x = 3",
+    "option3": "x = –2 and x = –3",
+    "option4": "x = 5 and x = 6",
+    "correctIndex": 2,
+    "explanation": "Factorise: x² – 5x + 6 = (x – 2)(x – 3). Setting each factor to 0 gives x = 2 and x = 3. Verify: p(2) = 4 – 10 + 6 = 0 ✓ p(3) = 9 – 15 + 6 = 0 ✓",
+    "subtopicTag": "POLY_ZERO_FIND_QUADRATIC"
+  },
+  {
+    "text": "A cubic polynomial can have at most how many zeros?",
+    "option1": "1",
+    "option2": "2",
+    "option3": "4",
+    "option4": "3",
+    "correctIndex": 4,
+    "explanation": "A cubic polynomial has degree 3, so it can have at most 3 zeros. It may have 1, 2, or 3 zeros.",
+    "subtopicTag": "POLY_ZERO_COUNT_BY_DEGREE"
+  },
+  {
+    "text": "Is x = 0 a zero of p(x) = x² + 4x?",
+    "option1": "No, because the polynomial has no constant term",
+    "option2": "Yes, because p(0) = 0",
+    "option3": "No, because p(0) = 4",
+    "option4": "Yes, because 0 is always a zero of any polynomial",
+    "correctIndex": 2,
+    "explanation": "p(0) = (0)² + 4(0) = 0 + 0 = 0. Since p(0) = 0, x = 0 is a zero of p(x).",
+    "subtopicTag": "POLY_ZERO_MEANING"
+  },
+  {
+    "text": "Find the zero of the linear polynomial p(x) = 5x + 15.",
+    "option1": "x = 5",
+    "option2": "x = 15",
+    "option3": "x = –3",
+    "option4": "x = 3",
+    "correctIndex": 3,
+    "explanation": "Set 5x + 15 = 0 → 5x = –15 → x = –3. Verify: p(–3) = 5(–3) + 15 = –15 + 15 = 0 ✓",
+    "subtopicTag": "POLY_ZERO_FIND_LINEAR"
+  },
+  {
+    "text": "Find the zeros of p(x) = x² – 4.",
+    "option1": "x = 2 only",
+    "option2": "x = 4 and x = –4",
+    "option3": "x = 2 and x = –2",
+    "option4": "x = 0 and x = 4",
+    "correctIndex": 3,
+    "explanation": "Set x² – 4 = 0 → x² = 4 → x = ±2. Both are zeros: p(2) = 4 – 4 = 0 ✓ and p(–2) = 4 – 4 = 0 ✓",
+    "subtopicTag": "POLY_ZERO_FIND_QUADRATIC"
+  }
+]
+
+[
+  {
+    "text": "If α and β are the zeros of p(x) = x² – 7x + 12, what is the value of α + β?",
+    "option1": "12",
+    "option2": "–7",
+    "option3": "7",
+    "option4": "–12",
+    "correctIndex": 3,
+    "explanation": "For p(x) = x² – 7x + 12, a = 1, b = –7. Sum of zeros = –b/a = –(–7)/1 = 7.",
+    "subtopicTag": "POLY_REL_QUAD_SUM"
+  },
+  {
+    "text": "If α and β are the zeros of p(x) = 2x² – 8x + 6, what is the product of the zeros?",
+    "option1": "–4",
+    "option2": "3",
+    "option3": "6",
+    "option4": "4",
+    "correctIndex": 2,
+    "explanation": "For p(x) = 2x² – 8x + 6, a = 2, c = 6. Product of zeros = c/a = 6/2 = 3.",
+    "subtopicTag": "POLY_REL_QUAD_PRODUCT"
+  },
+  {
+    "text": "If the sum of zeros of the polynomial kx² + 2x + 3k is equal to their product, find k.",
+    "option1": "k = 1/3",
+    "option2": "k = –2/3",
+    "option3": "k = 2/3",
+    "option4": "k = –1/3",
+    "correctIndex": 2,
+    "explanation": "Sum = –2/k and Product = 3k/k = 3. Setting sum = product: –2/k = 3 → k = –2/3.",
+    "subtopicTag": "POLY_REL_QUAD_FIND_COEFF"
+  },
+  {
+    "text": "Verify: Are 2 and 3 zeros of p(x) = x² – 5x + 6? Check by using the sum and product relations.",
+    "option1": "No, sum matches but product does not",
+    "option2": "No, neither sum nor product matches",
+    "option3": "No, product matches but sum does not",
+    "option4": "Yes, both sum and product match the coefficients",
+    "correctIndex": 4,
+    "explanation": "Sum = 2 + 3 = 5 = –(–5)/1 = 5 ✓. Product = 2 × 3 = 6 = 6/1 = 6 ✓. Both relations hold, so 2 and 3 are indeed the zeros.",
+    "subtopicTag": "POLY_REL_QUAD_VERIFY"
+  },
+  {
+    "text": "If α and β are zeros of p(x) = 3x² + 5x – 2, find α + β.",
+    "option1": "5/3",
+    "option2": "–2/3",
+    "option3": "–5/3",
+    "option4": "2/3",
+    "correctIndex": 3,
+    "explanation": "a = 3, b = 5. Sum of zeros = –b/a = –5/3.",
+    "subtopicTag": "POLY_REL_QUAD_SUM"
+  },
+  {
+    "text": "If α and β are zeros of p(x) = x² + 3x – 10, find αβ.",
+    "option1": "3",
+    "option2": "10",
+    "option3": "–3",
+    "option4": "–10",
+    "correctIndex": 4,
+    "explanation": "a = 1, c = –10. Product of zeros = c/a = –10/1 = –10.",
+    "subtopicTag": "POLY_REL_QUAD_PRODUCT"
+  },
+  {
+    "text": "If one zero of p(x) = x² – 6x + k is 4, find the value of k.",
+    "option1": "k = 10",
+    "option2": "k = 8",
+    "option3": "k = –8",
+    "option4": "k = –10",
+    "correctIndex": 2,
+    "explanation": "If one zero is 4 and other is β, then 4 + β = 6 → β = 2. Product: 4 × 2 = k → k = 8.",
+    "subtopicTag": "POLY_REL_QUAD_FIND_COEFF"
+  },
+  {
+    "text": "Verify whether –3 and 5 are zeros of p(x) = x² – 2x – 15.",
+    "option1": "Yes, because (–3) + 5 = 2 = –b/a and (–3)(5) = –15 = c/a",
+    "option2": "No, the product does not satisfy c/a",
+    "option3": "Yes, because (–3) + 5 = –2 = –b/a and (–3)(5) = –15 = c/a",
+    "option4": "No, the sum does not satisfy –b/a",
+    "correctIndex": 1,
+    "explanation": "a=1, b=–2, c=–15. –b/a = 2. Sum: –3+5 = 2 ✓. c/a = –15. Product: –3×5 = –15 ✓. Both match, so –3 and 5 are the zeros.",
+    "subtopicTag": "POLY_REL_QUAD_VERIFY"
+  },
+  {
+    "text": "For p(x) = 4x² – x – 3, find the sum of zeros.",
+    "option1": "–3/4",
+    "option2": "3/4",
+    "option3": "1/4",
+    "option4": "–1/4",
+    "correctIndex": 3,
+    "explanation": "a = 4, b = –1. Sum of zeros = –b/a = –(–1)/4 = 1/4.",
+    "subtopicTag": "POLY_REL_QUAD_SUM"
+  },
+  {
+    "text": "For the polynomial p(x) = 5x² – 4x + 1, what is the product of its zeros?",
+    "option1": "4/5",
+    "option2": "–1/5",
+    "option3": "–4/5",
+    "option4": "1/5",
+    "correctIndex": 4,
+    "explanation": "a = 5, c = 1. Product of zeros = c/a = 1/5.",
+    "subtopicTag": "POLY_REL_QUAD_PRODUCT"
+  },
+  {
+    "text": "If the product of zeros of p(x) = 6x² – 11x + k is 1, find k.",
+    "option1": "k = 11",
+    "option2": "k = –6",
+    "option3": "k = 6",
+    "option4": "k = –11",
+    "correctIndex": 3,
+    "explanation": "Product = c/a = k/6. Setting k/6 = 1 → k = 6.",
+    "subtopicTag": "POLY_REL_QUAD_FIND_COEFF"
+  },
+  {
+    "text": "The zeros of a quadratic polynomial are 5 and –2. Verify these are consistent with p(x) = x² – 3x – 10.",
+    "option1": "No, sum is incorrect: 5 + (–2) ≠ –b/a",
+    "option2": "Yes, sum = 3 = –(–3)/1 and product = –10 = –10/1",
+    "option3": "No, product is incorrect: 5 × (–2) ≠ c/a",
+    "option4": "Yes, but only the product relation holds",
+    "correctIndex": 2,
+    "explanation": "a=1, b=–3, c=–10. –b/a = 3. Sum: 5+(–2) = 3 ✓. c/a = –10. Product: 5×(–2) = –10 ✓. Both verified.",
+    "subtopicTag": "POLY_REL_QUAD_VERIFY"
+  },
+  {
+    "text": "If α + β = –4 and αβ = 3 for a quadratic polynomial with leading coefficient 1, find the sum of zeros in terms of coefficients. What is –b/a?",
+    "option1": "–b/a = 3",
+    "option2": "–b/a = –3",
+    "option3": "–b/a = 4",
+    "option4": "–b/a = –4",
+    "correctIndex": 4,
+    "explanation": "Sum of zeros = –b/a. Since α + β = –4, we have –b/a = –4. The polynomial is x² + 4x + 3.",
+    "subtopicTag": "POLY_REL_QUAD_SUM"
+  },
+  {
+    "text": "For p(x) = x² – x – 20, find the product of zeros.",
+    "option1": "1",
+    "option2": "20",
+    "option3": "–20",
+    "option4": "–1",
+    "correctIndex": 3,
+    "explanation": "a = 1, c = –20. Product of zeros = c/a = –20/1 = –20.",
+    "subtopicTag": "POLY_REL_QUAD_PRODUCT"
+  },
+  {
+    "text": "If one zero of p(x) = 2x² + kx – 6 is –3, find k.",
+    "option1": "k = 4",
+    "option2": "k = –4",
+    "option3": "k = 3",
+    "option4": "k = –3",
+    "correctIndex": 1,
+    "explanation": "Since –3 is a zero: p(–3) = 0 → 2(9) + k(–3) – 6 = 0 → 18 – 3k – 6 = 0 → 12 = 3k → k = 4.",
+    "subtopicTag": "POLY_REL_QUAD_FIND_COEFF"
+  },
+  {
+    "text": "For p(x) = x² – 2x – 8, verify that 4 and –2 are its zeros using sum and product.",
+    "option1": "Sum: 4+(–2)=2=–b/a ✓ and Product: 4×(–2)=–8=c/a ✓ — Verified",
+    "option2": "Sum does not match –b/a",
+    "option3": "Product does not match c/a",
+    "option4": "Neither sum nor product matches",
+    "correctIndex": 1,
+    "explanation": "a=1, b=–2, c=–8. –b/a = 2. Sum: 4+(–2) = 2 ✓. c/a = –8. Product: 4×(–2) = –8 ✓. Both verified.",
+    "subtopicTag": "POLY_REL_QUAD_VERIFY"
+  },
+  {
+    "text": "If α and β are zeros of p(x) = x² + px + q, which expression gives the sum of zeros?",
+    "option1": "q/p",
+    "option2": "–q",
+    "option3": "–p",
+    "option4": "p/q",
+    "correctIndex": 3,
+    "explanation": "For p(x) = x² + px + q, a=1, b=p, c=q. Sum of zeros = –b/a = –p/1 = –p.",
+    "subtopicTag": "POLY_REL_QUAD_SUM"
+  },
+  {
+    "text": "If the zeros of p(x) = x² – (k+2)x + 2k are equal, what is the sum of the two equal zeros?",
+    "option1": "k + 2",
+    "option2": "2k",
+    "option3": "k",
+    "option4": "2",
+    "correctIndex": 1,
+    "explanation": "Sum of zeros = –(–(k+2))/1 = k+2. This holds regardless of whether the zeros are equal or distinct.",
+    "subtopicTag": "POLY_REL_QUAD_SUM"
+  },
+  {
+    "text": "For p(x) = 3x² – x – 4, find the product of zeros.",
+    "option1": "1/3",
+    "option2": "–4/3",
+    "option3": "4/3",
+    "option4": "–1/3",
+    "correctIndex": 2,
+    "explanation": "a = 3, c = –4. Product of zeros = c/a = –4/3.",
+    "subtopicTag": "POLY_REL_QUAD_PRODUCT"
+  },
+  {
+    "text": "If the sum of zeros of p(x) = 2x² + (3 – k)x + 5 is 4, find k.",
+    "option1": "k = –5",
+    "option2": "k = 11",
+    "option3": "k = –11",
+    "option4": "k = 5",
+    "correctIndex": 2,
+    "explanation": "Sum of zeros = –(3–k)/2 = 4 → –(3–k) = 8 → –3+k = 8 → k = 11.",
+    "subtopicTag": "POLY_REL_QUAD_FIND_COEFF"
+  }
+]
+[
+  {
+    "text": "When p(x) = x³ – 3x² + 5x – 3 is divided by g(x) = x² – 2, what is the quotient?",
+    "option1": "x – 1",
+    "option2": "x + 3",
+    "option3": "x – 3",
+    "option4": "x + 1",
+    "correctIndex": 3,
+    "explanation": "Divide: x³÷x² = x → subtract x(x²–2)=x³–2x → get –3x²+7x–3. Then –3x²÷x²=–3 → subtract –3(x²–2)=–3x²+6 → remainder 7x–9. Quotient = x–3.",
+    "subtopicTag": "POLY_DIV_LONG_DIVISION"
+  },
+  {
+    "text": "Divide p(x) = 2x⁴ – 3x³ + 4x – 5 by (x – 1). What is the quotient?",
+    "option1": "2x³ + x² + x + 5",
+    "option2": "2x³ – x² – x + 3",
+    "option3": "2x³ – x² + x – 3",
+    "option4": "2x³ + x² – x – 3",
+    "correctIndex": 2,
+    "explanation": "Using synthetic division with root 1 on coefficients [2, –3, 0, 4, –5]: carry 2 → 2(1)+(–3)=–1 → (–1)(1)+0=–1 → (–1)(1)+4=3 → 3(1)+(–5)=–2. Quotient = 2x³–x²–x+3, remainder = –2.",
+    "subtopicTag": "POLY_DIV_LONG_DIVISION"
+  },
+  {
+    "text": "Divide p(x) = x³ + x² – 3x + 5 by (x + 3). What is the remainder?",
+    "option1": "–8",
+    "option2": "4",
+    "option3": "8",
+    "option4": "–4",
+    "correctIndex": 4,
+    "explanation": "Using synthetic division with root –3 on [1, 1, –3, 5]: carry 1 → 1(–3)+1=–2 → (–2)(–3)+(–3)=3 → 3(–3)+5=–4. Remainder = –4, quotient = x²–2x+3.",
+    "subtopicTag": "POLY_DIV_LONG_DIVISION"
+  },
+  {
+    "text": "When 3x³ – 2x² + x – 4 is divided by x² + x – 1, which quotient and remainder are correct?",
+    "option1": "q = 3x – 5, r = 9x – 9",
+    "option2": "q = 3x + 5, r = 9x + 9",
+    "option3": "q = 3x – 5, r = 4x – 9",
+    "option4": "q = 3x + 1, r = 9x – 9",
+    "correctIndex": 1,
+    "explanation": "3x³÷x²=3x → subtract 3x(x²+x–1)=3x³+3x²–3x → get –5x²+4x–4. Then –5x²÷x²=–5 → subtract –5(x²+x–1)=–5x²–5x+5 → remainder 9x–9. q=3x–5, r=9x–9.",
+    "subtopicTag": "POLY_DIV_LONG_DIVISION"
+  },
+  {
+    "text": "What is the quotient when x⁴ – 1 is divided by (x – 1)?",
+    "option1": "x³ – x² + x – 1",
+    "option2": "x³ + x² – x + 1",
+    "option3": "x³ + x² + x + 1",
+    "option4": "x³ – x² – x – 1",
+    "correctIndex": 3,
+    "explanation": "x⁴–1 = (x–1)(x³+x²+x+1). Verify: (x–1)(x³+x²+x+1) = x⁴+x³+x²+x–x³–x²–x–1 = x⁴–1 ✓. Remainder = 0.",
+    "subtopicTag": "POLY_DIV_LONG_DIVISION"
+  },
+  {
+    "text": "What is the remainder when p(x) = x³ + 3x² – 5x + 4 is divided by (x – 2)?",
+    "option1": "10",
+    "option2": "18",
+    "option3": "14",
+    "option4": "6",
+    "correctIndex": 3,
+    "explanation": "By the Remainder Theorem, remainder = p(2) = 8 + 12 – 10 + 4 = 14.",
+    "subtopicTag": "POLY_DIV_FIND_REMAINDER"
+  },
+  {
+    "text": "Find the remainder when p(x) = 2x³ – 3x² + x – 5 is divided by (x + 1).",
+    "option1": "–11",
+    "option2": "–9",
+    "option3": "11",
+    "option4": "–5",
+    "correctIndex": 1,
+    "explanation": "Remainder = p(–1) = 2(–1)³ – 3(–1)² + (–1) – 5 = –2 – 3 – 1 – 5 = –11.",
+    "subtopicTag": "POLY_DIV_FIND_REMAINDER"
+  },
+  {
+    "text": "What is the remainder when p(x) = x⁴ – 2x³ + 3x – 1 is divided by (x – 1)?",
+    "option1": "–1",
+    "option2": "3",
+    "option3": "0",
+    "option4": "1",
+    "correctIndex": 4,
+    "explanation": "Remainder = p(1) = 1 – 2 + 3 – 1 = 1.",
+    "subtopicTag": "POLY_DIV_FIND_REMAINDER"
+  },
+  {
+    "text": "If the remainder when p(x) = 3x³ + kx² – 5x + 2 is divided by (x – 1) is 3, find k.",
+    "option1": "k = 2",
+    "option2": "k = 4",
+    "option3": "k = 3",
+    "option4": "k = –2",
+    "correctIndex": 3,
+    "explanation": "p(1) = 3 + k – 5 + 2 = k + 0 = k. Setting k = 3 gives p(1) = 3 ✓.",
+    "subtopicTag": "POLY_DIV_FIND_REMAINDER"
+  },
+  {
+    "text": "What is the remainder when p(x) = x³ – ax² + 6x – a is divided by (x – a)?",
+    "option1": "6a",
+    "option2": "a³",
+    "option3": "0",
+    "option4": "5a",
+    "correctIndex": 4,
+    "explanation": "Remainder = p(a) = a³ – a(a²) + 6a – a = a³ – a³ + 6a – a = 5a.",
+    "subtopicTag": "POLY_DIV_FIND_REMAINDER"
+  },
+  {
+    "text": "For the division p(x) = x³ – 3x² + 5x – 3, g(x) = x² – 2, quotient = x – 3 and remainder = 7x – 9. Which reconstruction is correct?",
+    "option1": "p(x) = (x² – 2)(x + 3) + (7x – 9)",
+    "option2": "p(x) = (x² – 2)(x – 3) – (7x – 9)",
+    "option3": "p(x) = (x² – 2)(x – 3) + (7x + 9)",
+    "option4": "p(x) = (x² – 2)(x – 3) + (7x – 9)",
+    "correctIndex": 4,
+    "explanation": "Division Algorithm: p(x) = g(x)·q(x) + r(x). So p(x) = (x²–2)(x–3) + (7x–9). Expanding: x³–3x²–2x+6+7x–9 = x³–3x²+5x–3 ✓.",
+    "subtopicTag": "POLY_DIV_VERIFY"
+  },
+  {
+    "text": "p(x) = 2x⁴ – 3x³ + 4x – 5 is divided by (x – 1) giving quotient 2x³ – x² – x + 3. What is the correct verification equation?",
+    "option1": "p(x) = (x–1)(2x³–x²–x+3) – 2",
+    "option2": "p(x) = (x+1)(2x³–x²–x+3) + (–2)",
+    "option3": "p(x) = (x–1)(2x³–x²–x+3) + (–2)",
+    "option4": "p(x) = (x–1)(2x³+x²+x–3) + (–2)",
+    "correctIndex": 3,
+    "explanation": "p(x) = (x–1)(2x³–x²–x+3) + (–2). Expanding: 2x⁴–x³–x²+3x–2x³+x²+x–3–2 = 2x⁴–3x³+4x–5 ✓.",
+    "subtopicTag": "POLY_DIV_VERIFY"
+  },
+  {
+    "text": "For the division of 3x³ – 2x² + x – 4 by x² + x – 1, quotient = 3x – 5 and remainder = 9x – 9. Which is the correct verification?",
+    "option1": "(x²+x–1)(3x–5) + (9x–9) = 3x³–2x²+x–4 ✓",
+    "option2": "(x²+x–1)(3x+5) + (9x–9) = 3x³–2x²+x–4 ✓",
+    "option3": "(x²+x–1)(3x–5) – (9x–9) = 3x³–2x²+x–4 ✓",
+    "option4": "(x²+x+1)(3x–5) + (9x–9) = 3x³–2x²+x–4 ✓",
+    "correctIndex": 1,
+    "explanation": "Division Algorithm: p(x)=g(x)·q(x)+r(x). Expanding (x²+x–1)(3x–5)=3x³+3x²–3x–5x²–5x+5=3x³–2x²–8x+5. Adding 9x–9: 3x³–2x²+x–4 ✓.",
+    "subtopicTag": "POLY_DIV_VERIFY"
+  },
+  {
+    "text": "When x³ + 2x² – 5x – 6 is divided by (x + 3), the remainder is 0 and quotient is x² – x – 2. The complete factorisation is:",
+    "option1": "(x+3)(x+2)(x+1)",
+    "option2": "(x+3)(x–2)(x+1)",
+    "option3": "(x–3)(x–2)(x+1)",
+    "option4": "(x+3)(x+2)(x–1)",
+    "correctIndex": 2,
+    "explanation": "x²–x–2 = (x–2)(x+1). So x³+2x²–5x–6 = (x+3)(x–2)(x+1). Verify zeros: x=–3,2,–1. Check: p(–1)=–1+2+5–6=0 ✓, p(2)=8+8–10–6=0 ✓.",
+    "subtopicTag": "POLY_DIV_VERIFY"
+  },
+  {
+    "text": "p(x) = (x+2)(2x–3) + 7. What is the remainder when p(x) is divided by (x + 2)?",
+    "option1": "3",
+    "option2": "0",
+    "option3": "–7",
+    "option4": "7",
+    "correctIndex": 4,
+    "explanation": "p(–2) = (–2+2)(2(–2)–3)+7 = 0×(–7)+7 = 7. Alternatively, p(x) is already written as (x+2)·q(x)+7, so the remainder when divided by (x+2) is directly 7.",
+    "subtopicTag": "POLY_DIV_VERIFY"
+  },
+  {
+    "text": "Is (x – 2) a factor of p(x) = x³ – 3x² + 4?",
+    "option1": "No, because p(2) = 4",
+    "option2": "No, because p(2) = –2",
+    "option3": "Yes, because p(2) = 0",
+    "option4": "Yes, because p(2) = 4",
+    "correctIndex": 3,
+    "explanation": "p(2) = 8 – 12 + 4 = 0. By Factor Theorem, since p(2) = 0, (x–2) is a factor of p(x).",
+    "subtopicTag": "POLY_MIXED_FACTOR_THEOREM"
+  },
+  {
+    "text": "If (x – 3) is a factor of p(x) = 2x³ – kx² – 4x + 12, find k.",
+    "option1": "k = 4",
+    "option2": "k = 3",
+    "option3": "k = 8",
+    "option4": "k = 6",
+    "correctIndex": 4,
+    "explanation": "By Factor Theorem, p(3) = 0: 2(27) – 9k – 12 + 12 = 0 → 54 – 9k = 0 → k = 6.",
+    "subtopicTag": "POLY_MIXED_FACTOR_THEOREM"
+  },
+  {
+    "text": "If (x + 1) and (x – 2) are both factors of p(x) = x³ + ax² + bx – 4, find a + b.",
+    "option1": "a + b = –5",
+    "option2": "a + b = 3",
+    "option3": "a + b = –3",
+    "option4": "a + b = 5",
+    "correctIndex": 3,
+    "explanation": "p(–1)=0: –1+a–b–4=0 → a–b=5 ...(i). p(2)=0: 8+4a+2b–4=0 → 2a+b=–2 ...(ii). Adding: 3a=3 → a=1, b=–4. So a+b=1+(–4)=–3.",
+    "subtopicTag": "POLY_MIXED_FACTOR_THEOREM"
+  },
+  {
+    "text": "For what value of k is (2x + 1) a factor of p(x) = 4x³ + 4x² – x + k?",
+    "option1": "k = 1",
+    "option2": "k = –2",
+    "option3": "k = –1",
+    "option4": "k = 2",
+    "correctIndex": 3,
+    "explanation": "Root of (2x+1)=0 is x=–½. p(–½)=4(–⅛)+4(¼)–(–½)+k=–½+1+½+k=1+k=0 → k=–1.",
+    "subtopicTag": "POLY_MIXED_FACTOR_THEOREM"
+  },
+  {
+    "text": "If (x – α) and (x – β) are factors of x² + px + q (leading coeff = 1), by Factor Theorem p(α) = 0. What does this directly imply?",
+    "option1": "α² – pα + q = 0",
+    "option2": "α² + pα – q = 0",
+    "option3": "α² + pα + q = 0",
+    "option4": "α² – pα – q = 0",
+    "correctIndex": 3,
+    "explanation": "p(α)=0 means substituting x=α into x²+px+q gives α²+pα+q=0. This is the condition for α to be a zero, and confirms (x–α) is a factor.",
+    "subtopicTag": "POLY_MIXED_FACTOR_THEOREM"
+  },
+  {
+    "text": "p(x) = x³ – 5x² + 8x – 4 has one zero at x = 1. After factoring out (x–1), what are all the zeros?",
+    "option1": "1, 4, –2",
+    "option2": "1, 2, –2",
+    "option3": "1, 2, 2",
+    "option4": "1, –2, –2",
+    "correctIndex": 3,
+    "explanation": "p(x)÷(x–1): synthetic on [1,–5,8,–4] with root 1 → [1,–4,4,0]. Quotient=x²–4x+4=(x–2)². So p(x)=(x–1)(x–2)². Zeros: 1, 2, 2.",
+    "subtopicTag": "POLY_MIXED_MULTI_CONCEPT"
+  },
+  {
+    "text": "p(x) = x³ – 5x² + 8x – 4 has zeros 1, 2, 2. What is the sum of all zeros and does it equal –b/a?",
+    "option1": "Sum = 5; –b/a = –5/1 = –5. Does not match.",
+    "option2": "Sum = 5; –b/a = 5/1 = 5. Matches ✓",
+    "option3": "Sum = 4; –b/a = 5/1 = 5. Does not match.",
+    "option4": "Sum = 5; –b/a = –(–5)/1 = 5. Matches ✓ (same as option B)",
+    "correctIndex": 2,
+    "explanation": "Sum = 1+2+2 = 5. For x³–5x²+8x–4, a=1, b=–5. –b/a = –(–5)/1 = 5. Sum = 5 = –b/a ✓. Option 2 correctly states this using the direct ratio.",
+    "subtopicTag": "POLY_MIXED_MULTI_CONCEPT"
+  },
+  {
+    "text": "Two zeros of p(x) = x⁴ – 6x³ – 26x² + 138x – 35 are 2+√3 and 2–√3. What are the other two zeros?",
+    "option1": "7 and –5",
+    "option2": "5 and –7",
+    "option3": "–5 and –7",
+    "option4": "7 and 5",
+    "correctIndex": 1,
+    "explanation": "Quadratic with the two known zeros: (x–(2+√3))(x–(2–√3))=x²–4x+1. Dividing p(x) by x²–4x+1 gives x²–2x–35=(x–7)(x+5). Other zeros: 7 and –5.",
+    "subtopicTag": "POLY_MIXED_MULTI_CONCEPT"
+  },
+  {
+    "text": "The zeros of 2x² – 5x – 3 are α and β. A new polynomial has zeros 2α and 2β. What is this polynomial?",
+    "option1": "x² + 5x – 6",
+    "option2": "x² – 5x + 6",
+    "option3": "x² – 5x – 6",
+    "option4": "x² + 5x + 6",
+    "correctIndex": 3,
+    "explanation": "For 2x²–5x–3: α+β=5/2, αβ=–3/2. New zeros 2α, 2β: sum=5, product=4αβ=4×(–3/2)=–6. Polynomial: x²–5x+(–6)=x²–5x–6.",
+    "subtopicTag": "POLY_MIXED_MULTI_CONCEPT"
+  },
+  {
+    "text": "p(x) = x³ + 2x² – 5x – 6 has zeros 2, –1, –3. Verify the relationship αβ + βγ + γα = c/a.",
+    "option1": "αβ+βγ+γα = –7 and c/a = –5. Does not match.",
+    "option2": "αβ+βγ+γα = 5 and c/a = –5. Does not match.",
+    "option3": "αβ+βγ+γα = –5 and c/a = –5. Matches ✓",
+    "option4": "αβ+βγ+γα = 6 and c/a = –5. Does not match.",
+    "correctIndex": 3,
+    "explanation": "With zeros 2,–1,–3: αβ+βγ+γα = (2)(–1)+(–1)(–3)+(–3)(2) = –2+3–6 = –5. For p(x)=x³+2x²–5x–6, c/a = –5/1 = –5. –5 = –5 ✓",
+    "subtopicTag": "POLY_MIXED_MULTI_CONCEPT"
+  }
+]

@@ -247,8 +247,14 @@ export default function ProfilePage() {
     : 0;
   const recentPracticeTarget = NavigationContext.getRecentPracticeTarget();
 
-  // Detect if user is new (no attempts or no data)
-  const isNewUser = !stats || stats.totalAttempted === 0;
+  // User State Engine - determines UI based on engagement level
+  function getUserState(stats) {
+    if (!stats || stats.totalQuestions === 0) return 'NEW';
+    if (stats.totalQuestions > 0 && stats.totalQuestions <= 50) return 'MID';
+    return 'LONG';
+  }
+  const userState = getUserState(stats);
+  const isNewUser = userState === 'NEW'; // Keep for backward compatibility
   
   // Transform weak topics data for UI
   const weakSubtopics = stats?.weakTopics?.map(wt => ({
@@ -297,7 +303,7 @@ export default function ProfilePage() {
     const availableMistakes = mistakesData.filter(m => AVAILABLE_TOPIC_IDS.includes(m.id));
     
     // Case 1: First-time user - suggest first available topic
-    if (isNewUser || availableTopicProgress.length === 0) {
+    if (userState === 'NEW' || availableTopicProgress.length === 0) {
       // For beta, recommend a specific available topic
       return {
         topicName: 'Polynomials',
@@ -405,8 +411,8 @@ export default function ProfilePage() {
   return (
     <AppShell>
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header Stats - Real Data */}
-        {!isNewUser && stats && (
+        {/* Header Stats - Show for LONG users only */}
+        {userState === 'LONG' && stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="glass-card p-4 text-center bg-gradient-to-br from-orange-50 to-orange-100">
               <div className="text-2xl mb-1">🔥</div>
@@ -432,12 +438,101 @@ export default function ProfilePage() {
         )}
 
         {/* NEW USER: Duolingo-style Onboarding (Action-Focused) */}
-        {isNewUser && (
+        {userState === 'NEW' && (
           <NewUserOnboarding userName={profile.name} />
         )}
 
-        {/* RETURNING USER: Full Dashboard */}
-        {!isNewUser && (
+        {/* MID USER: Guided Learning Experience */}
+        {userState === 'MID' && (
+          <>
+            {/* Dynamic Greeting Banner */}
+            <GreetingBanner name={profile.name} stats={stats} profile={profile} />
+
+            <RecommendedActionCard 
+              topicName={recommendation.topicName}
+              message={recommendation.message}
+              topicId={recommendation.topicId}
+            />
+            
+            {/* 1. TODAY'S PROGRESS (Simple Version) */}
+            <div className="glass-card p-6 mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-bold text-heading">Today's Progress</h2>
+                <span className="text-xs text-muted">Last updated just now</span>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="mb-4">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="font-semibold text-heading">
+                    {stats?.todayProgress?.done || 0} / {stats?.todayProgress?.goal || 15} questions
+                  </span>
+                  <span className="text-muted">
+                    {stats?.goalHit ? '🎉 Goal complete!' : `${(stats?.todayProgress?.goal || 15) - (stats?.todayProgress?.done || 0)} more to go`}
+                  </span>
+                </div>
+                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-primary to-primary-light transition-all duration-500 animate-pulse"
+                    style={{ width: `${Math.min((stats?.todayProgress?.done || 0) / (stats?.todayProgress?.goal || 15) * 100, 100)}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Primary CTA */}
+              <button
+                onClick={() => router.push('/chapters')}
+                className="w-full min-h-[44px] px-4 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors flex items-center justify-center gap-2"
+              >
+                <span>Continue Practice</span>
+                <span>→</span>
+              </button>
+            </div>
+
+            {/* 2. FOCUS AREAS - Only if weak areas exist */}
+            {hasWeakAreas && (
+              <div className="glass-card p-6 mb-8">
+                <h2 className="text-lg font-bold text-heading mb-4">📍 You Should Focus On</h2>
+                <div className="space-y-3">
+                  {weakSubtopics.slice(0, 3).map((weak, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
+                      <div className="flex-1">
+                        <div className="font-semibold text-red-700 mb-1">{weak.name}</div>
+                        <div className="text-sm text-red-600">
+                          {weak.mistakeCount || 0} mistakes
+                        </div>
+                      </div>
+                      <button 
+                        className="min-h-[44px] px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
+                        onClick={() => router.push('/chapters')}
+                      >
+                        Practice This →
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* No Weak Areas Message */}
+            {!hasWeakAreas && (
+              <div className="glass-card p-6 mb-8 text-center">
+                <div className="text-3xl mb-2">🎉</div>
+                <h3 className="font-semibold text-heading mb-2">Great job! No weak areas yet 👏</h3>
+                <p className="text-muted mb-4">Keep practicing to maintain your streak 🔥</p>
+                <button
+                  onClick={() => router.push('/chapters')}
+                  className="min-h-[44px] px-6 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
+                >
+                  Keep Practicing →
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* LONG USER: Full Dashboard */}
+        {userState === 'LONG' && (
           <>
             {/* Dynamic Greeting Banner */}
             <GreetingBanner name={profile.name} stats={stats} profile={profile} />
@@ -455,6 +550,16 @@ export default function ProfilePage() {
                 </p>
               </div>
             )}
+            
+            {/* Motivational Message for LONG Users */}
+            <div className="glass-card p-4 mb-6 bg-gradient-to-r from-orange-50 to-red-50 border-orange-200">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🔥</span>
+                <p className="text-heading font-semibold">
+                  You're doing great! Keep your streak alive. Consistency is key to mastery!
+                </p>
+              </div>
+            </div>
             
             {/* 1. TODAY'S PROGRESS (Hero Section) */}
             <div className="glass-card p-6 mb-8">
@@ -590,31 +695,6 @@ export default function ProfilePage() {
           </div>
         )}
 
-            {/* RECOMMENDED ACTION - Smart Engine */}
-            {recommendedAction && (
-          <div className="glass-card p-6 mb-8 border-l-4 border-green-500">
-            <h2 className="text-lg font-bold text-heading mb-4">🎯 Recommended for You</h2>
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm text-muted mb-1">Fix:</div>
-                <div className="font-semibold text-heading text-lg">{recommendedAction.name}</div>
-                {recommendedAction.mistakeCount && (
-                  <div className="text-sm text-red-600 mt-1">{recommendedAction.mistakeCount} mistakes</div>
-                )}
-                {recommendedAction.mastery !== undefined && (
-                  <div className="text-sm text-orange-600 mt-1">Mastery: {recommendedAction.mastery}%</div>
-                )}
-              </div>
-              <button
-                onClick={() => router.push('/chapters')}
-                className="min-h-[44px] px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
-              >
-                Start Practice
-              </button>
-            </div>
-          </div>
-        )}
-
             {/* CHAPTER PROGRESS - Limited View (3-4 chapters) */}
             {chapterProgress.length > 0 && (
           <div className="glass-card p-6 mb-8">
@@ -726,38 +806,35 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* BADGE LOCKER */}
-        <div className="glass-card p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-heading">🏅 Badge Locker</h2>
-            {stats?.unrevealedBadges > 0 && (
-              <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
-                {stats?.unrevealedBadges} unrevealed!
-              </span>
-            )}
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <div className="text-3xl font-bold text-purple-600">{stats?.badgesEarned || 0}</div>
-              <div className="text-sm text-muted">Badges Earned</div>
+        {/* BADGE LOCKER - LONG users only */}
+            <div className="glass-card p-6 mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-heading">🏅 Badge Locker</h2>
+                {stats?.unrevealedBadges > 0 && (
+                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                    {stats?.unrevealedBadges} unrevealed!
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-3xl font-bold text-purple-600">{stats?.badgesEarned || 0}</div>
+                  <div className="text-sm text-muted">Badges Earned</div>
+                </div>
+                <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                  <div className="text-3xl font-bold text-yellow-600">{stats?.unrevealedBadges || 0}</div>
+                  <div className="text-sm text-muted">Unrevealed</div>
+                </div>
+                <div className="text-center p-4 bg-blue-50 rounded-lg md:col-span-2">
+                  <button
+                    onClick={() => router.push('/badges')}
+                    className="w-full min-h-[44px] py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
+                  >
+                    View All Badges →
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="text-center p-4 bg-yellow-50 rounded-lg">
-              <div className="text-3xl font-bold text-yellow-600">{stats?.unrevealedBadges || 0}</div>
-              <div className="text-sm text-muted">Unrevealed</div>
-            </div>
-            <div className="text-center p-4 bg-blue-50 rounded-lg md:col-span-2">
-              <button
-                onClick={() => router.push('/badges')}
-                className="w-full min-h-[44px] py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
-              >
-                View All Badges →
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </>
-    )}
 
             {/* COMPACT STATS */}
             <div className="glass-card p-4 mb-8">
@@ -780,6 +857,8 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
+          </>
+        )}
       </div>
     </AppShell>
   );

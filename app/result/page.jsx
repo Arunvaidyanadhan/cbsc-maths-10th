@@ -201,7 +201,7 @@ function ResultPage() {
             onClick={() => setShowFeedback(true)}
             className="w-full min-h-[44px] py-3 bg-blue-50 border border-blue-200 text-blue-700 rounded-xl font-medium hover:bg-blue-100 transition-all mb-3"
           >
-            Give Feedback 📋
+            Get personalized experience by answering this survey 📋
           </button>
 
           {/* 9. Secondary Action */}

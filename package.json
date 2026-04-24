@@ -9,7 +9,7 @@
     "lint": "next lint",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "node scripts/seed.js",
+    "db:seed": "node scripts/seed-master.js",
     "db:studio": "prisma studio"
   },
   "dependencies": {

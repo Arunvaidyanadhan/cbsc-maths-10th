@@ -25,8 +25,8 @@ export default function PracticePage() {
   const [newlyUnlockedBadges, setNewlyUnlockedBadges] = useState([]);
   const [showBadgeModal, setShowBadgeModal] = useState(false);
   const [lastAttemptData, setLastAttemptData] = useState(null);
+  const [userName, setUserName] = useState('Student');
   const level = searchParams.get('level') || 'pass';
-  const userName = 'Student';
 
   const handleUpgrade = () => {
     setIsPremium(true);
@@ -37,7 +37,22 @@ export default function PracticePage() {
   useEffect(() => {
     NavigationContext.saveLastActivity('topic', params.topicId);
     fetchQuestions(params.topicId, level);
+    fetchUserProfile();
   }, [params.topicId, level]);
+
+  const fetchUserProfile = async () => {
+    try {
+      const res = await fetch('/api/profile');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.profile?.name) {
+          setUserName(data.profile.name);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
 
   const fetchQuestions = async (topicId, level) => {
     try {
@@ -161,8 +176,6 @@ export default function PracticePage() {
       const data = await res.json();
       const weakAreas = data.weakSubtopics || [];
       const newlyUnlocked = data.newlyUnlockedBadges || [];
-
-      const userName = 'Student';
 
       // Store attempt data for modal
       setLastAttemptData({

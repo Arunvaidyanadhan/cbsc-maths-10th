@@ -34,16 +34,17 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-5 py-4 bg-card border-b border-subtle backdrop-blur-12">
-        <a className="text-xl font-extrabold text-primary tracking-tight cursor-pointer" href="/">
+        <a className="text-xl font-extrabold text-primary tracking-tight cursor-pointer flex items-center gap-2" href="/">
           Rithamio
+          <span className="px-2 py-0.5 text-xs font-bold bg-yellow-500 text-white rounded-md">BETA</span>
         </a>
         <div className="flex items-center gap-1">
           <a href="#features" className="text-sm font-medium px-3 py-2 rounded-lg text-body hover:bg-card-hover transition-all">
             Features
           </a>
-          <a href="#pricing" className="text-sm font-medium px-3 py-2 rounded-lg text-body hover:bg-card-hover transition-all">
+          {/* <a href="#pricing" className="text-sm font-medium px-3 py-2 rounded-lg text-body hover:bg-card-hover transition-all">
             Pricing
-          </a>
+          </a> */}
           <ThemeToggle />
         </div>
       </nav>
@@ -255,7 +256,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Pricing Section - Hidden for Beta */}
+      {/*
       <section id="pricing" className="px-5 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12">
@@ -269,7 +271,6 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Early Bird Offer */}
             <div className="glass-card p-8 rounded-2xl border-2 border-primary relative overflow-hidden animate-fade-in">
               <div className="absolute top-0 right-0 bg-primary text-on-primary text-xs font-bold px-4 py-1 rounded-bl-lg">
                 LIMITED OFFER
@@ -305,7 +306,6 @@ export default function Home() {
               </a>
             </div>
 
-            {/* Regular Price */}
             <div className="glass-card p-8 rounded-2xl border border-subtle animate-fade-in delay-100">
               <div className="text-sm font-semibold text-muted mb-2">Regular</div>
               <div className="flex items-baseline gap-2 mb-2">
@@ -340,6 +340,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
 
       {/* Founder Story Section */}
       <section id="about" className="px-5 py-20 bg-card border-t border-subtle">
@@ -470,7 +471,7 @@ export default function Home() {
             <div className="animate-fade-in delay-100">
               <h4 className="text-xs font-bold tracking-widest uppercase text-primary mb-4">Product</h4>
               <a href="#features" className="block text-sm text-secondary mb-2 hover:text-primary transition-colors hover:translate-x-1">Features</a>
-              <a href="#pricing" className="block text-sm text-secondary mb-2 hover:text-primary transition-colors hover:translate-x-1">Pricing</a>
+              {/* <a href="#pricing" className="block text-sm text-secondary mb-2 hover:text-primary transition-colors hover:translate-x-1">Pricing</a> */}
             </div>
             <div className="animate-fade-in delay-200">
               <h4 className="text-xs font-bold tracking-widest uppercase text-primary mb-4">Company</h4>
