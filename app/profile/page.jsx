@@ -67,6 +67,7 @@ export default function ProfilePage() {
       
       if (progressRes.ok) {
         const progressData = await progressRes.json();
+        console.log('Progress data:', progressData); // Debug log
         setStats(progressData);
       }
     } catch (error) {
@@ -411,7 +412,7 @@ export default function ProfilePage() {
     <AppShell>
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header Stats - Show for LONG users only */}
-        {userState === 'LONG' && stats && (
+        {/* {userState === 'LONG' && stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="glass-card p-4 text-center bg-gradient-to-br from-orange-50 to-orange-100">
               <div className="text-2xl mb-1">🔥</div>
@@ -434,7 +435,7 @@ export default function ProfilePage() {
               <div className="text-xs text-muted">Badges</div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* NEW USER: Duolingo-style Onboarding (Action-Focused) */}
         {userState === 'NEW' && (
@@ -695,7 +696,7 @@ export default function ProfilePage() {
         )}
 
             {/* CHAPTER PROGRESS - Limited View (3-4 chapters) */}
-            {chapterProgress.length > 0 && (
+            {/* {chapterProgress.length > 0 && (
           <div className="glass-card p-6 mb-8">
             <h2 className="text-lg font-bold text-heading mb-4">📚 Your Progress</h2>
             <div className="space-y-3">
@@ -718,7 +719,7 @@ export default function ProfilePage() {
                 ))}
             </div>
           </div>
-        )}
+        )} */}
 
             {/* STRONG AREAS - Optional */}
             {topicProgress.filter(tp => tp.mastery > 70).length > 0 && (
@@ -743,7 +744,7 @@ export default function ProfilePage() {
         )}
 
             {/* PRACTICE INTELLIGENCE */}
-            {stats?.practiceModesProgress && (
+            {/* {stats?.practiceModesProgress && (
           <div className="glass-card p-6 mb-8">
             <h2 className="text-lg font-bold text-heading mb-4">📊 Practice Intelligence</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -781,10 +782,10 @@ export default function ProfilePage() {
               )}
             </div>
           </div>
-        )}
+        )} */}
 
             {/* EXAM COUNTDOWN */}
-            {stats?.examCountdownDays > 0 && (
+            {/* {stats?.examCountdownDays > 0 && (
           <div className="glass-card p-6 mb-8 bg-gradient-to-r from-blue-50 to-indigo-50">
             <div className="flex items-center justify-between">
               <div>
@@ -803,40 +804,12 @@ export default function ProfilePage() {
               </button>
             </div>
           </div>
-        )}
+        )} */}
 
-        {/* BADGE LOCKER - LONG users only */}
-            <div className="glass-card p-6 mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-heading">🏅 Badge Locker</h2>
-                {stats?.unrevealedBadges > 0 && (
-                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
-                    {stats?.unrevealedBadges} unrevealed!
-                  </span>
-                )}
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center p-4 bg-purple-50 rounded-lg">
-                  <div className="text-3xl font-bold text-purple-600">{stats?.badgesEarned || 0}</div>
-                  <div className="text-sm text-muted">Badges Earned</div>
-                </div>
-                <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                  <div className="text-3xl font-bold text-yellow-600">{stats?.unrevealedBadges || 0}</div>
-                  <div className="text-sm text-muted">Unrevealed</div>
-                </div>
-                <div className="text-center p-4 bg-blue-50 rounded-lg md:col-span-2">
-                  <button
-                    onClick={() => router.push('/badges')}
-                    className="w-full min-h-[44px] py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors"
-                  >
-                    View All Badges →
-                  </button>
-                </div>
-              </div>
-            </div>
+          
 
             {/* COMPACT STATS */}
-            <div className="glass-card p-4 mb-8">
+            {/* <div className="glass-card p-4 mb-8">
               <div className="flex items-center justify-around text-center">
                 <div>
                   <div className="text-xl font-bold text-primary">⚡ {stats?.xp || profile.xp}</div>
@@ -855,7 +828,7 @@ export default function ProfilePage() {
                   <div className="text-xs text-muted">Badges</div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </>
         )}
       </div>
