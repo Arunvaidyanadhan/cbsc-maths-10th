@@ -38,9 +38,6 @@ export async function GET(request) {
       );
     }
 
-    // Debug logging to check user data
-    console.log('Profile user data:', { userId, userName: user.name, userEmail: user.email });
-
     // Calculate consistency score from daily stats
     const dailyStats = await prisma.dailyStats.findUnique({
       where: { userId }

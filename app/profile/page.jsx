@@ -67,7 +67,6 @@ export default function ProfilePage() {
       
       if (progressRes.ok) {
         const progressData = await progressRes.json();
-        console.log('Progress data:', progressData); // Debug log
         setStats(progressData);
       }
     } catch (error) {
