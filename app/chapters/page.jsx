@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '../../components/AppShell.jsx';
 import ProgressRing from '../../components/ProgressRing';
+import { getClientCache, setClientCache } from '../../lib/clientCache.js';
 
 export default function Chapters() {
   const router = useRouter();
@@ -18,18 +19,29 @@ export default function Chapters() {
 
   const fetchData = async () => {
     try {
-      const [chaptersRes, progressRes] = await Promise.all([
-        fetch('/api/chapters'),
-        fetch('/api/progress'),
-      ]);
+      // Check cache first
+      let chaptersData = getClientCache('chapters');
+      let progressData = getClientCache('progress');
 
-      if (progressRes.status === 401) {
-        router.push('/login');
-        return;
+      if (!chaptersData || !progressData) {
+        const [chaptersRes, progressRes] = await Promise.all([
+          fetch('/api/chapters'),
+          fetch('/api/progress'),
+        ]);
+
+        if (progressRes.status === 401) {
+          router.push('/login');
+          return;
+        }
+
+        chaptersData = await chaptersRes.json();
+        progressData = await progressRes.json();
+        
+        // Cache the data
+        setClientCache('chapters', chaptersData);
+        setClientCache('progress', progressData);
       }
 
-      const chaptersData = await chaptersRes.json();
-      const progressData = await progressRes.json();
       setChapters(chaptersData.chapters || []);
       setProgress(progressData);
       setIsPremium(progressData.isPremium || false);
@@ -44,35 +56,64 @@ export default function Chapters() {
     router.push(`/chapter/${chapter.id}`);
   };
 
+  // Prefetch chapter pages on hover for instant navigation
+  const handleChapterHover = (chapter) => {
+    router.prefetch(`/chapter/${chapter.id}`);
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 sm:px-6 lg:px-14 py-4 backdrop-blur-12 border-b border-subtle transition-all" style={{ background: 'var(--bg-navbar)' }}>
-          <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
-          <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
-        </nav>
-        <section className="px-4 sm:px-6 lg:px-14 py-20 sm:py-32">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
-              <div className="h-4 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
-              <div className="h-10 sm:h-12 w-48 sm:w-64 bg-gray-200 rounded animate-pulse mb-3"></div>
+      <AppShell>
+        <section className="py-8 sm:py-12">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Skeleton Header */}
+            <div className="mb-6 sm:mb-8">
+              <div className="h-4 w-24 bg-gray-200 rounded animate-pulse mb-3 sm:mb-4"></div>
+              <div className="h-10 sm:h-12 w-48 sm:w-64 bg-gray-200 rounded animate-pulse mb-2 sm:mb-3"></div>
               <div className="h-4 w-32 sm:w-48 bg-gray-200 rounded animate-pulse"></div>
             </div>
-            <div className="flex flex-col gap-px border border-subtle">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="grid grid-cols-[auto_1fr_auto] gap-4 sm:gap-8 items-start p-4 sm:p-8 bg-card border-b border-subtle">
-                  <div className="h-4 w-8 bg-gray-200 rounded animate-pulse"></div>
-                  <div>
-                    <div className="h-5 sm:h-6 w-36 sm:w-48 bg-gray-200 rounded animate-pulse mb-2"></div>
-                    <div className="h-3 sm:h-4 w-24 sm:w-32 bg-gray-200 rounded animate-pulse"></div>
+
+            {/* Skeleton Chapter Cards */}
+            <div className="chapters-grid">
+              {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                <div key={i} className="chapter-card animate-pulse">
+                  {/* Left: chapter number */}
+                  <div className="chapter-num bg-gray-200 h-8 w-8 rounded"></div>
+                  
+                  {/* Center: chapter info */}
+                  <div className="chapter-info">
+                    <div className="chapter-title">
+                      <div className="h-6 w-6 bg-gray-200 rounded mr-3"></div>
+                      <div className="h-6 w-32 bg-gray-200 rounded"></div>
+                    </div>
+                    <div className="chapter-meta">
+                      <div className="h-4 w-20 bg-gray-200 rounded mr-2"></div>
+                      <div className="h-4 w-16 bg-gray-200 rounded mr-2"></div>
+                      <div className="h-4 w-12 bg-gray-200 rounded"></div>
+                    </div>
                   </div>
-                  <div className="h-5 sm:h-6 w-5 sm:w-6 bg-gray-200 rounded animate-pulse"></div>
+                  
+                  {/* Right: progress ring + arrow */}
+                  <div className="chapter-right">
+                    <div className="h-10 w-10 bg-gray-200 rounded-full"></div>
+                    <div className="h-5 w-5 bg-gray-200 rounded ml-2"></div>
+                  </div>
                 </div>
               ))}
             </div>
+
+            {/* Skeleton Paywall */}
+            <div className="mt-6 sm:mt-8 bg-card-hover border border-subtle p-4 sm:p-6 rounded-xl animate-pulse">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                <div className="h-6 w-32 bg-gray-200 rounded"></div>
+              </div>
+              <div className="h-4 w-full bg-gray-200 rounded mb-4"></div>
+              <div className="h-11 w-24 bg-gray-200 rounded"></div>
+            </div>
           </div>
         </section>
-      </div>
+      </AppShell>
     );
   }
 
@@ -106,6 +147,7 @@ export default function Chapters() {
                 <div
                   key={chapter.id}
                   onClick={() => !isLocked && handleChapterClick(chapter)}
+                  onMouseEnter={() => !isLocked && handleChapterHover(chapter)}
                   className={`chapter-card ${isLocked ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
                 >
                   {/* Left: chapter number */}

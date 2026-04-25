@@ -2,23 +2,48 @@ import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 import { runBadgeEvaluation } from '../../../lib/badgeEngine';
 import { getRequestUserId } from '../../../lib/auth.js';
+import { rateLimit } from '../../../lib/rateLimiter.js';
+import { sanitizeId, sanitizeLevel, sanitizeNumber, sanitizeObjectArray } from '../../../lib/sanitize.js';
 
 export async function POST(request) {
+  // Rate limiting: 30 requests per minute for attempts
+  const ip = request.headers.get('x-forwarded-for') || 
+              request.headers.get('x-real-ip') || 
+              'unknown';
+  
+  if (!rateLimit(ip, 30, 60000)) {
+    return NextResponse.json({ 
+      error: 'Too many requests. Please try again later.' 
+    }, { status: 429 });
+  }
+
   try {
     const body = await request.json();
     const sessionUserId = await getRequestUserId(request, { allowQuery: true, allowHeader: true });
     const { userId: bodyUserId, topicId, chapterId, level, score, total, answers, timeTakenSecs } = body;
     const userId = sessionUserId || bodyUserId;
     
-    if (!userId || !topicId || !chapterId) {
+    // Sanitize inputs
+    const sanitizedTopicId = sanitizeId(topicId);
+    const sanitizedChapterId = sanitizeId(chapterId);
+    const sanitizedLevel = sanitizeLevel(level);
+    const sanitizedScore = sanitizeNumber(score, 0, 1000);
+    const sanitizedTotal = sanitizeNumber(total, 1, 1000);
+    const sanitizedTime = sanitizeNumber(timeTakenSecs, 0, 3600);
+    const sanitizedAnswers = sanitizeObjectArray(answers);
+    
+    if (!userId || !sanitizedTopicId || !sanitizedChapterId) {
       return NextResponse.json({ error: 'userId, topicId, and chapterId are required' }, { status: 400 });
     }
     
-    const mastery = Math.round((score / total) * 100);
-    const xpEarned = score * 5;
+    const mastery = Math.round((sanitizedScore / sanitizedTotal) * 100);
+    const xpEarned = sanitizedScore * 5;
     
-    // Calculate weak subtopics
-    const wrongAnswers = answers.filter(a => !a.isCorrect);
+    // Calculate weak subtopics (only from valid answers)
+    const validAnswersForAnalysis = sanitizedAnswers.filter(a => 
+      a && typeof a.isCorrect === 'boolean'
+    );
+    const wrongAnswers = validAnswersForAnalysis.filter(a => !a.isCorrect);
     const subtopicCounts = {};
     wrongAnswers.forEach(a => {
       if (a.subtopicTag) {
@@ -29,26 +54,41 @@ export async function POST(request) {
       .filter(([, count]) => count >= 2)
       .map(([tag]) => tag);
     
+  
+    // Validate and filter answers before saving
+    const validAnswers = sanitizedAnswers.filter(a => 
+      a && 
+      typeof a.selectedIndex === 'number' && 
+      typeof a.correctIndex === 'number' && 
+      typeof a.isCorrect === 'boolean'
+    );
+
+    if (validAnswers.length === 0) {
+      return NextResponse.json({ 
+        error: 'No valid answers provided' 
+      }, { status: 400 });
+    }
+
     // Save attempt with answers
     const attempt = await prisma.attempt.create({
       data: {
         userId,
-        topicId,
-        chapterId,
-        level,
-        score,
-        total,
+        topicId: sanitizedTopicId,
+        chapterId: sanitizedChapterId,
+        level: sanitizedLevel,
+        score: sanitizedScore,
+        total: sanitizedTotal,
         mastery,
         xpEarned,
-        timeTakenSecs,
+        timeTakenSecs: sanitizedTime,
         weakSubtopics,
         answers: {
-          create: answers.map(a => ({
+          create: validAnswers.map(a => ({
             selectedIndex: a.selectedIndex,
             correctIndex: a.correctIndex,
             isCorrect: a.isCorrect,
             timeTakenSecs: a.timeTakenSecs || 0,
-            subtopicTag: a.subtopicTag,
+            subtopicTag: a.subtopicTag || null,
           })),
         },
       },
@@ -90,13 +130,13 @@ export async function POST(request) {
       update: {
         xp: { increment: xpEarned },
         todayDate: todayStr,
-        todayQuestionsAnswered: { increment: total },
-        todayQuestionsCorrect: { increment: score },
+        todayQuestionsAnswered: { increment: sanitizedTotal },
+        todayQuestionsCorrect: { increment: sanitizedScore },
         streak: newStreak,
         longestStreak: Math.max(newLongestStreak, newStreak),
         todayGoalHit: existingDailyStats?.todayDate === todayStr 
-          ? (existingDailyStats.todayQuestionsAnswered + total >= 15)
-          : (total >= 15),
+          ? (existingDailyStats.todayQuestionsAnswered + sanitizedTotal >= 15)
+          : (sanitizedTotal >= 15),
         updatedAt: new Date(),
       },
       create: {
@@ -104,29 +144,29 @@ export async function POST(request) {
         xp: xpEarned,
         dailyGoal: 15,
         todayDate: todayStr,
-        todayQuestionsAnswered: total,
-        todayQuestionsCorrect: score,
+        todayQuestionsAnswered: sanitizedTotal,
+        todayQuestionsCorrect: sanitizedScore,
         streak: newStreak,
         longestStreak: newStreak,
-        todayGoalHit: total >= 15,
+        todayGoalHit: sanitizedTotal >= 15,
       },
     });
     
     // Update topic progress
     await prisma.topicProgress.upsert({
       where: { 
-        userId_topicId: { userId, topicId }
+        userId_topicId: { userId, topicId: sanitizedTopicId }
       },
       update: {
         mastery,
         attempts: { increment: 1 },
-        bestScore: { set: Math.max(score) },
+        bestScore: { set: Math.max(sanitizedScore) },
         lastDoneAt: new Date(),
       },
       create: {
         userId,
-        topicId,
-        bestScore: score,
+        topicId: sanitizedTopicId,
+        bestScore: sanitizedScore,
         mastery,
         attempts: 1,
         completedAt: new Date(),
@@ -141,7 +181,7 @@ export async function POST(request) {
           where: {
             userId_topicId_subtopicTag: {
               userId,
-              topicId,
+              topicId: sanitizedTopicId,
               subtopicTag: answer.subtopicTag,
             }
           },
@@ -150,7 +190,7 @@ export async function POST(request) {
           },
           create: {
             userId,
-            topicId,
+            topicId: sanitizedTopicId,
             subtopicTag: answer.subtopicTag,
             wrongCount: 1,
           },
@@ -161,36 +201,36 @@ export async function POST(request) {
     // Update chapter progress
     const chapterProgress = await prisma.chapterProgress.findUnique({
       where: { 
-        userId_chapterId: { userId, chapterId }
+        userId_chapterId: { userId, chapterId: sanitizedChapterId }
       },
     });
     
     // Get total topics in this chapter
     const chapter = await prisma.chapter.findUnique({
-      where: { id: chapterId },
+      where: { id: sanitizedChapterId },
       select: { totalTopics: true }
     });
     
     const completedTopics = chapterProgress?.completedTopicIds || [];
     const totalTopics = chapter?.totalTopics || 1;
     
-    if (!completedTopics.includes(topicId)) {
-      const newCompletedTopics = [...completedTopics, topicId];
+    if (!completedTopics.includes(sanitizedTopicId)) {
+      const newCompletedTopics = [...completedTopics, sanitizedTopicId];
       const newPct = Math.round((newCompletedTopics.length / totalTopics) * 100);
       
       await prisma.chapterProgress.upsert({
         where: { 
-          userId_chapterId: { userId, chapterId }
+          userId_chapterId: { userId, chapterId: sanitizedChapterId }
         },
         update: {
-          completedTopicIds: { push: topicId },
+          completedTopicIds: { push: sanitizedTopicId },
           pct: newPct,
           lastPractisedAt: new Date(),
         },
         create: {
           userId,
-          chapterId,
-          completedTopicIds: [topicId],
+          chapterId: sanitizedChapterId,
+          completedTopicIds: [sanitizedTopicId],
           pct: Math.round((1 / totalTopics) * 100),
           lastPractisedAt: new Date(),
         },
@@ -206,8 +246,14 @@ export async function POST(request) {
       },
     });
     
-    // Check for new badge unlocks
-    const newlyUnlockedBadges = await runBadgeEvaluation(userId, 'practice');
+    // Check for new badge unlocks (protected from failure)
+    let newlyUnlockedBadges = [];
+    try {
+      newlyUnlockedBadges = await runBadgeEvaluation(userId, 'practice');
+    } catch (badgeError) {
+      console.error('Badge evaluation failed:', badgeError);
+      // Continue without badges - don't break the attempt flow
+    }
     
     return NextResponse.json({ 
       success: true, 
@@ -218,6 +264,8 @@ export async function POST(request) {
       newlyUnlockedBadges,
     });
   } catch (error) {
+    console.error('Attempt API Error:', error);
+    console.error('Stack trace:', error.stack);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

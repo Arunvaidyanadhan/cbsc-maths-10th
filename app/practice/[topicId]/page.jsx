@@ -6,6 +6,7 @@ import QuestionCard from '../../../components/QuestionCard';
 import PaywallModal from '../../../components/PaywallModal';
 import AppShell from '../../../components/AppShell.jsx';
 import { NavigationContext } from '../../../lib/navigationContext.js';
+import { getClientCache, setClientCache } from '../../../lib/clientCache.js';
 
 export default function PracticePage() {
   const router = useRouter();
@@ -22,8 +23,6 @@ export default function PracticePage() {
   const [startTime, setStartTime] = useState(null);
   const [totalTime, setTotalTime] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [newlyUnlockedBadges, setNewlyUnlockedBadges] = useState([]);
-  const [showBadgeModal, setShowBadgeModal] = useState(false);
   const [lastAttemptData, setLastAttemptData] = useState(null);
   const [userName, setUserName] = useState('Student');
   const level = searchParams.get('level') || 'pass';
@@ -56,12 +55,21 @@ export default function PracticePage() {
 
   const fetchQuestions = async (topicId, level) => {
     try {
-      const res = await fetch(`/api/questions?topicId=${topicId}&level=${level}`);
-      const data = await res.json();
+      // Check cache first
+      const cacheKey = `questions_${topicId}_${level}`;
+      let data = getClientCache(cacheKey);
 
-      if (res.status === 401) {
-        router.push('/login');
-        return;
+      if (!data) {
+        const res = await fetch(`/api/questions?topicId=${topicId}&level=${level}`);
+        data = await res.json();
+
+        if (res.status === 401) {
+          router.push('/login');
+          return;
+        }
+        
+        // Cache the questions
+        setClientCache(cacheKey, data);
       }
       
       if (data.error === 'premium_required') {
@@ -189,15 +197,10 @@ export default function PracticePage() {
         userName
       });
 
-      // Show badge unlock modal if new badges earned
-      if (newlyUnlocked.length > 0) {
-        setNewlyUnlockedBadges(newlyUnlocked);
-        setShowBadgeModal(true);
-      } else {
-        router.push(
-          `/result?score=${finalScore}&total=${questions.length}&mastery=${data.mastery || 0}&xpEarned=${data.xpEarned || 0}&topicId=${params.topicId}&level=${level}&weakAreas=${encodeURIComponent(JSON.stringify(weakAreas))}&userName=${encodeURIComponent(userName)}`
-        );
-      }
+      // Always redirect to results page directly (no badge popup)
+      router.push(
+        `/result?score=${finalScore}&total=${questions.length}&mastery=${data.mastery || 0}&xpEarned=${data.xpEarned || 0}&topicId=${params.topicId}&level=${level}&weakAreas=${encodeURIComponent(JSON.stringify(weakAreas))}&userName=${encodeURIComponent(userName)}`
+      );
     } catch (error) {
       console.error('Error submitting attempt:', error);
       alert('Failed to submit attempt. Please try again.');
@@ -206,26 +209,63 @@ export default function PracticePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-4" style={{ background: 'var(--bg-page)' }}>
-        <div className="max-w-md mx-auto">
-          <div className="flex justify-between items-center mb-4">
-            <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+      <AppShell>
+        {/* Sticky Header Skeleton */}
+        <header className="practice-nav sticky top-16 sm:top-20 z-10 p-3 sm:p-4">
+          <div className="flex justify-between items-center mb-2 sm:mb-3">
+            <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
             <div className="flex gap-2">
               <div className="h-8 w-16 bg-gray-200 rounded-lg animate-pulse"></div>
               <div className="h-8 w-12 bg-gray-200 rounded-lg animate-pulse"></div>
             </div>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-6 animate-pulse"></div>
+          <div className="nav-progress-track h-2 bg-gray-200 rounded-full overflow-hidden animate-pulse"></div>
+          <div className="flex justify-between items-center mt-2">
+            <div className="h-3 w-8 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-3 w-12 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+        </header>
+
+        {/* Question Content Skeleton */}
+        <main className="p-4 sm:p-6 pt-20 sm:pt-24 max-w-3xl mx-auto">
+          {/* Back Button */}
+          <div className="h-8 w-16 bg-gray-200 rounded animate-pulse mb-4"></div>
+
+          {/* Topic Header */}
+          <div className="practice-topic-header mb-6">
+            <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mr-3"></div>
+            <div className="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+
+          {/* Question Card Skeleton */}
           <div className="question-card">
-            <div className="h-6 bg-gray-200 rounded mb-4 animate-pulse"></div>
+            {/* Question Number */}
+            <div className="flex justify-between items-center mb-4">
+              <div className="h-5 w-16 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-5 w-12 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+
+            {/* Question Text */}
+            <div className="mb-6">
+              <div className="h-6 bg-gray-200 rounded w-full animate-pulse mb-2"></div>
+              <div className="h-6 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+            </div>
+
+            {/* Options */}
             <div className="options-list">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-12 bg-gray-100 rounded-lg animate-pulse"></div>
+                <div key={i} className="h-12 bg-gray-100 rounded-lg animate-pulse mb-3"></div>
               ))}
             </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-between mt-6">
+              <div className="h-10 w-20 bg-gray-200 rounded-lg animate-pulse"></div>
+              <div className="h-10 w-24 bg-gray-200 rounded-lg animate-pulse"></div>
+            </div>
           </div>
-        </div>
-      </div>
+        </main>
+      </AppShell>
     );
   }
 
@@ -313,52 +353,6 @@ export default function PracticePage() {
         )}
       </main>
 
-      {/* Badge Unlock Modal */}
-      {showBadgeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="glass-card p-6 max-w-md w-full text-center">
-            <div className="text-4xl mb-4">??</div>
-            <h2 className="text-xl font-bold text-heading mb-2">
-              {newlyUnlockedBadges.length === 1 ? 'New Badge Unlocked!' : 'New Badges Unlocked!'}
-            </h2>
-            <div className="space-y-3 mb-6">
-              {newlyUnlockedBadges.map((badge, index) => (
-                <div key={badge.id} className="flex items-center gap-3 p-3 bg-card rounded-lg">
-                  <span className="text-2xl">{badge.icon}</span>
-                  <div className="text-left">
-                    <div className="font-semibold text-heading">{badge.name}</div>
-                    <div className="text-sm text-muted">{badge.description}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="space-y-2">
-              <button
-                onClick={() => {
-                  setShowBadgeModal(false);
-                  router.push('/profile');
-                }}
-                className="w-full px-4 py-2 bg-primary text-on-primary rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-              >
-                View Badges
-              </button>
-              <button
-                onClick={() => {
-                  setShowBadgeModal(false);
-                  if (lastAttemptData) {
-                    router.push(
-                      `/result?score=${lastAttemptData.score}&total=${lastAttemptData.total}&mastery=${lastAttemptData.mastery}&xpEarned=${lastAttemptData.xpEarned}&topicId=${lastAttemptData.topicId}&level=${lastAttemptData.level}&weakAreas=${encodeURIComponent(JSON.stringify(lastAttemptData.weakAreas))}&userName=${encodeURIComponent(lastAttemptData.userName)}`
-                    );
-                  }
-                }}
-                className="w-full px-4 py-2 bg-card border border-subtle rounded-lg font-semibold hover:bg-card-hover transition-colors"
-              >
-                Continue to Results
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </AppShell>
+          </AppShell>
   );
 }

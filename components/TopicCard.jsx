@@ -1,4 +1,4 @@
-export default function TopicCard({ topic, progress, onClick, isLocked = false }) {
+export default function TopicCard({ topic, progress, onClick, isLocked = false, onHover }) {
   const done = progress?.[topic.id];
   const levelMeta = {
     pass: { label: 'Pass Level', emoji: '🟢', color: 'text-primary', bg: 'bg-primary-light' },
@@ -11,6 +11,7 @@ export default function TopicCard({ topic, progress, onClick, isLocked = false }
   return (
     <button
       onClick={() => !isLocked && onClick(topic)}
+      onMouseEnter={() => !isLocked && onHover && onHover(topic)}
       disabled={isLocked}
       className={`w-full bg-white/30 backdrop-blur-md rounded-xl p-4 text-left shadow-lg transition-all hover:shadow-xl ${
         isLocked ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
