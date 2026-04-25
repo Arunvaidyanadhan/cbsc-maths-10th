@@ -55,16 +55,6 @@ export async function POST(request) {
       .map(([tag]) => tag);
     
   
-    sanitizedAnswers.forEach((a, i) => {
-      console.log(`Answer ${i}:`, {
-        selectedIndex: a?.selectedIndex,
-        correctIndex: a?.correctIndex,
-        isCorrect: a?.isCorrect,
-        timeTakenSecs: a?.timeTakenSecs,
-        subtopicTag: a?.subtopicTag
-      });
-    });
-
     // Validate and filter answers before saving
     const validAnswers = sanitizedAnswers.filter(a => 
       a && 
@@ -72,13 +62,6 @@ export async function POST(request) {
       typeof a.correctIndex === 'number' && 
       typeof a.isCorrect === 'boolean'
     );
-
-    console.log('Invalid answers:', sanitizedAnswers.filter(a => 
-      !a || 
-      typeof a.selectedIndex !== 'number' || 
-      typeof a.correctIndex !== 'number' || 
-      typeof a.isCorrect !== 'boolean'
-    ));
 
     if (validAnswers.length === 0) {
       return NextResponse.json({ 
