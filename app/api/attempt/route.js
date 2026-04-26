@@ -1,76 +1,106 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
-import { runBadgeEvaluation } from '../../../lib/badgeEngine';
 import { getRequestUserId } from '../../../lib/auth.js';
 import { rateLimit } from '../../../lib/rateLimiter.js';
 import { sanitizeId, sanitizeLevel, sanitizeNumber, sanitizeObjectArray } from '../../../lib/sanitize.js';
+import { analyzeWeakAreas } from '../../../lib/engine/weakAreaEngine.js';
+import { predictScoreRange } from '../../../lib/engine/predictionEngine.js';
+import { generateRecommendations } from '../../../lib/engine/recommendationEngine.js';
+import { getDynamicMessage } from '../../../lib/engine/messageEngine.js';
 
 export async function POST(request) {
-  // Rate limiting: 30 requests per minute for attempts
-  const ip = request.headers.get('x-forwarded-for') || 
-              request.headers.get('x-real-ip') || 
+  // Rate limiting: 30 requests per minute
+  const ip = request.headers.get('x-forwarded-for') ||
+              request.headers.get('x-real-ip') ||
               'unknown';
-  
+
   if (!rateLimit(ip, 30, 60000)) {
-    return NextResponse.json({ 
-      error: 'Too many requests. Please try again later.' 
+    return NextResponse.json({
+      error: 'Too many requests. Please try again later.'
     }, { status: 429 });
   }
 
   try {
-    const body = await request.json();
-    const sessionUserId = await getRequestUserId(request, { allowQuery: true, allowHeader: true });
-    const { userId: bodyUserId, topicId, chapterId, level, score, total, answers, timeTakenSecs } = body;
-    const userId = sessionUserId || bodyUserId;
-    
-    // Sanitize inputs
-    const sanitizedTopicId = sanitizeId(topicId);
-    const sanitizedChapterId = sanitizeId(chapterId);
-    const sanitizedLevel = sanitizeLevel(level);
-    const sanitizedScore = sanitizeNumber(score, 0, 1000);
-    const sanitizedTotal = sanitizeNumber(total, 1, 1000);
-    const sanitizedTime = sanitizeNumber(timeTakenSecs, 0, 3600);
-    const sanitizedAnswers = sanitizeObjectArray(answers);
-    
-    if (!userId || !sanitizedTopicId || !sanitizedChapterId) {
-      return NextResponse.json({ error: 'userId, topicId, and chapterId are required' }, { status: 400 });
+    const result = await processAttempt(request);
+
+    // Optional: Generate dynamic message (safe fallback)
+    let dynamicMessage = null;
+    try {
+      dynamicMessage = await getDynamicMessage({
+        userId: result.userId,
+        score: result.mastery,
+        trend: result.prediction?.trend,
+        confidence: result.prediction?.confidence,
+        weakAreas: result.weakAreas
+      });
+    } catch {
+      dynamicMessage = "Keep practicing consistently.";
     }
-    
-    const mastery = Math.round((sanitizedScore / sanitizedTotal) * 100);
-    const xpEarned = sanitizedScore * 5;
-    
-    // Calculate weak subtopics (only from valid answers)
-    const validAnswersForAnalysis = sanitizedAnswers.filter(a => 
-      a && typeof a.isCorrect === 'boolean'
-    );
-    const wrongAnswers = validAnswersForAnalysis.filter(a => !a.isCorrect);
-    const subtopicCounts = {};
-    wrongAnswers.forEach(a => {
-      if (a.subtopicTag) {
-        subtopicCounts[a.subtopicTag] = (subtopicCounts[a.subtopicTag] || 0) + 1;
-      }
+
+    // Minimal response - decision engine output only
+    return NextResponse.json({
+      success: true,
+      mastery: result.mastery,
+      weakAreas: result.weakAreas,
+      prediction: result.prediction,
+      recommendations: result.recommendations,
+      dynamicMessage
     });
-    const weakSubtopics = Object.entries(subtopicCounts)
-      .filter(([, count]) => count >= 2)
-      .map(([tag]) => tag);
-    
-  
-    // Validate and filter answers before saving
-    const validAnswers = sanitizedAnswers.filter(a => 
-      a && 
-      typeof a.selectedIndex === 'number' && 
-      typeof a.correctIndex === 'number' && 
-      typeof a.isCorrect === 'boolean'
-    );
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
 
-    if (validAnswers.length === 0) {
-      return NextResponse.json({ 
-        error: 'No valid answers provided' 
-      }, { status: 400 });
-    }
+/**
+ * Process attempt - optimized lightweight version
+ * Minimal DB operations for Vercel/Neon free tier
+ * @param {Request} request - HTTP request
+ * @returns {Object} Decision engine output
+ */
+async function processAttempt(request) {
+  const body = await request.json();
+  const sessionUserId = await getRequestUserId(request, { allowQuery: true, allowHeader: true });
+  const { userId: bodyUserId, topicId, chapterId, level, score, total, answers, timeTakenSecs } = body;
+  const userId = sessionUserId || bodyUserId;
 
-    // Save attempt with answers
-    const attempt = await prisma.attempt.create({
+  // Sanitize inputs
+  const sanitizedTopicId = sanitizeId(topicId);
+  const sanitizedChapterId = sanitizeId(chapterId);
+  const sanitizedLevel = sanitizeLevel(level);
+  const sanitizedScore = sanitizeNumber(score, 0, 1000);
+  const sanitizedTotal = sanitizeNumber(total, 1, 1000);
+  const sanitizedTime = sanitizeNumber(timeTakenSecs, 0, 3600);
+  const sanitizedAnswers = sanitizeObjectArray(answers);
+
+  if (!userId || !sanitizedTopicId || !sanitizedChapterId) {
+    throw new Error('userId, topicId, and chapterId are required');
+  }
+
+  if (sanitizedTotal === 0) {
+    throw new Error('Total questions cannot be zero');
+  }
+
+  // Compute mastery
+  const mastery = Math.round((sanitizedScore / sanitizedTotal) * 100);
+
+  // Prepare answers for analysis and storage
+  const validAnswers = sanitizedAnswers.filter(a =>
+    a &&
+    typeof a.selectedIndex === 'number' &&
+    typeof a.correctIndex === 'number' &&
+    typeof a.isCorrect === 'boolean'
+  );
+
+  if (validAnswers.length === 0) {
+    throw new Error('No valid answers provided');
+  }
+
+  const wrongAnswers = validAnswers.filter(a => !a.isCorrect);
+
+  // Execute minimal transaction: attempt + progress + mistakes only
+  const [attempt, topicProgress] = await prisma.$transaction([
+    // Create attempt (no xpEarned, no weakSubtopics, no include)
+    prisma.attempt.create({
       data: {
         userId,
         topicId: sanitizedTopicId,
@@ -79,9 +109,7 @@ export async function POST(request) {
         score: sanitizedScore,
         total: sanitizedTotal,
         mastery,
-        xpEarned,
         timeTakenSecs: sanitizedTime,
-        weakSubtopics,
         answers: {
           create: validAnswers.map(a => ({
             selectedIndex: a.selectedIndex,
@@ -92,71 +120,11 @@ export async function POST(request) {
           })),
         },
       },
-      include: {
-        answers: true,
-      },
-    });
-    
-    // Update or create daily stats
-    // Use toDateString() for proper unique day tracking
-    const todayStr = new Date().toDateString();
-    const yesterdayDate = new Date();
-    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-    const yesterdayStr = yesterdayDate.toDateString();
-    
-    const existingDailyStats = await prisma.dailyStats.findUnique({
-      where: { userId }
-    });
+    }),
 
-    let newStreak = existingDailyStats?.streak || 0;
-    let newLongestStreak = existingDailyStats?.longestStreak || 0;
-
-    // Check if it's a new day
-    if (existingDailyStats && existingDailyStats.todayDate !== todayStr) {
-      // Check if yesterday was active
-      if (existingDailyStats.todayDate === yesterdayStr && existingDailyStats.todayGoalHit) {
-        newStreak = existingDailyStats.streak + 1;
-      } else {
-        // Streak reset if missed a day
-        newStreak = 1;
-      }
-    } else if (!existingDailyStats) {
-      // First time user
-      newStreak = 1;
-    }
-
-    const dailyStats = await prisma.dailyStats.upsert({
-      where: { userId },
-      update: {
-        xp: { increment: xpEarned },
-        todayDate: todayStr,
-        todayQuestionsAnswered: { increment: sanitizedTotal },
-        todayQuestionsCorrect: { increment: sanitizedScore },
-        streak: newStreak,
-        longestStreak: Math.max(newLongestStreak, newStreak),
-        todayGoalHit: existingDailyStats?.todayDate === todayStr 
-          ? (existingDailyStats.todayQuestionsAnswered + sanitizedTotal >= 15)
-          : (sanitizedTotal >= 15),
-        updatedAt: new Date(),
-      },
-      create: {
-        userId,
-        xp: xpEarned,
-        dailyGoal: 15,
-        todayDate: todayStr,
-        todayQuestionsAnswered: sanitizedTotal,
-        todayQuestionsCorrect: sanitizedScore,
-        streak: newStreak,
-        longestStreak: newStreak,
-        todayGoalHit: sanitizedTotal >= 15,
-      },
-    });
-    
     // Update topic progress
-    await prisma.topicProgress.upsert({
-      where: { 
-        userId_topicId: { userId, topicId: sanitizedTopicId }
-      },
+    prisma.topicProgress.upsert({
+      where: { userId_topicId: { userId, topicId: sanitizedTopicId } },
       update: {
         mastery,
         attempts: { increment: 1 },
@@ -172,100 +140,78 @@ export async function POST(request) {
         completedAt: new Date(),
         lastDoneAt: new Date(),
       },
-    });
-    
-    // Track mistakes for weak area detection
-    for (const answer of wrongAnswers) {
-      if (answer.subtopicTag) {
-        await prisma.mistake.upsert({
-          where: {
-            userId_topicId_subtopicTag: {
-              userId,
-              topicId: sanitizedTopicId,
-              subtopicTag: answer.subtopicTag,
-            }
-          },
-          update: {
-            wrongCount: { increment: 1 },
-          },
-          create: {
+    }),
+  ]);
+
+  // Track mistakes in parallel (outside transaction for speed)
+  const mistakePromises = wrongAnswers
+    .filter(answer => answer.subtopicTag)
+    .map(answer =>
+      prisma.mistake.upsert({
+        where: {
+          userId_topicId_subtopicTag: {
             userId,
             topicId: sanitizedTopicId,
             subtopicTag: answer.subtopicTag,
-            wrongCount: 1,
-          },
-        });
-      }
-    }
-    
-    // Update chapter progress
-    const chapterProgress = await prisma.chapterProgress.findUnique({
-      where: { 
-        userId_chapterId: { userId, chapterId: sanitizedChapterId }
-      },
-    });
-    
-    // Get total topics in this chapter
-    const chapter = await prisma.chapter.findUnique({
-      where: { id: sanitizedChapterId },
-      select: { totalTopics: true }
-    });
-    
-    const completedTopics = chapterProgress?.completedTopicIds || [];
-    const totalTopics = chapter?.totalTopics || 1;
-    
-    if (!completedTopics.includes(sanitizedTopicId)) {
-      const newCompletedTopics = [...completedTopics, sanitizedTopicId];
-      const newPct = Math.round((newCompletedTopics.length / totalTopics) * 100);
-      
-      await prisma.chapterProgress.upsert({
-        where: { 
-          userId_chapterId: { userId, chapterId: sanitizedChapterId }
+          }
         },
-        update: {
-          completedTopicIds: { push: sanitizedTopicId },
-          pct: newPct,
-          lastPractisedAt: new Date(),
-        },
+        update: { wrongCount: { increment: 1 } },
         create: {
           userId,
-          chapterId: sanitizedChapterId,
-          completedTopicIds: [sanitizedTopicId],
-          pct: Math.round((1 / totalTopics) * 100),
-          lastPractisedAt: new Date(),
+          topicId: sanitizedTopicId,
+          subtopicTag: answer.subtopicTag,
+          wrongCount: 1,
         },
-      });
-    }
-    
-    // Update user XP
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        xp: { increment: xpEarned },
-        lastActiveAt: new Date(),
-      },
-    });
-    
-    // Check for new badge unlocks (protected from failure)
-    let newlyUnlockedBadges = [];
-    try {
-      newlyUnlockedBadges = await runBadgeEvaluation(userId, 'practice');
-    } catch (badgeError) {
-      console.error('Badge evaluation failed:', badgeError);
-      // Continue without badges - don't break the attempt flow
-    }
-    
-    return NextResponse.json({ 
-      success: true, 
-      attemptId: attempt.id,
-      mastery,
-      xpEarned,
-      weakSubtopics,
-      newlyUnlockedBadges,
-    });
-  } catch (error) {
-    console.error('Attempt API Error:', error);
-    console.error('Stack trace:', error.stack);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+      })
+    );
+
+  // Fetch minimal data for engines in parallel with mistake updates
+  const [recentAttempts, mistakes, topicProgressAll] = await Promise.all([
+    // Last 5 attempts - only mastery needed
+    prisma.attempt.findMany({
+      where: { userId },
+      orderBy: { completedAt: 'desc' },
+      take: 5,
+      select: { mastery: true }
+    }),
+
+    // All user mistakes - minimal fields
+    prisma.mistake.findMany({
+      where: { userId },
+      select: { subtopicTag: true, wrongCount: true, topicId: true }
+    }),
+
+    // Topic progress for recommendations
+    prisma.topicProgress.findMany({
+      where: { userId },
+      select: { topicId: true, mastery: true }
+    }),
+
+    // Fire-and-forget mistake updates
+    ...mistakePromises
+  ]);
+
+  // Call decision engines
+  const weakAreas = analyzeWeakAreas({
+    currentAnswers: validAnswers,
+    mistakes,
+    recentAttempts
+  });
+
+  const prediction = predictScoreRange(recentAttempts, sanitizedTotal);
+
+  const recommendations = generateRecommendations({
+    weakAreas,
+    topicProgress: topicProgressAll,
+    recentAttempts
+  });
+
+  return {
+    success: true,
+    userId,
+    mastery,
+    weakAreas,
+    prediction,
+    recommendations
+  };
 }

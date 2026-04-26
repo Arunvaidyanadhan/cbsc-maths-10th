@@ -10,11 +10,10 @@ function ResultPage() {
   const searchParams = useSearchParams();
   const [showFeedback, setShowFeedback] = useState(false);
 
-  // Defensive parsing with fallbacks
+  // Defensive parsing with fallbacks for new API format
   const score = parseInt(searchParams.get('score') ?? '0') || 0;
   const total = parseInt(searchParams.get('total') ?? '0') || 0;
   const mastery = parseInt(searchParams.get('mastery') ?? '0') || 0;
-  const xpEarned = parseInt(searchParams.get('xpEarned') ?? '0') || 0;
   const topicId = searchParams.get('topicId') ?? '';
   const level = searchParams.get('level') ?? 'pass';
   const userName = decodeURIComponent(searchParams.get('userName') ?? 'Student');
@@ -22,6 +21,7 @@ function ResultPage() {
   const mode = searchParams.get('mode');
   const modeName = decodeURIComponent(searchParams.get('modeName') ?? '');
 
+  // Parse new data format with safe fallbacks
   let weakAreas = [];
   try {
     weakAreas = JSON.parse(decodeURIComponent(searchParams.get('weakAreas') ?? '[]'));
@@ -29,7 +29,28 @@ function ResultPage() {
     weakAreas = [];
   }
 
+  let prediction = { min: 40, max: 70, confidence: 'LOW' };
+  try {
+    prediction = JSON.parse(decodeURIComponent(searchParams.get('prediction') ?? '{}'));
+  } catch (e) {
+    prediction = { min: 40, max: 70, confidence: 'LOW' };
+  }
+
+  let recommendations = [];
+  try {
+    recommendations = JSON.parse(decodeURIComponent(searchParams.get('recommendations') ?? '[]'));
+  } catch (e) {
+    recommendations = [];
+  }
+
+  const dynamicMessage = decodeURIComponent(searchParams.get('dynamicMessage') ?? '');
+
   const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
+
+  // Safe fallbacks for edge cases
+  const safeWeakAreas = Array.isArray(weakAreas) ? weakAreas : [];
+  const safeRecommendations = Array.isArray(recommendations) ? recommendations.slice(0, 3) : [];
+  const safePrediction = prediction || { min: 40, max: 70, confidence: 'LOW' };
 
   // Dynamic headline based on score
   const getHeadline = (acc, name) => {
@@ -39,11 +60,9 @@ function ResultPage() {
     return `Let's improve this, ${name} 🎯`;
   };
 
-  // Personal message based on score
-  const getPersonalMessage = (acc) => {
-    if (acc >= 80) return "Great! Move to next topic or challenge yourself";
-    if (acc >= 60) return "You're close — one more attempt will improve this";
-    return "Focus on weak areas and retry once";
+  // Personal message - use dynamic message from API or fallback
+  const getPersonalMessage = () => {
+    return dynamicMessage || "Keep practicing consistently.";
   };
 
   // Primary CTA based on score
@@ -86,7 +105,7 @@ function ResultPage() {
     };
   };
 
-  const smartCard = getSmartCardContent(accuracy, weakAreas, topicId);
+  const smartCard = getSmartCardContent(accuracy, safeWeakAreas, topicId);
 
   const handlePrimaryAction = () => {
     if (accuracy >= 80) {
@@ -131,12 +150,12 @@ function ResultPage() {
           {/* 3. Personal Message */}
           <div className="bg-primary-light border border-subtle rounded-xl p-4 mb-6 text-center">
             <p className="text-heading font-semibold">
-              {getPersonalMessage(accuracy)}
+              {getPersonalMessage()}
             </p>
           </div>
 
           {/* 4. Weak Areas - Priority Based */}
-          {weakAreas.length > 0 && (
+          {safeWeakAreas.length > 0 && (
             <div className="mb-6">
               <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-3">
                 Focus here first
@@ -145,29 +164,35 @@ function ResultPage() {
                 {/* Primary weak area - highlighted */}
                 <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
                   <span className="text-xl">👉</span>
-                  <span className="font-bold text-red-700">{weakAreas[0]}</span>
-                  <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded-full ml-auto">Primary</span>
+                  <span className="font-bold text-red-700">
+                    {safeWeakAreas[0].subtopicTag || safeWeakAreas[0]}
+                  </span>
+                  <span className="text-xs bg-red-200 text-red-800 px-2 py-1 rounded-full ml-auto">
+                    {safeWeakAreas[0].severity || 'Primary'}
+                  </span>
                 </div>
-                {/* Other weak areas */}
-                {weakAreas.slice(1).map((area, idx) => (
+                {/* Other weak areas (limit to 3 total) */}
+                {safeWeakAreas.slice(1, 3).map((area, idx) => (
                   <div key={idx} className="flex items-center gap-3 p-3 bg-orange-50 border border-orange-100 rounded-lg">
                     <span className="text-muted">→</span>
-                    <span className="text-secondary text-sm">{area}</span>
+                    <span className="text-secondary text-sm">
+                      {area.subtopicTag || area}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* 5. Minimal Stats */}
+          {/* 5. Minimal Stats - Mastery and Prediction Range */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="text-center p-4 bg-green-50 rounded-xl">
               <div className="text-2xl font-bold text-green-600">{mastery}%</div>
               <div className="text-xs text-muted uppercase tracking-wider">Mastery</div>
             </div>
-            <div className="text-center p-4 bg-yellow-50 rounded-xl">
-              <div className="text-2xl font-bold text-yellow-600">+{xpEarned}</div>
-              <div className="text-xs text-muted uppercase tracking-wider">XP Earned</div>
+            <div className="text-center p-4 bg-blue-50 rounded-xl">
+              <div className="text-2xl font-bold text-blue-600">{safePrediction.min}-{safePrediction.max}%</div>
+              <div className="text-xs text-muted uppercase tracking-wider">Prediction Range</div>
             </div>
           </div>
 

@@ -125,7 +125,7 @@ model Attempt {
   score         Int
   total         Int
   mastery       Int
-  xpEarned      Int
+  xpEarned      Int      @default(0)
   timeTakenSecs Int
   
   weakSubtopics String[]
@@ -339,8 +339,19 @@ model SubtopicFeedback {
   nextSubtopic    String
   message         String
   createdAt       DateTime @default(now())
-  
+
   @@index([userId])
   @@index([subtopicTag])
   @@index([createdAt])
+}
+
+// Stores message history for dynamic message system
+// Prevents repetition of the same messages across sessions
+model UserMessageHistory {
+  id           String   @id @default(cuid())
+  userId       String
+  lastMessages String[] // Store last 3 messages shown
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
 }

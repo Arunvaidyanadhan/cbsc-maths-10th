@@ -182,24 +182,30 @@ export default function PracticePage() {
       }
 
       const data = await res.json();
-      const weakAreas = data.weakSubtopics || [];
-      const newlyUnlocked = data.newlyUnlockedBadges || [];
 
-      // Store attempt data for modal
+      // Extract new API response fields with safe fallbacks
+      const weakAreas = data.weakAreas || [];
+      const prediction = data.prediction || { min: 40, max: 70, confidence: 'LOW' };
+      const recommendations = data.recommendations || [];
+      const dynamicMessage = data.dynamicMessage || 'Keep practicing consistently.';
+
+      // Store attempt data for modal (minimal state)
       setLastAttemptData({
         score: finalScore,
         total: questions.length,
         mastery: data.mastery || 0,
-        xpEarned: data.xpEarned || 0,
         topicId: params.topicId,
         level,
         weakAreas,
+        prediction,
+        recommendations,
+        dynamicMessage,
         userName
       });
 
-      // Always redirect to results page directly (no badge popup)
+      // Redirect to results page with new data format
       router.push(
-        `/result?score=${finalScore}&total=${questions.length}&mastery=${data.mastery || 0}&xpEarned=${data.xpEarned || 0}&topicId=${params.topicId}&level=${level}&weakAreas=${encodeURIComponent(JSON.stringify(weakAreas))}&userName=${encodeURIComponent(userName)}`
+        `/result?score=${finalScore}&total=${questions.length}&mastery=${data.mastery || 0}&topicId=${params.topicId}&level=${level}&weakAreas=${encodeURIComponent(JSON.stringify(weakAreas))}&prediction=${encodeURIComponent(JSON.stringify(prediction))}&recommendations=${encodeURIComponent(JSON.stringify(recommendations))}&dynamicMessage=${encodeURIComponent(dynamicMessage)}&userName=${encodeURIComponent(userName)}`
       );
     } catch (error) {
       console.error('Error submitting attempt:', error);
